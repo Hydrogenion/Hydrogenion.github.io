@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+    
+    
+  <url>
+    <loc>http://blackblog.tech/2018/01/25/cDCGAN%E7%94%9F%E6%88%90MNIST%E5%9B%BE%E7%89%87/</loc>
+    <lastmod>2018-01-25T17:54:15.719Z</lastmod>
+    <data>
+        <display>
+        <title>cDCGAN生成MNIST图片</title>
+        <pubTime>2018-01-25T08:55:59.000Z</pubTime>
+        
+        <tag>tensorflow</tag>
+         
+         
+           
+             
+              <breadCrumb title="机器学习" url="http://blackblog.tech/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blackblog.tech/2017/02/21/hello-world/</loc>
+    <lastmod>2018-01-25T09:27:05.289Z</lastmod>
+    <data>
+        <display>
+        <title>Hello World</title>
+        <pubTime>2017-02-20T16:44:22.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blackblog.tech/2017/02/21/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</loc>
+    <lastmod>2017-02-21T15:48:23.000Z</lastmod>
+    <data>
+        <display>
+        <title>新的开始</title>
+        <pubTime>2017-02-21T15:29:58.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="日志" url="http://blackblog.tech/categories/%E6%97%A5%E5%BF%97/"/>
+          
+        </display>
+    </data>
+    </url>
+
+</urlset>
