@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
+<meta name="description" content="前几日，学校期末作业要求我们使用机器学习的方法解决一个实际问题，思考了很久，尝试做了很多选题，最终决定做一个cDCGAN，即条件深度卷积生成对抗网络。为什么做这个选题呢？生成对抗网络这几年实在是火爆，图片上色，视频去马赛克，包括英伟达最近展出的白马变棕马，白天变黑夜，都是使用生成对抗网络实现的。2014年”Generative Adversarial Nets”这篇论文中所提到的生成对抗网络是一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="新的开始">
-<meta property="og:url" content="http://blackblog.tech/2017/02/21/新的开始/index.html">
+<meta property="og:title" content="cDCGAN生成MNIST图片">
+<meta property="og:url" content="http://blackblog.tech/2018/01/25/cDCGAN生成MNIST图片/index.html">
 <meta property="og:site_name" content="Black'Blog">
-<meta property="og:description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
-<meta property="og:updated_time" content="2017-02-21T15:48:23.000Z">
+<meta property="og:description" content="前几日，学校期末作业要求我们使用机器学习的方法解决一个实际问题，思考了很久，尝试做了很多选题，最终决定做一个cDCGAN，即条件深度卷积生成对抗网络。为什么做这个选题呢？生成对抗网络这几年实在是火爆，图片上色，视频去马赛克，包括英伟达最近展出的白马变棕马，白天变黑夜，都是使用生成对抗网络实现的。2014年”Generative Adversarial Nets”这篇论文中所提到的生成对抗网络是一个">
+<meta property="og:updated_time" content="2018-01-25T09:35:54.285Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新的开始">
-<meta name="twitter:description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
+<meta name="twitter:title" content="cDCGAN生成MNIST图片">
+<meta name="twitter:description" content="前几日，学校期末作业要求我们使用机器学习的方法解决一个实际问题，思考了很久，尝试做了很多选题，最终决定做一个cDCGAN，即条件深度卷积生成对抗网络。为什么做这个选题呢？生成对抗网络这几年实在是火爆，图片上色，视频去马赛克，包括英伟达最近展出的白马变棕马，白天变黑夜，都是使用生成对抗网络实现的。2014年”Generative Adversarial Nets”这篇论文中所提到的生成对抗网络是一个">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://blackblog.tech/2017/02/21/新的开始/"/>
+  <link rel="canonical" href="http://blackblog.tech/2018/01/25/cDCGAN生成MNIST图片/"/>
 
 
 
 
 
-  <title>新的开始 | Black'Blog</title>
+  <title>cDCGAN生成MNIST图片 | Black'Blog</title>
   
 
 
@@ -231,7 +231,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2017/02/21/新的开始/">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/01/25/cDCGAN生成MNIST图片/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Black">
@@ -248,7 +248,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">新的开始</h1>
+          <h1 class="post-title" itemprop="name headline">cDCGAN生成MNIST图片</h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-21T23:29:58+08:00">
-                2017-02-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-25T16:55:59+08:00">
+                2018-01-25
               </time>
             
 
@@ -270,28 +270,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/日志/" itemprop="url" rel="index">
-                    <span itemprop="name">日志</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -320,7 +298,9 @@
       
 
       
-        <p>这是一个新的开始。<br>这是我用hexo搭建完博客后的第一篇日志。<br>在这里小小纪念一下哈哈哈<br>以后持续更新！！！</p>
+        <p>前几日，学校期末作业要求我们使用机器学习的方法解决一个实际问题，思考了很久，尝试做了很多选题，最终决定做一个cDCGAN，即条件深度卷积生成对抗网络。<br>为什么做这个选题呢？<br>生成对抗网络这几年实在是火爆，图片上色，视频去马赛克，包括英伟达最近展出的白马变棕马，白天变黑夜，都是使用生成对抗网络实现的。<br>2014年”Generative Adversarial Nets”这篇论文中所提到的生成对抗网络是一个无监督的生成对抗网络，且没有使用卷积与反卷积操作。<br>今天我们以MNIST手写集为数据集，实现cDCGAN（条件深度卷积生成对抗网络）</p>
+<h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>生成对抗网络（Generative Adversarial Nets）启发自博弈论中的两人零和博弈，GAN模型中的两位博弈方分别有生成网络（Generator）与判别网络（Discriminator）充当。当生成网络G捕捉到样本数据分布，用服从某一分布的噪声z生成一个类似真实训练数据的样本，与真实样本越接近越好；判别网络D一般是一个二分类模型，在本文中D是一个多分类器，用于估计一个样本来自于真实数据的概率，如果样本来自于真实数据，则D输出大概率，否则输出小概率。本文中，判别网络需要在此基础上实现分类功能。<br><a id="more"></a><br>在训练的过程中，需要固定一方，更新另一方的网络状态，如此交替进行。在整个训练的过程中，双方都极力优化自己的网络，从而形成竞争对抗，知道双方达到一个动态的平衡。此时生成网络训练出来的数据与真实数据的分布几乎相同，判别网络也无法再判断出真伪。<br>整个过程可以表示为：</p>
+<p>x表示训练样本，z表示噪声，G表示生成网络，D表示判别网络。<br>在本文中，在生成网络与判别网络中，加上了标签信息，实现了多分类的效果，且在生成网络与判别网络中分别使用反卷积与卷积。<br>整个过程可以表示为：<br>$$  min_G max_D V $$<br>x表示训练样本，y表示标签信息，z表示噪声，G表示生成网络，D表示判别网络。<br>本文中生成对抗网络主要分为两部分，生成网络（Generator）与判别网络（Discriminator）。向生成网络内输入噪声，通过多次反卷积的方式得到一个28x28x1的图像作为X_fake，此时将真实的图像X_real与生成器生成的X_fake放入判别网络，判别网络使用多次卷积与Sigmoid函数并通过交叉熵函数计算出判别网络的损失函数D_loss，通过判别网络的损失函数D_loss计算得到生成网络损失函数G_loss。使用G_loss与D_loss对生成网络与判别网络进行参数调整。</p>
 
       
     </div>
@@ -345,8 +325,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/21/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2017/02/21/新的开始/" rel="next" title="新的开始">
+                <i class="fa fa-chevron-left"></i> 新的开始
               </a>
             
           </div>
@@ -354,10 +334,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/25/cDCGAN生成MNIST图片/" rel="prev" title="cDCGAN生成MNIST图片">
-                cDCGAN生成MNIST图片 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -409,8 +385,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -461,6 +446,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法描述"><span class="nav-number">1.</span> <span class="nav-text">算法描述</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
