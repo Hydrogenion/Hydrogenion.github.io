@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="决策树," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="决策树：构建一个基于属性的树形分类器。1.每个非叶节点表示一个特征属性上的测试（分割），2.每个分支代表这个特征属性在某个值域上的输出，3.每个叶节点存放一个类别。使用决策树进行决策的过程就是从根节点开始，测试待分类项中相应的特征属性，并按照其值选择输出分支，直到到达叶子节点，将叶子节点存放的类别作为决策结果。采用递归的方法进行建树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="决策树——ID3算法实现">
+<meta property="og:url" content="http://blackblog.tech/2018/01/29/决策树——ID3算法实现/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="决策树：构建一个基于属性的树形分类器。1.每个非叶节点表示一个特征属性上的测试（分割），2.每个分支代表这个特征属性在某个值域上的输出，3.每个叶节点存放一个类别。使用决策树进行决策的过程就是从根节点开始，测试待分类项中相应的特征属性，并按照其值选择输出分支，直到到达叶子节点，将叶子节点存放的类别作为决策结果。采用递归的方法进行建树">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%201.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%202.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%203.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%204.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%205.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%206.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%207.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%208.png">
+<meta property="og:updated_time" content="2018-01-29T15:40:35.498Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="决策树——ID3算法实现">
+<meta name="twitter:description" content="决策树：构建一个基于属性的树形分类器。1.每个非叶节点表示一个特征属性上的测试（分割），2.每个分支代表这个特征属性在某个值域上的输出，3.每个叶节点存放一个类别。使用决策树进行决策的过程就是从根节点开始，测试待分类项中相应的特征属性，并按照其值选择输出分支，直到到达叶子节点，将叶子节点存放的类别作为决策结果。采用递归的方法进行建树">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%201.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/01/29/决策树——ID3算法实现/"/>
+
+
+
+
+
+  <title>决策树——ID3算法实现 | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/01/29/决策树——ID3算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">决策树——ID3算法实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T19:55:33+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>决策树：构建一个基于属性的树形分类器。<br>1.每个非叶节点表示一个特征属性上的测试（分割），<br>2.每个分支代表这个特征属性在某个值域上的输出，<br>3.每个叶节点存放一个类别。<br>使用决策树进行决策的过程就是从根节点开始，测试待分类项中相应的特征属性，并按照其值选择输出分支，直到到达叶子节点，将叶子节点存放的类别作为决策结果。<br>采用递归的方法进行建树<br><a id="more"></a></p>
+<h2 id="递归的结束条件"><a href="#递归的结束条件" class="headerlink" title="递归的结束条件"></a>递归的结束条件</h2><p>1.当前结点样本均属于同一类别，无需划分。<br>2.当前属性集为空。<br>3.所有样本在当前属性集上取值相同，无法划分。<br>4.当前结点包含的样本集合为空，不能划分。</p>
+<h2 id="决策树的核心"><a href="#决策树的核心" class="headerlink" title="决策树的核心"></a>决策树的核心</h2><p>经过属性划分后，不同类样本被更好的分离<br>理想情况：划分后样本被完美分类。即每个分支的样本都属性同一类。<br>实际情况：不可能完美划分！尽量使得每个分支某一类样本比例尽量高！即尽量提高划分后子集的纯度。</p>
+<p>划分的目标：提升划分后子集的纯度，降低划分后子集的不纯度</p>
+<h2 id="决策树算法分类"><a href="#决策树算法分类" class="headerlink" title="决策树算法分类"></a>决策树算法分类</h2><p>决策树算法的区别主要在于所采用的纯度判别标准</p>
+<h3 id="ID3算法："><a href="#ID3算法：" class="headerlink" title="ID3算法："></a>ID3算法：</h3><p>使用信息增益作为判别标准<br>信息熵计算公式：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%201.png" alt="信息熵"><br>假设属性𝑎有𝑉可能取值{𝑎^1,𝑎^2,⋯⋯,𝑎^𝑉}, 𝑎^𝑣对应划分后的数据子集为𝐷^𝑣.<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%202.png" alt="信息熵"><br>信息增益：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%203.png" alt="信息增益"><br>信息增益越大，说明当前的划分效果越好<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%204.png" alt="信息增益"></p>
+<h3 id="C4-5算法"><a href="#C4-5算法" class="headerlink" title="C4.5算法"></a>C4.5算法</h3><p>使用信息增益率作为判别准则<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%205.png" alt="信息增益"><br>𝐼𝑉(𝑎)称为属性𝑎的“固有值”（Intrinsic Value）<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%206.png" alt="信息增益"><br>信息增益率越大，说明当前划分效果越好</p>
+<h3 id="CART算法"><a href="#CART算法" class="headerlink" title="CART算法"></a>CART算法</h3><p>使用基尼系数作为判别准则<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%207.png" alt="信息增益"></p>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>python3.6<br>macOS 10.12</p>
+<h2 id="代码思路"><a href="#代码思路" class="headerlink" title="代码思路"></a>代码思路</h2><p>BuildTree函数：在该函数中完成递归建树，递归返回条件的判断，建立存储树所用的字典，打印各类信息<br>ChooseAttr函数：在该函数中完成选出最佳特征的功能，根据Ent函数计算出的所有样本的信息熵和加权的信息熵计算信息增益，信息增越大的意味着该属性的纯度越高，选取信息增益最大的属性为最佳属性。<br>Ent函数：计算输入样本的信息熵，通过输入Sample的最后一列统计出该正例与反例出现的概率，根据信息熵公式计算信息熵<br>SpiltData函数：该函数用于对数据进行拆分，去掉已经判断过的属性对应的样本<br>CreatePlot函数：用于决策树的可视化</p>
+<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>使用西瓜书上的西瓜数据集2.0<br>为了方便计算，将西瓜数据集的内容转换为数字<br>色泽： 0：青绿 1：乌黑 2：浅白<br>根底： 0：蜷缩 1：少蜷 2：硬挺<br>敲声： 0：浊响 1：沉闷 2：清脆<br>纹理： 0：清晰 1：稍糊 2：模糊<br>脐部： 0：凹陷 1：稍凹 2：平坦<br>触感： 0：硬滑 1：软黏<br>好瓜： 0：不是 1：是</p>
+<h2 id="上代码"><a href="#上代码" class="headerlink" title="上代码"></a>上代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> math</div><div class="line"><span class="keyword">import</span> numpy</div><div class="line"><span class="keyword">import</span> DrawTree</div></pre></td></tr></table></figure>
+<p>数据集,属性列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#初始化一个属性列表</span></div><div class="line">AttrArr=[<span class="string">"色泽"</span>,<span class="string">"根蒂"</span>,<span class="string">"敲声"</span>,<span class="string">"纹理"</span>,<span class="string">"脐部"</span>,<span class="string">"触感"</span>,<span class="string">"好瓜"</span>]</div><div class="line"><span class="comment">#此处使用西瓜数据集2.0</span></div><div class="line">data = numpy.array(</div><div class="line">[[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">0</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>],</div><div class="line">[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]]</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>BuildTree函数：在该函数中完成递归建树，递归返回条件的判断，建立存储树所用的字典，打印各类信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#建树的函数</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">BuildTree</span><span class="params">(Sample,Label)</span>:</span></div><div class="line">    <span class="comment">#Sample 为输入的数据</span></div><div class="line">    <span class="comment">#Label 为对应的标签</span></div><div class="line"></div><div class="line">    <span class="comment">#获取输入数据的的大小</span></div><div class="line">    [Count, Attr] = Sample.shape;</div><div class="line">    n = Attr - <span class="number">1</span>;</div><div class="line">    m = Count - <span class="number">1</span>;</div><div class="line">    print(<span class="string">"Sample:"</span>)</div><div class="line">    print(Sample)</div><div class="line">    <span class="comment">#使用classlist存储表示正例与反例所在的列</span></div><div class="line">    classList = Sample[:, n];</div><div class="line">    <span class="comment"># 记录第一个类中的个数</span></div><div class="line">    classOne = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, Count):</div><div class="line">        <span class="keyword">if</span> (classList[i] == classList[<span class="number">0</span>]):</div><div class="line">            classOne = classOne + <span class="number">1</span>;</div><div class="line">    <span class="comment">#如果当前结点包含的样本全属于同一个样本，则停止划分</span></div><div class="line">    <span class="keyword">if</span> (classOne == Count):</div><div class="line">        print(<span class="string">"Final"</span>)</div><div class="line">        print(Sample)</div><div class="line">        <span class="keyword">if</span>(classList[<span class="number">0</span>]==<span class="number">0</span>):<span class="keyword">return</span> <span class="string">"no"</span> <span class="comment">#通过 classlist 的 0 1 判断 最终的结果</span></div><div class="line">        <span class="keyword">if</span> (classList[<span class="number">0</span>] == <span class="number">1</span>): <span class="keyword">return</span> <span class="string">"yes"</span> <span class="comment">#通过 classlist 的 0 1 判断 最终的结果</span></div><div class="line">    <span class="comment">#如果当前属性集为空，无法划分</span></div><div class="line">    <span class="keyword">if</span> (Attr == <span class="number">0</span>):</div><div class="line">        print(<span class="string">"Final"</span>)</div><div class="line">        print(Sample)</div><div class="line">        <span class="keyword">return</span> classList[<span class="number">0</span>]</div><div class="line">    <span class="comment">#使用ChooseAttr函数获取最佳的特征对应编号</span></div><div class="line">    bestAttr = ChooseAttr(Sample)</div><div class="line">    <span class="comment">#通过最佳特征的编号获得标签名</span></div><div class="line">    name=Label[bestAttr]</div><div class="line">    <span class="comment">#新建一个字典用于存储树</span></div><div class="line">    Tree = &#123;name: &#123;&#125;&#125;</div><div class="line">    <span class="comment">#打印出最佳特征</span></div><div class="line">    print(<span class="string">"最佳特征:"</span>, name);</div><div class="line">    <span class="comment">#取出对最佳属性对应的一列 并去掉重复值 用于得出一个属性下所包含的取值</span></div><div class="line">    featValue = numpy.unique(Sample[:, bestAttr])</div><div class="line">    <span class="comment">#计算出一个属性下包含的取值</span></div><div class="line">    numOfFeatValue = len(featValue);</div><div class="line"></div><div class="line">    <span class="comment">#最佳属性的每一个评级都打印出来</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, numOfFeatValue):</div><div class="line">        print(name, <span class="string">"评级："</span>, featValue[i])</div><div class="line">        subLabels = Label[:]</div><div class="line">        <span class="comment">#对现有的树执行 SpiltData 去掉计算过的属性所对应的样本 递归调用buildTree</span></div><div class="line">        Tree[name][i] = BuildTree(SpiltData(Sample, bestAttr, featValue[i]),subLabels)</div><div class="line">        print(<span class="string">'-------------------------'</span>);</div><div class="line">    <span class="keyword">return</span> Tree</div></pre></td></tr></table></figure>
+<p>ChooseAttr函数：在该函数中完成选出最佳特征的功能，根据Ent函数计算出的所有样本的信息熵和加权的信息熵计算信息增益，信息增越大的意味着该属性的纯度越高，选取信息增益最大的属性为最佳属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Choose函数用于 选出最佳的属性</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ChooseAttr</span><span class="params">(Sample)</span>:</span></div><div class="line">    <span class="comment">#Sample 为输入的数据</span></div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment">#获取输入数据的大小</span></div><div class="line">    [Count, Attr] = Sample.shape</div><div class="line">    numOfFeature = Attr - <span class="number">1</span></div><div class="line">    <span class="comment">#计算整个数据的信息熵</span></div><div class="line">    baseEnt = Ent(Sample)</div><div class="line">    <span class="comment">#初始信息增益</span></div><div class="line">    bestInfoGain = <span class="number">0.0</span></div><div class="line">    <span class="comment">#初始的最佳属性为 -1</span></div><div class="line">    bestFeature = <span class="number">-1</span></div><div class="line">    <span class="comment">#遍历当前所有属性</span></div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, numOfFeature):</div><div class="line">        <span class="comment">#记录出每一个属性中的取值 并去掉重复值</span></div><div class="line">        featureTemp = numpy.unique(Sample[:, j])</div><div class="line">        <span class="comment">#记录下属性取值的个数</span></div><div class="line">        numF = len(featureTemp)</div><div class="line">        newEnt = <span class="number">0.0</span>;</div><div class="line">        <span class="comment">#遍历所有的取值</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, numF):</div><div class="line">            <span class="comment">#去除掉当前已经判断的样本</span></div><div class="line">            subSet = SpiltData(Sample, j, featureTemp[i])</div><div class="line">            <span class="comment">#得到每一个取值的个数</span></div><div class="line">            [newCount, newAttr] = subSet.shape</div><div class="line">            <span class="comment">#计算每一个取值出现的概率</span></div><div class="line">            prob = newCount / Count</div><div class="line">            <span class="comment">#计算新的信息熵</span></div><div class="line">            newEnt = newEnt + prob * Ent(subSet)</div><div class="line">        <span class="comment">#计算信息增益</span></div><div class="line">        infoGain = baseEnt - newEnt</div><div class="line">        <span class="comment">#找到信息增益最大的属性 作为当前最佳属性</span></div><div class="line">        <span class="keyword">if</span> (infoGain &gt; bestInfoGain):</div><div class="line">            bestInfoGain = infoGain</div><div class="line">            bestFeature = j</div><div class="line">    <span class="keyword">return</span> bestFeature</div></pre></td></tr></table></figure>
+<p>Ent函数：计算输入样本的信息熵，通过输入Sample的最后一列统计出该正例与反例出现的概率，根据信息熵公式计算信息熵</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Ent函数用于计算信息熵</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">Ent</span><span class="params">(Sample)</span>:</span></div><div class="line">    <span class="comment">#Sample为输入的数据</span></div><div class="line"></div><div class="line">    <span class="comment">#得到输入数据的大小</span></div><div class="line">    [Count, Attr] = Sample.shape</div><div class="line">    n = Attr - <span class="number">1</span></div><div class="line">    m = Count - <span class="number">1</span></div><div class="line">    <span class="comment">#获取正例与反例所在的列</span></div><div class="line">    label = Sample[:, n]</div><div class="line">    <span class="comment">#去掉重复的数据</span></div><div class="line">    deal = numpy.unique(label)</div><div class="line">    <span class="comment">#得到最后判别情况的个数</span></div><div class="line">    numOfLabel = len(deal)</div><div class="line">    <span class="comment">#新建一个概率list 用于存储概率</span></div><div class="line">    prob = numpy.zeros([numOfLabel, <span class="number">2</span>])</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, numOfLabel):</div><div class="line">        <span class="comment">#获取正例与反例</span></div><div class="line">        prob[i, <span class="number">0</span>] = deal[i]</div><div class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, Count):</div><div class="line">            <span class="comment">#对正例 与 反例 进行计数</span></div><div class="line">            <span class="keyword">if</span> (label[j] == deal[i]):</div><div class="line">                prob[i, <span class="number">1</span>] = prob[i, <span class="number">1</span>] + <span class="number">1</span></div><div class="line">    <span class="comment">#计算出概率</span></div><div class="line">    prob[:, <span class="number">1</span>] = prob[:, <span class="number">1</span>] / Count</div><div class="line">    ent = <span class="number">0</span></div><div class="line">    <span class="comment">#根据信息熵公示计算出信息熵</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, numOfLabel):</div><div class="line">        ent = ent - prob[i, <span class="number">1</span>] * math.log2(prob[i, <span class="number">1</span>])</div><div class="line">    <span class="keyword">return</span> ent</div></pre></td></tr></table></figure>
+<p>SpiltData函数：该函数用于对数据进行拆分，去掉已经判断过的属性对应的样本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#对数据进行拆分 去掉已经判断过的属性所对应的样本</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">SpiltData</span><span class="params">(Sample, axis, value)</span>:</span></div><div class="line">    <span class="comment">#Sample 代表输入的数据</span></div><div class="line">    <span class="comment">#axis 表示要删除值所在的行</span></div><div class="line">    <span class="comment">#value表示要删除的值</span></div><div class="line">    [Count, Attr] = Sample.shape</div><div class="line">    subSet = Sample</div><div class="line">    k = <span class="number">0</span></div><div class="line">    <span class="comment">#对每一个样本都做判断 把已经做过判断的样本删掉</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, Count):</div><div class="line">        <span class="keyword">if</span> (Sample[i, axis]) != value:</div><div class="line">            subSet=numpy.delete(subSet,i-k,<span class="number">0</span>)</div><div class="line">            k = k + <span class="number">1</span></div><div class="line">    <span class="keyword">return</span> subSet</div></pre></td></tr></table></figure>
+<p>主函数部分</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TreeDict=BuildTree(data,AttrArr)</div></pre></td></tr></table></figure>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>存储树的字典：<br>{‘纹理’: {0: {‘根蒂’: {0: ‘yes’, 1: {‘色泽’: {0: ‘yes’, 1: {‘触感’: {0: ‘yes’, 1: ‘no’}}}}, 2: ‘no’}}, 1: {‘触感’: {0: ‘no’, 1: ‘yes’}}, 2: ‘no’}}</p>
+<p>递归的过程：<br>Sample:<br>[[0 0 0 0 0 0 1]<br> [1 0 1 0 0 0 1]<br> [1 0 0 0 0 0 1]<br> [0 0 1 0 0 0 1]<br> [2 0 0 0 0 0 1]<br> [0 1 0 0 1 1 1]<br> [1 1 0 1 1 1 1]<br> [1 1 0 0 1 0 1]<br> [1 1 1 1 1 0 0]<br> [0 2 2 0 2 1 0]<br> [2 2 2 2 2 0 0]<br> [2 0 0 2 2 1 0]<br> [0 1 0 1 0 0 0]<br> [2 1 1 1 0 0 0]<br> [1 1 0 0 1 1 0]<br> [2 0 0 2 2 0 0]<br> [0 0 1 1 1 0 0]]<br>最佳特征: 纹理<br>纹理 评级： 0<br>Sample:<br>[[0 0 0 0 0 0 1]<br> [1 0 1 0 0 0 1]<br> [1 0 0 0 0 0 1]<br> [0 0 1 0 0 0 1]<br> [2 0 0 0 0 0 1]<br> [0 1 0 0 1 1 1]<br> [1 1 0 0 1 0 1]<br> [0 2 2 0 2 1 0]<br> [1 1 0 0 1 1 0]]<br>最佳特征: 根蒂<br>根蒂 评级： 0<br>Sample:<br>[[0 0 0 0 0 0 1]<br> [1 0 1 0 0 0 1]<br> [1 0 0 0 0 0 1]<br> [0 0 1 0 0 0 1]<br> [2 0 0 0 0 0 1]]<br>Final<br>[[0 0 0 0 0 0 1]<br> [1 0 1 0 0 0 1]<br> [1 0 0 0 0 0 1]<br> [0 0 1 0 0 0 1]<br> [2 0 0 0 0 0 1]]</p>
+<p>根蒂 评级： 1<br>Sample:<br>[[0 1 0 0 1 1 1]<br> [1 1 0 0 1 0 1]<br> [1 1 0 0 1 1 0]]<br>最佳特征: 色泽<br>色泽 评级： 0<br>Sample:<br>[[0 1 0 0 1 1 1]]<br>Final<br>[[0 1 0 0 1 1 1]]</p>
+<p>色泽 评级： 1<br>Sample:<br>[[1 1 0 0 1 0 1]<br> [1 1 0 0 1 1 0]]<br>最佳特征: 触感<br>触感 评级： 0<br>Sample:<br>[[1 1 0 0 1 0 1]]<br>Final<br>[[1 1 0 0 1 0 1]]</p>
+<p>触感 评级： 1<br>Sample:<br>[[1 1 0 0 1 1 0]]<br>Final<br>[[1 1 0 0 1 1 0]]</p>
+<p>根蒂 评级： 2<br>Sample:<br>[[0 2 2 0 2 1 0]]<br>Final<br>[[0 2 2 0 2 1 0]]</p>
+<p>纹理 评级： 1<br>Sample:<br>[[1 1 0 1 1 1 1]<br> [1 1 1 1 1 0 0]<br> [0 1 0 1 0 0 0]<br> [2 1 1 1 0 0 0]<br> [0 0 1 1 1 0 0]]<br>最佳特征: 触感<br>触感 评级： 0<br>Sample:<br>[[1 1 1 1 1 0 0]<br> [0 1 0 1 0 0 0]<br> [2 1 1 1 0 0 0]<br> [0 0 1 1 1 0 0]]<br>Final<br>[[1 1 1 1 1 0 0]<br> [0 1 0 1 0 0 0]<br> [2 1 1 1 0 0 0]<br> [0 0 1 1 1 0 0]]</p>
+<p>触感 评级： 1<br>Sample:<br>[[1 1 0 1 1 1 1]]<br>Final<br>[[1 1 0 1 1 1 1]]</p>
+<p>纹理 评级： 2<br>Sample:<br>[[2 2 2 2 2 0 0]<br> [2 0 0 2 2 1 0]<br> [2 0 0 2 2 0 0]]<br>Final<br>[[2 2 2 2 2 0 0]<br> [2 0 0 2 2 1 0]<br> [2 0 0 2 2 0 0]]</p>
+<h2 id="树的可视化"><a href="#树的可视化" class="headerlink" title="树的可视化"></a>树的可视化</h2><p>此处使用的是网上一个常见的可视化代码</p>
+<h3 id="可视化函数"><a href="#可视化函数" class="headerlink" title="可视化函数"></a>可视化函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#绘制树形图</span></div><div class="line"><span class="keyword">import</span> matplotlib</div><div class="line"><span class="comment"># matplotlib.use('qt4agg')</span></div><div class="line"><span class="keyword">from</span> matplotlib.font_manager <span class="keyword">import</span> *</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line">myfont = FontProperties(fname=<span class="string">'/Users/zhangxuancheng/Library/Fonts/simhei.ttf'</span>)</div><div class="line">decision_node = dict(boxstyle=<span class="string">"sawtooth"</span>,fc=<span class="string">"0.8"</span>)</div><div class="line">leaf_node = dict(boxstyle=<span class="string">"round4"</span>,fc=<span class="string">"0.8"</span>)</div><div class="line">arrow_args = dict(arrowstyle=<span class="string">"&lt;-"</span>)</div><div class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</div><div class="line"><span class="comment">#获取树的叶子结点个数（确定图的宽度）</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_leaf_num</span><span class="params">(tree)</span>:</span></div><div class="line">    leaf_num = <span class="number">0</span></div><div class="line">    first_key = list(tree.keys())[<span class="number">0</span>]</div><div class="line">    next_dict = tree[first_key]</div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> next_dict.keys():</div><div class="line">        <span class="keyword">if</span> type(next_dict[key]).__name__==<span class="string">"dict"</span>:</div><div class="line">            leaf_num +=get_leaf_num(next_dict[key])</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            leaf_num +=<span class="number">1</span></div><div class="line">    <span class="keyword">return</span> leaf_num</div><div class="line"><span class="comment">#获取数的深度（确定图的高度）</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_tree_depth</span><span class="params">(tree)</span>:</span></div><div class="line">    depth = <span class="number">0</span></div><div class="line">    first_key = list(tree.keys())[<span class="number">0</span>]</div><div class="line">    next_dict = tree[first_key]</div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> next_dict.keys():</div><div class="line">        <span class="keyword">if</span> type(next_dict[key]).__name__ == <span class="string">"dict"</span>:</div><div class="line">            thisdepth = <span class="number">1</span>+ get_tree_depth(next_dict[key])</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            thisdepth = <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> thisdepth&gt;depth: depth = thisdepth</div><div class="line">    <span class="keyword">return</span> depth</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plotNode</span><span class="params">(nodeTxt, centerPt, parentPt, nodeType)</span>:</span></div><div class="line">    createPlot.ax1.annotate(nodeTxt, xy=parentPt, xycoords=<span class="string">'axes fraction'</span>,</div><div class="line">                            xytext=centerPt, textcoords=<span class="string">'axes fraction'</span>,</div><div class="line">                            va=<span class="string">"center"</span>, ha=<span class="string">"center"</span>, bbox=nodeType, arrowprops=arrow_args)</div><div class="line"></div><div class="line"><span class="comment">#在父子节点间填充文本信息</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plotMidText</span><span class="params">(cntrPt, parentPt, txtString)</span>:</span></div><div class="line">    xMid = (parentPt[<span class="number">0</span>] - cntrPt[<span class="number">0</span>]) / <span class="number">2.0</span> + cntrPt[<span class="number">0</span>]</div><div class="line">    yMid = (parentPt[<span class="number">1</span>] - cntrPt[<span class="number">1</span>]) / <span class="number">2.0</span> + cntrPt[<span class="number">1</span>]</div><div class="line">    createPlot.ax1.text(xMid, yMid, txtString, va=<span class="string">"center"</span>, ha=<span class="string">"center"</span>, rotation=<span class="number">30</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plotTree</span><span class="params">(myTree, parentPt, nodeTxt)</span>:</span></div><div class="line">    numLeafs = get_leaf_num(myTree)</div><div class="line">    depth = get_tree_depth(myTree)</div><div class="line">    firstStr = list(myTree.keys())[<span class="number">0</span>]</div><div class="line">    cntrPt = (plotTree.xOff + (<span class="number">1.0</span> + float(numLeafs)) / <span class="number">2.0</span> / plotTree.totalW, plotTree.yOff)</div><div class="line">    plotMidText(cntrPt, parentPt, nodeTxt)</div><div class="line">    plotNode(firstStr, cntrPt, parentPt, decision_node)</div><div class="line">    secondDict = myTree[firstStr]</div><div class="line">    plotTree.yOff = plotTree.yOff - <span class="number">1.0</span> / plotTree.totalD</div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> secondDict.keys():</div><div class="line">        <span class="keyword">if</span> type(secondDict[</div><div class="line">                    key]).__name__ == <span class="string">'dict'</span>:</div><div class="line">            plotTree(secondDict[key], cntrPt, str(key))</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            plotTree.xOff = plotTree.xOff + <span class="number">1.0</span> / plotTree.totalW</div><div class="line">            plotNode(secondDict[key], (plotTree.xOff, plotTree.yOff), cntrPt, leaf_node)</div><div class="line">            plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, str(key))</div><div class="line">    plotTree.yOff = plotTree.yOff + <span class="number">1.0</span> / plotTree.totalD</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">createPlot</span><span class="params">(inTree)</span>:</span></div><div class="line">    fig = plt.figure(<span class="number">1</span>, facecolor=<span class="string">'white'</span>)</div><div class="line">    fig.clf()</div><div class="line">    axprops = dict(xticks=[], yticks=[])</div><div class="line">    createPlot.ax1 = plt.subplot(<span class="number">111</span>, frameon=<span class="keyword">False</span>, **axprops)</div><div class="line">    plotTree.totalW = float(get_leaf_num(inTree))</div><div class="line">    plotTree.totalD = float(get_tree_depth(inTree))</div><div class="line">    plotTree.xOff = <span class="number">-0.5</span> / plotTree.totalW</div><div class="line">    plotTree.yOff = <span class="number">1.0</span></div><div class="line">    plotTree(inTree, (<span class="number">0.5</span>, <span class="number">1.0</span>), <span class="string">''</span>)</div><div class="line">    plt.show()</div></pre></td></tr></table></figure>
+<p>调用该函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DrawTree.createPlot(TreeDict)</div></pre></td></tr></table></figure>
+<h3 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog3%20decision%20tree/decision%20tree%208.png" alt="信息熵"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/决策树/" rel="tag"># 决策树</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/" rel="next" title="Tensorflow1.5更新：CUDA9与cuDNN7">
+                <i class="fa fa-chevron-left"></i> Tensorflow1.5更新：CUDA9与cuDNN7
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归的结束条件"><span class="nav-number">1.</span> <span class="nav-text">递归的结束条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的核心"><span class="nav-number">2.</span> <span class="nav-text">决策树的核心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树算法分类"><span class="nav-number">3.</span> <span class="nav-text">决策树算法分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ID3算法："><span class="nav-number">3.1.</span> <span class="nav-text">ID3算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C4-5算法"><span class="nav-number">3.2.</span> <span class="nav-text">C4.5算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CART算法"><span class="nav-number">3.3.</span> <span class="nav-text">CART算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">4.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码思路"><span class="nav-number">5.</span> <span class="nav-text">代码思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">6.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上代码"><span class="nav-number">7.</span> <span class="nav-text">上代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">8.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树的可视化"><span class="nav-number">9.</span> <span class="nav-text">树的可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化函数"><span class="nav-number">9.1.</span> <span class="nav-text">可视化函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化结果"><span class="nav-number">9.2.</span> <span class="nav-text">可视化结果</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2156596"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
