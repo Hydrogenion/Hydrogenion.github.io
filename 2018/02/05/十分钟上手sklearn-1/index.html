@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="sklearn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装其中包括：1.分类（Classification）2.回归（Regression）3.聚类（Clustering）4.数据降维（Dimensionality reduction）5.常用模型（Model selection）6.数据预处理（Preprocessing）本文将从sklearn的安装开始讲解，由浅">
+<meta property="og:type" content="article">
+<meta property="og:title" content="十分钟上手sklearn：安装，获取数据，数据预处理">
+<meta property="og:url" content="http://blackblog.tech/2018/02/05/十分钟上手sklearn-1/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装其中包括：1.分类（Classification）2.回归（Regression）3.聚类（Clustering）4.数据降维（Dimensionality reduction）5.常用模型（Model selection）6.数据预处理（Preprocessing）本文将从sklearn的安装开始讲解，由浅">
+<meta property="og:updated_time" content="2018-02-05T15:14:02.872Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="十分钟上手sklearn：安装，获取数据，数据预处理">
+<meta name="twitter:description" content="sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装其中包括：1.分类（Classification）2.回归（Regression）3.聚类（Clustering）4.数据降维（Dimensionality reduction）5.常用模型（Model selection）6.数据预处理（Preprocessing）本文将从sklearn的安装开始讲解，由浅">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/02/05/十分钟上手sklearn-1/"/>
+
+
+
+
+
+  <title>十分钟上手sklearn：安装，获取数据，数据预处理 | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/02/05/十分钟上手sklearn-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">十分钟上手sklearn：安装，获取数据，数据预处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-05T20:43:16+08:00">
+                2018-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装<br>其中包括：<br>1.分类（Classification）<br>2.回归（Regression）<br>3.聚类（Clustering）<br>4.数据降维（Dimensionality reduction）<br>5.常用模型（Model selection）<br>6.数据预处理（Preprocessing）<br>本文将从sklearn的安装开始讲解，由浅入深，逐步上手sklearn。</p>
+<p>sklearn官网：<a href="http://scikit-learn.org/stable/index.html" target="_blank" rel="external">http://scikit-learn.org/stable/index.html</a><br>sklearn API：<a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing" target="_blank" rel="external">http://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing</a><br><a id="more"></a></p>
+<h2 id="skleran安装"><a href="#skleran安装" class="headerlink" title="skleran安装"></a>skleran安装</h2><p>sklearn的目前版本是0.19.1<br>依赖包：<br>Python (&gt;=2.6或&gt;=3.3)<br>NumPy(&gt;=1.6.1)<br>SciPy(&gt;=0.9)</p>
+<p>使用pip安装，terminal直接执行即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -U scikit-learn</div></pre></td></tr></table></figure>
+<p>使用Anaconda安装，推荐Anaconda，因为里面已经内置了NumPy，SciPy等常用工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda install scikit-learn</div></pre></td></tr></table></figure>
+<p>安装完成后可以在python中检查一下版本，import sklearn不报错，则表示安装成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;import sklearn</div><div class="line">&gt;&gt;sklearn.__version__</div><div class="line"><span class="string">'0.19.1'</span></div></pre></td></tr></table></figure>
+<h2 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h2><p>机器学习算法往往需要大量的数据，在skleran中获取数据通常采用两种方式，一种是使用自带的数据集，另一种是创建数据集</p>
+<h3 id="导入数据集"><a href="#导入数据集" class="headerlink" title="导入数据集"></a>导入数据集</h3><p>sklearn自带了很多数据集，可以用来对算法进行测试分析，免去了自己再去找数据集的烦恼<br>其中包括：<br>鸢尾花数据集:load_iris()<br>手写数字数据集:load_digitals()<br>糖尿病数据集:load_diabetes()<br>乳腺癌数据集:load_breast_cancer()<br>波士顿房价数据集:load_boston()<br>体能训练数据集:load_linnerud()</p>
+<p>这里以鸢尾花数据集为例导入数据集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#导入sklearn的数据集</span></div><div class="line"><span class="keyword">import</span> sklearn.datasets <span class="keyword">as</span> sk_datasets</div><div class="line">iris = sk_datasets.load_iris()</div><div class="line">iris_X = iris.data <span class="comment">#导入数据</span></div><div class="line">iris_y = iris.target <span class="comment">#导入标签</span></div></pre></td></tr></table></figure>
+<h3 id="创建数据集"><a href="#创建数据集" class="headerlink" title="创建数据集"></a>创建数据集</h3><p>使用skleran的样本生成器(samples generator)可以创建数据，sklearn.datasets.samples_generator中包含了大量创建样本数据的方法。</p>
+<p>这里以分类问题创建样本数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sklearn.datasets.samples_generator <span class="keyword">as</span> sk_sample_generator</div><div class="line">X,y=sk_sample_generator.make_classification(n_samples=<span class="number">6</span>,n_features=<span class="number">5</span>,n_informative=<span class="number">2</span>,n_redundant=<span class="number">3</span>,n_classes=<span class="number">2</span>,n_clusters_per_class=<span class="number">2</span>,scale=<span class="number">1</span>,random_state=<span class="number">20</span>)</div><div class="line"><span class="keyword">for</span> x_,y_ <span class="keyword">in</span> zip(X,y):</div><div class="line">    print(y_,end=<span class="string">": "</span>)</div><div class="line">    print(x_)</div></pre></td></tr></table></figure>
+<p>参数说明：<br>n_features :特征个数= n_informative（） + n_redundant + n_repeated<br>n_informative：多信息特征的个数<br>n_redundant：冗余信息，informative特征的随机线性组合<br>n_repeated ：重复信息，随机提取n_informative和n_redundant 特征<br>n_classes：分类类别<br>n_clusters_per_class ：某一个类别是由几个cluster构成的<br>random_state：随机种子，使得实验可重复<br>n_classes*n_clusters_per_class 要小于或等于 2^n_informative</p>
+<p>打印结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="number">0</span>: [ <span class="number">0.64459602</span>  <span class="number">0.92767918</span> <span class="number">-1.32091378</span> <span class="number">-1.25725859</span> <span class="number">-0.74386837</span>]</div><div class="line"><span class="number">0</span>: [ <span class="number">1.66098845</span>  <span class="number">2.22206181</span> <span class="number">-2.86249859</span> <span class="number">-3.28323172</span> <span class="number">-1.62389676</span>]</div><div class="line"><span class="number">0</span>: [ <span class="number">0.27019475</span> <span class="number">-0.12572907</span>  <span class="number">1.1003977</span>  <span class="number">-0.6600737</span>   <span class="number">0.58334745</span>]</div><div class="line"><span class="number">1</span>: [<span class="number">-0.77182836</span> <span class="number">-1.03692724</span>  <span class="number">1.34422289</span>  <span class="number">1.52452016</span>  <span class="number">0.76221055</span>]</div><div class="line"><span class="number">1</span>: [<span class="number">-0.1407289</span>   <span class="number">0.32675611</span> <span class="number">-1.41296696</span>  <span class="number">0.4113583</span>  <span class="number">-0.75833145</span>]</div><div class="line"><span class="number">1</span>: [<span class="number">-0.76656634</span> <span class="number">-0.35589955</span> <span class="number">-0.83132182</span>  <span class="number">1.68841011</span> <span class="number">-0.4153836</span> ]</div></pre></td></tr></table></figure>
+<h3 id="数据集的划分"><a href="#数据集的划分" class="headerlink" title="数据集的划分"></a>数据集的划分</h3><p>机器学习的过程正往往需要对数据集进行划分，常分为训练集，测试集。sklearn中的model_selection为我们提供了划分数据集的方法。<br>以鸢尾花数据集为例进行划分</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sklearn.model_selection <span class="keyword">as</span> sk_model_selection</div><div class="line">X_train,X_test,y_train,y_test = sk_model_selection.train_test_split(iris_X,iris_y,train_size=<span class="number">0.3</span>,random_state=<span class="number">20</span>)</div></pre></td></tr></table></figure>
+<p>参数说明：<br>arrays：样本数组，包含特征向量和标签<br>test_size：<br>　　float-获得多大比重的测试样本 （默认：0.25）<br>　　int - 获得多少个测试样本<br>train_size: 同test_size<br>random_state:int - 随机种子（种子固定，实验可复现）<br>shuffle - 是否在分割之前对数据进行洗牌（默认True）</p>
+<p>后面我们训练模型使用的数据集都基于此</p>
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>我们为什么要进行数据预处理？<br>通常，真实生活中，我们获得的数据中往往存在很多的无用信息，甚至存在错误信息，而机器学习中有一句话叫做”Garbage in，Garbage out”，数据的健康程度对于算法结果的影响极大。数据预处理就是让那些冗余混乱的源数据变得能满足其应用要求。<br>当然，仅仅是数据预处理的方法就可以写好几千字的文章了，在这里只谈及几个基础的数据预处理的方法。<br>skleran中为我们提供了一个数据预处理的package：preprocessing，我们直接导入即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sklearn.preprocessing <span class="keyword">as</span> sk_preprocessing</div></pre></td></tr></table></figure>
+<p>下面的例子我们使用:[[1, -1, 2], [0, 2, -1], [0, 1, -2]]做为初始数据。</p>
+<h3 id="数据的归一化"><a href="#数据的归一化" class="headerlink" title="数据的归一化"></a>数据的归一化</h3><p>基于mean和std的标准化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scaler = sk_preprocessing.StandardScaler().fit(X)</div><div class="line">new_X = scaler.transform(X)</div><div class="line">print(<span class="string">'基于mean和std的标准化:'</span>,new_X)</div></pre></td></tr></table></figure>
+<p>打印结果:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">基于mean和std的标准化:</div><div class="line"> [[ <span class="number">1.41421356</span> <span class="number">-1.33630621</span>  <span class="number">1.37281295</span>]</div><div class="line"> [<span class="number">-0.70710678</span>  <span class="number">1.06904497</span> <span class="number">-0.39223227</span>]</div><div class="line"> [<span class="number">-0.70710678</span>  <span class="number">0.26726124</span> <span class="number">-0.98058068</span>]]</div></pre></td></tr></table></figure>
+<p>规范化到一定区间内 feature_range为数据规范化的范围</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scaler = sk_preprocessing.MinMaxScaler(feature_range=(<span class="number">0</span>,<span class="number">1</span>)).fit(X)</div><div class="line">new_X=scaler.transform(X)</div><div class="line">print(<span class="string">'规范化到一定区间内'</span>,new_X)</div></pre></td></tr></table></figure>
+<p>打印结果:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">规范化到一定区间内</div><div class="line"> [[<span class="number">1.</span>          <span class="number">0.</span>          <span class="number">1.</span>        ]</div><div class="line"> [ <span class="number">0.</span>          <span class="number">1.</span>          <span class="number">0.25</span>      ]</div><div class="line"> [ <span class="number">0.</span>          <span class="number">0.66666667</span>  <span class="number">0.</span>        ]]</div></pre></td></tr></table></figure>
+<h3 id="数据的正则化"><a href="#数据的正则化" class="headerlink" title="数据的正则化"></a>数据的正则化</h3><p>首先求出样本的p-范数，然后该样本的所有元素都要除以该范数，这样最终使得每个样本的范数都为1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">new_X = sk_preprocessing.normalize(X,norm=<span class="string">'l2'</span>)</div><div class="line">print(<span class="string">'求二范数'</span>,new_X)</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">规范化到一定区间内</div><div class="line"> [[<span class="number">0.40824829</span> <span class="number">-0.40824829</span>  <span class="number">0.81649658</span>]</div><div class="line"> [ <span class="number">0.</span>          <span class="number">0.89442719</span> <span class="number">-0.4472136</span> ]</div><div class="line"> [ <span class="number">0.</span>          <span class="number">0.4472136</span>  <span class="number">-0.89442719</span>]]</div></pre></td></tr></table></figure>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文介绍了sklearn的安装，sklearn导入数据集，创建数据集的基本方法，对数据预处理的常用方法进行了介绍。<br>下一篇，将重点讲解如何使用sklearn进行特征提取，使用sklearn实现机器学习经典算法，模型的保存等内容。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sklearn/" rel="tag"># sklearn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/29/决策树——ID3算法实现/" rel="next" title="决策树——ID3算法实现">
+                <i class="fa fa-chevron-left"></i> 决策树——ID3算法实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/05/十分钟上手sklearn-2/" rel="prev" title="十分钟上手sklearn：特征提取，常用模型，交叉验证">
+                十分钟上手sklearn：特征提取，常用模型，交叉验证 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#skleran安装"><span class="nav-number">1.</span> <span class="nav-text">skleran安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取数据"><span class="nav-number">2.</span> <span class="nav-text">获取数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导入数据集"><span class="nav-number">2.1.</span> <span class="nav-text">导入数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据集"><span class="nav-number">2.2.</span> <span class="nav-text">创建数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集的划分"><span class="nav-number">2.3.</span> <span class="nav-text">数据集的划分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据预处理"><span class="nav-number">3.</span> <span class="nav-text">数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据的归一化"><span class="nav-number">3.1.</span> <span class="nav-text">数据的归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据的正则化"><span class="nav-number">3.2.</span> <span class="nav-text">数据的正则化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2156596"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
