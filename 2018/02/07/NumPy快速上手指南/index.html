@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="如果想要python进行数据处理，机器学习，那么必然离不开一个科学计算包——NumPy(Numeric Python)。甚至可以算是将python变成一个NumPy中包括：1.一个强大的N维数组对象Array2.比较成熟的（广播）函数库3.用于整合C/C++和Fortran代码的工具包4.实用的线性代数、傅里叶变换和随机数生成函数。numpy和稀疏矩阵运算包scipy配合使用更加方便。除此之外，N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NumPy快速上手指南">
+<meta property="og:url" content="http://blackblog.tech/2018/02/07/NumPy快速上手指南/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="如果想要python进行数据处理，机器学习，那么必然离不开一个科学计算包——NumPy(Numeric Python)。甚至可以算是将python变成一个NumPy中包括：1.一个强大的N维数组对象Array2.比较成熟的（广播）函数库3.用于整合C/C++和Fortran代码的工具包4.实用的线性代数、傅里叶变换和随机数生成函数。numpy和稀疏矩阵运算包scipy配合使用更加方便。除此之外，N">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog5%20numpy/numpy1.png">
+<meta property="og:updated_time" content="2018-02-07T15:48:53.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NumPy快速上手指南">
+<meta name="twitter:description" content="如果想要python进行数据处理，机器学习，那么必然离不开一个科学计算包——NumPy(Numeric Python)。甚至可以算是将python变成一个NumPy中包括：1.一个强大的N维数组对象Array2.比较成熟的（广播）函数库3.用于整合C/C++和Fortran代码的工具包4.实用的线性代数、傅里叶变换和随机数生成函数。numpy和稀疏矩阵运算包scipy配合使用更加方便。除此之外，N">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog5%20numpy/numpy1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/02/07/NumPy快速上手指南/"/>
+
+
+
+
+
+  <title>NumPy快速上手指南 | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/02/07/NumPy快速上手指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NumPy快速上手指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-07T16:47:37+08:00">
+                2018-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/07/NumPy快速上手指南/" class="leancloud_visitors" data-flag-title="NumPy快速上手指南">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>如果想要python进行数据处理，机器学习，那么必然离不开一个科学计算包——NumPy(Numeric Python)。甚至可以算是将python变成一个<br>NumPy中包括：<br>1.一个强大的N维数组对象Array<br>2.比较成熟的（广播）函数库<br>3.用于整合C/C++和Fortran代码的工具包<br>4.实用的线性代数、傅里叶变换和随机数生成函数。numpy和稀疏矩阵运算包scipy配合使用更加方便。<br>除此之外，NumPy提供了许多高级的数值编程工具，如：矩阵数据类型、矢量处理，以及精密的运算库。<br>官网：<a href="https://docs.scipy.org/doc/numpy-dev/user/index.html" target="_blank" rel="external">https://docs.scipy.org/doc/numpy-dev/user/index.html</a><br>今天这篇博客就对NumPy的基础操作进行讲解<br><a id="more"></a></p>
+<h2 id="NumPy的安装"><a href="#NumPy的安装" class="headerlink" title="NumPy的安装"></a>NumPy的安装</h2><p>两种方式Pip与Anaconda，这里我还是推荐Anaconda，集中管理环境非常方便。<br>Pip:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -U numpy</div></pre></td></tr></table></figure>
+<p>Anaconda安装Anaconda的时候会自动装NumPy，如果不幸没装上，那么自己手动装一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda install numpy</div></pre></td></tr></table></figure>
+<p>安装完成后，进入python测试一下,不报错就证明安装成功了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import numpy</div></pre></td></tr></table></figure>
+<h2 id="NumPy第一步"><a href="#NumPy第一步" class="headerlink" title="NumPy第一步"></a>NumPy第一步</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import numpy</div></pre></td></tr></table></figure>
+<p>一般我们用 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import numpy as np</div></pre></td></tr></table></figure>
+<p>有的人也会用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; from numpy import *</div></pre></td></tr></table></figure>
+<p>但是我喜欢第二种写法，也只推荐第二种写法，因为不容和其他package搞混。</p>
+<h2 id="NumPy基本数据类型"><a href="#NumPy基本数据类型" class="headerlink" title="NumPy基本数据类型"></a>NumPy基本数据类型</h2><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog5%20numpy/numpy1.png" alt="数据类型"></p>
+<h2 id="NumPy数组"><a href="#NumPy数组" class="headerlink" title="NumPy数组"></a>NumPy数组</h2><p>NumPy数组是一个多维数组的对象，成为ndarray，由数组实际的数据和描述这些数据的元数据组成，一般来说，大部分操作仅针对于元数据，而不改变底层实际的数据。<br>注意：<br>1.NumPy数组的下标起始是0，不是1<br>2.同一个NumPy数组中所有元素的类型必须相同</p>
+<p>特别：NumPy数组的创建访问中的[]与()功能无异<br>例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.zeros((5,5))</div></pre></td></tr></table></figure>
+<p>也可以写为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.zeros([5,5])</div></pre></td></tr></table></figure>
+<p>下面的代码[]和()会出现混用的情况</p>
+<h3 id="NumPy基本数组的创建"><a href="#NumPy基本数组的创建" class="headerlink" title="NumPy基本数组的创建"></a>NumPy基本数组的创建</h3><p>NumPy数组有很多种创建方式，一般最为常用的方式为将list转换为np.array</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = [1,2,3,4,5]</div><div class="line">&gt;&gt;&gt; data =np.array(data)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([1, 2, 3, 4, 5])</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([1,2,3,4,5],<span class="built_in">float</span>)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([ 1.,  2.,  3.,  4.,  5.])</div></pre></td></tr></table></figure>
+<p>这里的float用于指定类型，可以不写，也可以写为int等其他类型。<br>注意，使用array函数创建时，参数必须是由方括号括起来的列表，而不能使用多个数值作为参数调用array。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([1,2,3]) <span class="comment">#对！！！</span></div><div class="line">&gt;&gt;&gt; data = np.array(1,2,3)   <span class="comment">#错！！！</span></div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line 1, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">ValueError: only 2 non-keyword arguments accepted</div></pre></td></tr></table></figure>
+<p>创建二维数组,多维数组以此类推。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6)])</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[1, 2, 3],</div><div class="line">       [4, 5, 6]])</div></pre></td></tr></table></figure>
+<h3 id="NumPy特殊数组的创建"><a href="#NumPy特殊数组的创建" class="headerlink" title="NumPy特殊数组的创建"></a>NumPy特殊数组的创建</h3><p>NumPy提供了一些使用占位符创建数组的函数。这些函数有助于满足除了数组扩展的需要，同时降低了高昂的运算开销。<br>下方代码</p>
+<p>创建一个全0的数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.zeros((5,5))</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[ 0.,  0.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  0.,  0.]])</div></pre></td></tr></table></figure>
+<p>创建一个全1的数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.ones((5,5))</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[ 1.,  1.,  1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.,  1.,  1.]])</div></pre></td></tr></table></figure>
+<p>创建一个对角阵</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.eye(5)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[ 1.,  0.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  1.,  0.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  1.,  0.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  1.,  0.],</div><div class="line">       [ 0.,  0.,  0.,  0.,  1.]])</div></pre></td></tr></table></figure>
+<p>创建一个内容随机并且依赖与内存状态的数组，主要起占位作用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.empty(10)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([ -1.28822975e-231,  -1.49457028e-154,   6.92642698e-310,</div><div class="line">         2.30467739e-314,   6.92642708e-310,   2.30467739e-314,</div><div class="line">         6.92642698e-310,   2.30467739e-314,   6.92642699e-310,</div><div class="line">         2.30467739e-314])</div></pre></td></tr></table></figure>
+<p>同样创建的过程中，可以指定数组元素的类型</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">data = np.ones((3,3),dtype=<span class="built_in">float</span>)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[ 1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.],</div><div class="line">       [ 1.,  1.,  1.]])</div></pre></td></tr></table></figure>
+<p>NumPy甚至可以直接创建等差数列，不仅支持整数，也支持浮点数。<br>以10开始，50结束，8为差的等差数列，最后一项一定会小于等于50。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data =np.arange(10, 50, 8) </div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([10, 18, 26, 34, 42])</div></pre></td></tr></table></figure>
+<h3 id="NumPy数组的访问"><a href="#NumPy数组的访问" class="headerlink" title="NumPy数组的访问"></a>NumPy数组的访问</h3><p>和list的访问方式基本一致，支持切片等操作。<br>以二维数组为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; data[0]        <span class="comment">#第一行</span></div><div class="line">array([1, 2, 3])</div><div class="line">&gt;&gt;&gt; data[:,0]      <span class="comment">#第一列</span></div><div class="line">array([1, 4, 7])</div><div class="line">&gt;&gt;&gt; data[:2]       <span class="comment">#前两行</span></div><div class="line">array([[1, 2, 3],</div><div class="line">       [4, 5, 6]])</div><div class="line">&gt;&gt;&gt; data[:,:2]     <span class="comment">#前两列</span></div><div class="line">array([[1, 2],</div><div class="line">       [4, 5],</div><div class="line">       [7, 8]])</div><div class="line">&gt;&gt;&gt; data[1][2]     <span class="comment">#访问特定元素</span></div><div class="line">6</div></pre></td></tr></table></figure>
+<p>可以使用take操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="comment">#一维数组</span></div><div class="line">&gt;&gt;&gt; data = np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; data.take(1)</div><div class="line">2</div><div class="line">&gt;&gt;&gt; i = np.array([0,0,1,2,1,0])</div><div class="line">&gt;&gt;&gt; data.take(i)</div><div class="line">array([1, 1, 2, 3, 2, 1])</div><div class="line">&gt;&gt;&gt; <span class="comment">#二维数组</span></div><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6)])</div><div class="line">&gt;&gt;&gt; data.take(1,axis=1)</div><div class="line">array([2, 5])</div></pre></td></tr></table></figure>
+<p>与take对应的是put，put可以快速修改一个array内的元素</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([0, 1, 2, 3, 4, 5])</div><div class="line">&gt;&gt;&gt; b = np.array([10,11,12])</div><div class="line">&gt;&gt;&gt; a.put([0,2],b)</div><div class="line">&gt;&gt;&gt; a</div><div class="line">array([10,  1, 11,  3,  4,  5])</div></pre></td></tr></table></figure>
+<p>可以使用比较符访问元素</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; data[data&gt;1]</div><div class="line">array([2, 3])</div></pre></td></tr></table></figure>
+<h3 id="NumPy数组的遍历"><a href="#NumPy数组的遍历" class="headerlink" title="NumPy数组的遍历"></a>NumPy数组的遍历</h3><p>一维数组的遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([2,3,4])</div><div class="line">&gt;&gt;&gt; <span class="keyword">for</span> i <span class="keyword">in</span> data:</div><div class="line">...     <span class="built_in">print</span>(i)</div><div class="line">... </div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td></tr></table></figure>
+<p>二维数组的遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,3),(5,7),(9,11)])</div><div class="line">&gt;&gt;&gt; <span class="keyword">for</span> i <span class="keyword">in</span> data:</div><div class="line">...    <span class="built_in">print</span>(i)</div><div class="line">... </div><div class="line">[1 3]</div><div class="line">[5 7]</div><div class="line">[ 9 11]</div></pre></td></tr></table></figure>
+<p>当然还可以这么玩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,3),(5,7),(9,11)])</div><div class="line">&gt;&gt;&gt; <span class="keyword">for</span> (a,b) <span class="keyword">in</span> data:</div><div class="line">...    <span class="built_in">print</span>(a*b)</div><div class="line">... </div><div class="line">3</div><div class="line">35</div><div class="line">99</div></pre></td></tr></table></figure>
+<h3 id="NumPy数组的常用属性"><a href="#NumPy数组的常用属性" class="headerlink" title="NumPy数组的常用属性"></a>NumPy数组的常用属性</h3><p>下面这些属性属于非常常用的属性，很容易记忆<br>1.ndarray.ndim：数组的维数（即数组轴的个数），等于秩。<br>2.ndarray.shape：数组的大小。为一个表示数组在每个维度上大小的整数元组。例如二维数组中，表示数组的“行数”和“列数”。<br>3.ndarray.size：数组元素的总个数，等于shape属性中元组元素的乘积。<br>4.ndarray.dtype：表示数组中元素类型的对象。<br>5.ndarray.itemsize：数组中每个元素的字节大小。<br>6.ndarray.data：包含实际数组元素的缓冲区，一般不用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; data.ndim</div><div class="line">2</div><div class="line">&gt;&gt;&gt; data.shape</div><div class="line">(3, 3)</div><div class="line">&gt;&gt;&gt; data.size</div><div class="line">9</div><div class="line">&gt;&gt;&gt; data.dtype</div><div class="line">dtype(<span class="string">'int64'</span>)</div><div class="line">&gt;&gt;&gt; data.itemsize</div><div class="line">8</div><div class="line">&gt;&gt;&gt; data.data</div><div class="line">&lt;memory at 0x1151f1dc8&gt;</div></pre></td></tr></table></figure>
+<h3 id="NumPy数组的基本操作"><a href="#NumPy数组的基本操作" class="headerlink" title="NumPy数组的基本操作"></a>NumPy数组的基本操作</h3><p>in：测试数值是否在数组中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; 2 <span class="keyword">in</span> data</div><div class="line">True</div><div class="line">&gt;&gt;&gt; 10 <span class="keyword">in</span> data</div><div class="line">False</div></pre></td></tr></table></figure>
+<p>reshape：数组的重排列<br>例：一维数组变为二维数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array((1,2,3,4,5,6))</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([1, 2, 3, 4, 5, 6])</div><div class="line">&gt;&gt;&gt; data.reshape((2,3))</div><div class="line">array([[1, 2, 3],</div><div class="line">       [4, 5, 6]])</div></pre></td></tr></table></figure>
+<p>insert：插入元素<br>参数:<br>   arr：数组<br>   obj：插入某一轴的对应标号<br>   values：插入的值<br>   axis：axis=0 插入行，axis=1 插入列</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; <span class="comment">#第一行插入1</span></div><div class="line">&gt;&gt;&gt; data = np.insert(data,0,1,axis=0)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[1, 1, 1],</div><div class="line">       [1, 2, 3],</div><div class="line">       [4, 5, 6],</div><div class="line">       [7, 8, 9]])</div><div class="line">&gt;&gt;&gt; <span class="comment">#第三列插入5</span></div><div class="line">&gt;&gt;&gt; data = np.insert(data,2,5,axis=1)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[1, 1, 5, 1],</div><div class="line">       [1, 2, 5, 3],</div><div class="line">       [4, 5, 5, 6],</div><div class="line">       [7, 8, 5, 9]])</div></pre></td></tr></table></figure>
+<p>delete：删除元素<br>参数:<br>   arr：数组<br>   obj：删除某一轴的对应标号<br>   axis：axis=0 删除行，axis=1 删除列</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[1, 2, 3],</div><div class="line">       [4, 5, 6],</div><div class="line">       [7, 8, 9]])</div><div class="line">&gt;&gt;&gt; data = np.delete(data,0,axis=0) <span class="comment">#删除第一行</span></div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[4, 5, 6],</div><div class="line">       [7, 8, 9]])</div><div class="line">&gt;&gt;&gt; data = np.delete(data,0,axis=1) <span class="comment">#删除第一列</span></div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([[5, 6],</div><div class="line">       [8, 9]])</div></pre></td></tr></table></figure>
+<p>copy：创建一个新的，内存分离的拷贝</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array((1,2,3))</div><div class="line">&gt;&gt;&gt; val = data </div><div class="line">&gt;&gt;&gt; val is data</div><div class="line">True</div><div class="line">&gt;&gt;&gt; val = data.copy()</div><div class="line">&gt;&gt;&gt; val is data</div><div class="line">False</div></pre></td></tr></table></figure>
+<p>赋值与copy的区别在于一个是浅拷贝，一个是深拷贝<br>使用上的区别：赋值操作，val与data指向同一个空间，data变，val变；copy操作，val与data指向不同的空间，data变，val不变。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array((1,2,3))</div><div class="line">&gt;&gt;&gt; val = data</div><div class="line">&gt;&gt;&gt; data[0]=5</div><div class="line">&gt;&gt;&gt; val</div><div class="line">array([5, 2, 3])</div><div class="line">&gt;&gt;&gt; data = np.array((1,2,3))</div><div class="line">&gt;&gt;&gt; val = data.copy()</div><div class="line">&gt;&gt;&gt; data[0]=5</div><div class="line">&gt;&gt;&gt; val</div><div class="line">array([1, 2, 3])</div></pre></td></tr></table></figure>
+<p>transpose：转置 (可以直接.T）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array(((1,2,3),(4,5,6),(7,8,9)))</div><div class="line">&gt;&gt;&gt; data.transpose()</div><div class="line">array([[1, 4, 7],</div><div class="line">       [2, 5, 8],</div><div class="line">       [3, 6, 9]])</div><div class="line">&gt;&gt;&gt; data.T</div><div class="line">array([[1, 4, 7],</div><div class="line">       [2, 5, 8],</div><div class="line">       [3, 6, 9]])</div></pre></td></tr></table></figure>
+<p>fill：用一个值填充数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array((1,2,3))</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([1, 2, 3])</div><div class="line">&gt;&gt;&gt; data.fill(0)</div><div class="line">&gt;&gt;&gt; data</div><div class="line">array([0, 0, 0])</div></pre></td></tr></table></figure>
+<p>flatten：把多维数组转为一维数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array(((1,2,3),(4,5,6),(7,8,9)))</div><div class="line">&gt;&gt;&gt; data.flatten()</div><div class="line">array([1, 2, 3, 4, 5, 6, 7, 8, 9])</div></pre></td></tr></table></figure>
+<p>concatenate：把多个数组串联起来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; b=np.array([4,5])</div><div class="line">&gt;&gt;&gt; c=np.array([7,8,9,10])</div><div class="line">&gt;&gt;&gt; np.concatenate((a,b,c))</div><div class="line">array([ 1,  2,  3,  4,  5,  7,  8,  9, 10])</div><div class="line"></div><div class="line">&gt;&gt;&gt; a=np.array([(1,2,3),(4,5,6)])</div><div class="line">&gt;&gt;&gt; b=np.array([(99,88),(77,66)])</div><div class="line">&gt;&gt;&gt; np.concatenate((a,b),axis=1)</div><div class="line">array([[ 1,  2,  3, 99, 88],</div><div class="line">       [ 4,  5,  6, 77, 66]])</div></pre></td></tr></table></figure>
+<p>多维数组连接的过程中要注意连接轴的大小相同，不然会报错</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; np.concatenate((a,b),axis=0)</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line 1, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">ValueError: all the input array dimensions except <span class="keyword">for</span> the concatenation axis must match exactly</div></pre></td></tr></table></figure>
+<p>newaxis：增加维度</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data=np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; data.shape</div><div class="line">(3,)</div><div class="line">&gt;&gt;&gt; data=data[:,np.newaxis]</div><div class="line">&gt;&gt;&gt; data.shape</div><div class="line">(3, 1)</div></pre></td></tr></table></figure>
+<p>tile：重复某个数组(类似于Matlab中的remat)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([[1,2],[3,4]])</div><div class="line">&gt;&gt;&gt; np.tile(data,2)</div><div class="line">array([[1, 2, 1, 2],</div><div class="line">       [3, 4, 3, 4]])</div><div class="line">&gt;&gt;&gt; np.tile(data,[2,3])</div><div class="line">array([[1, 2, 1, 2, 1, 2],</div><div class="line">       [3, 4, 3, 4, 3, 4],</div><div class="line">       [1, 2, 1, 2, 1, 2],</div><div class="line">       [3, 4, 3, 4, 3, 4]])</div></pre></td></tr></table></figure>
+<p>vstack, hstack：数组按列堆叠，按行堆叠</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([(2,3),(1,4)])</div><div class="line">&gt;&gt;&gt; b = np.array([(4,9),(6,2)])</div><div class="line">&gt;&gt;&gt; array([[2, 3],</div><div class="line">       [1, 4],</div><div class="line">       [4, 9],</div><div class="line">       [6, 2]])</div><div class="line">&gt;&gt;&gt; np.hstack((a,b))</div><div class="line">array([[2, 3, 4, 9],</div><div class="line">       [1, 4, 6, 2]])</div></pre></td></tr></table></figure>
+<h3 id="NumPy数组的数学操作"><a href="#NumPy数组的数学操作" class="headerlink" title="NumPy数组的数学操作"></a>NumPy数组的数学操作</h3><p>加减乘除，乘法是对应元素相乘，点乘使用.dot()</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a =np.ones((2,2))</div><div class="line">&gt;&gt;&gt; b= np.array([-2,5])</div><div class="line">&gt;&gt;&gt; a</div><div class="line">array([[ 1.,  1.],</div><div class="line">       [ 1.,  1.]])</div><div class="line">&gt;&gt;&gt; b</div><div class="line">array([-2,  5])</div><div class="line">&gt;&gt;&gt; a+b</div><div class="line">array([[-1.,  6.],</div><div class="line">       [-1.,  6.]])</div><div class="line">&gt;&gt;&gt; a-b</div><div class="line">array([[ 3., -4.],</div><div class="line">       [ 3., -4.]])</div><div class="line">&gt;&gt;&gt; a*b</div><div class="line">array([[-2.,  5.],</div><div class="line">       [-2.,  5.]])</div><div class="line">&gt;&gt;&gt; a/b</div><div class="line">array([[-0.5,  0.2],</div><div class="line">       [-0.5,  0.2]])</div><div class="line">&gt;&gt;&gt; a.dot(b)</div><div class="line">array([ 3.,  3.])</div></pre></td></tr></table></figure>
+<p>常量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; np.e</div><div class="line">2.718281828459045</div><div class="line">&gt;&gt;&gt; np.pi</div><div class="line">3.141592653589793</div><div class="line">&gt;&gt;&gt; np.Inf</div><div class="line">inf</div><div class="line">&gt;&gt;&gt; np.NaN</div><div class="line">nan</div></pre></td></tr></table></figure>
+<p>sum：求和，可以用数组的成员函数也可以用NumPy的标准函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,4,6])</div><div class="line">&gt;&gt;&gt; a.sum()</div><div class="line">12</div><div class="line">&gt;&gt;&gt; np.sum(a)</div><div class="line">12</div></pre></td></tr></table></figure>
+<p>prod：求积，可以用数组的成员函数也可以用NumPy的标准函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,4,6])</div><div class="line">&gt;&gt;&gt; a.prod()</div><div class="line">48</div><div class="line">&gt;&gt;&gt; np.prod(a)</div><div class="line">48</div></pre></td></tr></table></figure>
+<p>mean，var，std：平均数，方差，标准差</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,6,13])</div><div class="line">&gt;&gt;&gt; a.mean()</div><div class="line">7.0</div><div class="line">&gt;&gt;&gt; a.var()</div><div class="line">20.666666666666668</div><div class="line">&gt;&gt;&gt; a.std()</div><div class="line">4.5460605656619517</div></pre></td></tr></table></figure>
+<p>max，min：最大，最小元素</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,6,10])</div><div class="line">&gt;&gt;&gt; a.max()</div><div class="line">10</div><div class="line">&gt;&gt;&gt; a.min()</div><div class="line">2</div></pre></td></tr></table></figure>
+<p>argmax，argmin：最大，最小元素对应的索引值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,6,10])</div><div class="line">&gt;&gt;&gt; a.argmax()</div><div class="line">2</div><div class="line">&gt;&gt;&gt; a.argmin()</div><div class="line">0</div></pre></td></tr></table></figure>
+<p>ceil，floor，rint：取上限，取下限，四舍五入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1.4,2.5,3.8])</div><div class="line">&gt;&gt;&gt; np.ceil(a)  <span class="comment">#上限</span></div><div class="line">array([ 2.,  3.,  4.])</div><div class="line">&gt;&gt;&gt; np.floor(a) <span class="comment">#下限</span></div><div class="line">array([ 1.,  2.,  3.])</div><div class="line">&gt;&gt;&gt; np.rint(a)  <span class="comment">#四舍五入</span></div><div class="line">array([ 1.,  2.,  4.])</div></pre></td></tr></table></figure>
+<p>unique：去除数组中重复的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,2,2,3,4,5,6,6,7,8,9,9,10])</div><div class="line">&gt;&gt;&gt; np.unique(a)</div><div class="line">array([ 2,  3,  4,  5,  6,  7,  8,  9, 10])</div></pre></td></tr></table></figure>
+<p>clip：把数组里的元素限制到指定范围，即把大于上限的设为上限，小于下限的设为下限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([2,2,2,3,4,5,6,6,7,8,9,9,10])</div><div class="line">&gt;&gt;&gt; a.clip(0,6)</div><div class="line">array([2, 2, 2, 3, 4, 5, 6, 6, 6, 6, 6, 6, 6])</div></pre></td></tr></table></figure>
+<p>diagonal：取出对角元素</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([(1,2,3),(4,5,6),(7,8,9)])</div><div class="line">&gt;&gt;&gt; a.diagonal()</div><div class="line">array([1, 5, 9])</div></pre></td></tr></table></figure>
+<p>sort：排序</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([5,8,1,23,2,2,5,4,2,2,2,3,6,9,8,7,41])</div><div class="line">&gt;&gt;&gt; a.sort()</div><div class="line">&gt;&gt;&gt; a</div><div class="line">array([ 1,  2,  2,  2,  2,  2,  3,  4,  5,  5,  6,  7,  8,  8,  9, 23, 41])</div></pre></td></tr></table></figure>
+<p>还有一些数学运算操作：abs, sign, sqrt, log, log10, exp, sin, cos, tan, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh,和 arctanh，太多了，就不一个一个展示了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1.4,2.5,3.8])</div><div class="line">&gt;&gt;&gt; np.cos(a)</div><div class="line">array([ 0.16996714, -0.80114362, -0.79096771])</div><div class="line">&gt;&gt;&gt; np.sin(a)</div><div class="line">array([ 0.98544973,  0.59847214, -0.61185789])</div><div class="line">&gt;&gt;&gt; np.tan(a)</div><div class="line">array([ 5.79788372, -0.7470223 ,  0.77355609])</div><div class="line">&gt;&gt;&gt; np.log10(a)</div><div class="line">array([ 0.14612804,  0.39794001,  0.5797836 ])</div></pre></td></tr></table></figure>
+<h2 id="NumPy矩阵"><a href="#NumPy矩阵" class="headerlink" title="NumPy矩阵"></a>NumPy矩阵</h2><p>matrix是array的分支，matrix和array在很多时候都是通用的，你用哪一个都一样。但这时候，官方建议大家如果两个可以通用，那就选择array，因为array更灵活，速度更快。<br>但是matrix的优势就是相对简单的运算符号，比如两个矩阵相乘，就是用符号*，但是array相乘不能这么用，得用.dot()<br>array的优势就是不仅仅表示二维，还能表示3、4、5…维，而且在大部分Python程序里，array也是更常用的。<br>在这里只说一些NumPy矩阵的基本操作</p>
+<h3 id="创建矩阵"><a href="#创建矩阵" class="headerlink" title="创建矩阵"></a>创建矩阵</h3><p>方法与创建数组类似</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.mat([(1,2,3),(2,4,6),(3,5,7)])</div><div class="line">&gt;&gt;&gt; data</div><div class="line">matrix([[1, 2, 3],</div><div class="line">        [2, 4, 6],</div><div class="line">        [3, 5, 7]])</div></pre></td></tr></table></figure>
+<p>通过array转换为mat</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a=np.array([[1,5],[3,6]])</div><div class="line">&gt;&gt;&gt; b=np.mat(a)</div><div class="line">&gt;&gt;&gt; a</div><div class="line">array([[1, 5],</div><div class="line">       [3, 6]])</div><div class="line">&gt;&gt;&gt; b</div><div class="line">matrix([[1, 5],</div><div class="line">        [3, 6]])</div></pre></td></tr></table></figure>
+<h3 id="元素读取"><a href="#元素读取" class="headerlink" title="元素读取"></a>元素读取</h3><p>元素读取与array有所区别</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.mat([(1,2,3),(2,4,10),(3,5,3)])</div><div class="line">&gt;&gt;&gt; a[0,1]</div><div class="line">2</div><div class="line">&gt;&gt;&gt; a[0][1]</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line 1, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">  File <span class="string">"/Users/zhangxuancheng/anaconda3/lib/python3.6/site-packages/numpy/matrixlib/defmatrix.py"</span>, line 284, <span class="keyword">in</span> __getitem__</div><div class="line">    out = N.ndarray.__getitem__(self, index)</div><div class="line">IndexError: index 1 is out of bounds <span class="keyword">for</span> axis 0 with size 1</div></pre></td></tr></table></figure>
+<h3 id="快速的符号运算"><a href="#快速的符号运算" class="headerlink" title="快速的符号运算"></a>快速的符号运算</h3><p>matrix.T transpose：返回矩阵的转置矩阵<br>matrix.I inverse：返回矩阵的逆矩阵<br>matrix.H hermitian (conjugate) transpose：返回复数矩阵的共轭元素矩阵<br>matrix.A base array：返回矩阵基于的数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.mat([(1,2,3),(2,4,10),(3,5,3)])</div><div class="line">&gt;&gt;&gt; data.I</div><div class="line">matrix([[-9.5 ,  2.25,  2.  ],</div><div class="line">        [ 6.  , -1.5 , -1.  ],</div><div class="line">        [-0.5 ,  0.25,  0.  ]])</div><div class="line">&gt;&gt;&gt; data = np.mat([(1,2,3),(2,4,10),(3,5,3)])</div><div class="line">&gt;&gt;&gt; data.T</div><div class="line">matrix([[ 1,  2,  3],</div><div class="line">        [ 2,  4,  5],</div><div class="line">        [ 3, 10,  3]])</div><div class="line">&gt;&gt;&gt; data.I</div><div class="line">matrix([[-9.5 ,  2.25,  2.  ],</div><div class="line">        [ 6.  , -1.5 , -1.  ],</div><div class="line">        [-0.5 ,  0.25,  0.  ]])</div><div class="line">&gt;&gt;&gt; data.H</div><div class="line">matrix([[ 1,  2,  3],</div><div class="line">        [ 2,  4,  5],</div><div class="line">        [ 3, 10,  3]])</div><div class="line">&gt;&gt;&gt; data.A</div><div class="line">array([[ 1,  2,  3],</div><div class="line">       [ 2,  4, 10],</div><div class="line">       [ 3,  5,  3]])</div></pre></td></tr></table></figure>
+<p>矩阵差乘</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.mat([(1,2,3),(2,4,10),(3,5,3)])</div><div class="line">&gt;&gt;&gt; b = np.mat([(8,2,2),(2,5,10),(3,5,2)])</div><div class="line">&gt;&gt;&gt; a*b</div><div class="line">matrix([[21, 27, 28],</div><div class="line">        [54, 74, 64],</div><div class="line">        [43, 46, 62]])</div></pre></td></tr></table></figure>
+<p>注意此时.dot()表示叉乘</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a.dot(b)</div><div class="line">matrix([[21, 27, 28],</div><div class="line">        [54, 74, 64],</div><div class="line">        [43, 46, 62]])</div></pre></td></tr></table></figure>
+<h2 id="NumPy的比较操作"><a href="#NumPy的比较操作" class="headerlink" title="NumPy的比较操作"></a>NumPy的比较操作</h2><p>为什么把比较操作拿出来单独说一下？<br>因为NumPy的比较操作非常方便，而且我最开始不太会用，每次改代码都卡在这里。- -!</p>
+<h3 id="比较操作"><a href="#比较操作" class="headerlink" title="比较操作"></a>比较操作</h3><p>按照元素比较</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1,3,2])</div><div class="line">&gt;&gt;&gt; b = np.array([2,6,0])</div><div class="line">&gt;&gt;&gt; a&gt;b</div><div class="line">array([False, False,  True], dtype=bool)</div><div class="line">&gt;&gt;&gt; a==b</div><div class="line">array([False, False, False], dtype=bool)</div><div class="line">&gt;&gt;&gt; a&lt;b</div><div class="line">array([ True,  True, False], dtype=bool)</div></pre></td></tr></table></figure>
+<p>any：判断数组内元素是否存在True<br>all：判断数组内元素是否都为True</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([True,False,True])</div><div class="line">&gt;&gt;&gt; any(a)</div><div class="line">True</div><div class="line">&gt;&gt;&gt; all(a)</div><div class="line">False</div></pre></td></tr></table></figure>
+<p>logical_and,logical_or,logical_not：对数组的每个元素执行与或非</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1,3,2])</div><div class="line">&gt;&gt;&gt; b = np.array([2,6,0])</div><div class="line">&gt;&gt;&gt; np.logical_and(a &gt; 0, b&lt; 3)</div><div class="line">array([ True, False,  True], dtype=bool)</div><div class="line">&gt;&gt;&gt; np.logical_or(a &gt; 0, b&lt; 3)</div><div class="line">array([ True,  True,  True], dtype=bool)</div><div class="line">&gt;&gt;&gt; np.logical_not(a &gt; 0, b&lt; 3)</div><div class="line">array([False, False, False], dtype=bool)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; c = np.array([False, True, False])</div><div class="line">&gt;&gt;&gt; d = np.array([False, True, True])</div><div class="line">&gt;&gt;&gt; np.logical_and(c,d)</div><div class="line">array([False,  True, False], dtype=bool)</div><div class="line">&gt;&gt;&gt; np.logical_or(c,d)</div><div class="line">array([False,  True,  True], dtype=bool)</div><div class="line">&gt;&gt;&gt; np.logical_not(c,d)</div><div class="line">array([ True, False,  True], dtype=bool)</div></pre></td></tr></table></figure>
+<p>where：类似于C的a &gt; b ? a : b<br>如果a！=2则a*2,否则1/a</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1,3,2])</div><div class="line">&gt;&gt;&gt; np.where(a!=1,1/a,a*2)</div><div class="line">array([ 2.        ,  0.33333333,  0.5       ])</div></pre></td></tr></table></figure>
+<p>isnan，isfinite判断是否为 NaN 和 Inf：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1, np.NaN, np.Inf])</div><div class="line">&gt;&gt;&gt; np.isnan(a)</div><div class="line">array([False,  True, False], dtype=bool)</div><div class="line">&gt;&gt;&gt; np.isfinite(a)</div><div class="line">array([ True, False, False], dtype=bool)</div></pre></td></tr></table></figure>
+<p>nonzero：返回非零元素的索引</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([0,3,2,0,2,4,0,1,0,2,0])</div><div class="line">&gt;&gt;&gt; a.nonzero()</div><div class="line">(array([1, 2, 4, 5, 7, 9]),)</div></pre></td></tr></table></figure>
+<h3 id="使用比较操作进行访问"><a href="#使用比较操作进行访问" class="headerlink" title="使用比较操作进行访问"></a>使用比较操作进行访问</h3><p>前文提到的使用比较符访问元素的实质是用bool类型进行数组的访问，其操作非常多样</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; data = np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; data[data&gt;1]</div><div class="line">array([2, 3])</div><div class="line">&gt;&gt;&gt; data = np.array([1,2,3])</div><div class="line">&gt;&gt;&gt; data[np.logical_and(data&gt;1,data&lt;3)]</div><div class="line">array([2])</div></pre></td></tr></table></figure>
+<h2 id="更为复杂的数学运算"><a href="#更为复杂的数学运算" class="headerlink" title="更为复杂的数学运算"></a>更为复杂的数学运算</h2><p>NumPy内部支持线性代数，逻辑，随机数，多项式，傅立叶等多种更为复杂的数学运算，在这里就仅仅给出常用的函数，不再做演示。</p>
+<h3 id="线性代数"><a href="#线性代数" class="headerlink" title="线性代数"></a>线性代数</h3><p>所有有关线性代数的运算均在np.linalg中<br>dot 矩阵乘法。两个一维数组计算点乘，两个多维数组计算叉乘<br>diag 返回矩阵对角线元素<br>trace 对角线元素和<br>det 行列式<br>eig 特征值、特征向量<br>inv 逆<br>qr QR分解<br>svd 奇异值分解<br>solve 解线性方程Ax=b<br>lstsq 计算Ax=b的最小二乘解</p>
+<p>使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([[4, 2, 1], [5, 3, 7], [4, 12, 1]])</div><div class="line">&gt;&gt;&gt; vals,vecs=np.linalg.eig(a)</div><div class="line">&gt;&gt;&gt; vals</div><div class="line">array([ 12.77471879,   2.48129495,  -7.25601373])</div><div class="line">&gt;&gt;&gt; vecs</div><div class="line">array([[ 0.2296414 ,  0.78053395,  0.02907888],</div><div class="line">       [ 0.64158394, -0.32601736, -0.57313025],</div><div class="line">       [ 0.7318708 , -0.53336613,  0.81894819]])</div></pre></td></tr></table></figure>
+<h3 id="随机数"><a href="#随机数" class="headerlink" title="随机数"></a>随机数</h3><p>所有有关线性代数的运算均在np.random中<br>rand 均匀分布的样本值<br>randint 给定上下限的随机整数<br>randn 标准正态分布<br>binomial 二项分布<br>normal 正态分布<br>chisquare 卡方分布<br>gamma Gamma分布<br>uniform [0,1]之间的均匀分布<br>poisson 泊松分布<br>shuffle 洗牌</p>
+<p>使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; np.random.normal(1.2,4.0)</div><div class="line">1.7491764117192623</div><div class="line">&gt;&gt;&gt; np.random.normal(size=10)</div><div class="line">array([-0.23043955,  0.62456816,  1.40737576,  0.54461331,  1.90235434,</div><div class="line">       -1.04516153, -0.00286667,  0.71792032, -0.37120643,  0.68524438])</div><div class="line">&gt;&gt;&gt; np.random.poisson(10.0) <span class="comment">#10.0表示拉姆达</span></div><div class="line">12</div></pre></td></tr></table></figure>
+<h3 id="多项式"><a href="#多项式" class="headerlink" title="多项式"></a>多项式</h3><p>poly 给定一组根，寻找多项式系数<br>roots 给顶一组系数，寻找根<br>polyint 求积分<br>polyder 求导数<br>polyval 求函数在某一点的值<br>polyfit 使用最小二乘法做曲线拟合<br>polyadd, polysub, polymul, 和 polydiv 函数处理多项式系统的加，减，乘除</p>
+<p>使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="comment">#参数均为多项式的系数</span></div><div class="line">&gt;&gt;&gt; np.polyint([2,2,2,1])</div><div class="line">array([ 0.5       ,  0.66666667,  1.        ,  1.        ,  0.        ])</div><div class="line">&gt;&gt;&gt; np.polyder([ 0.5       ,  0.66666667,  1.        ,  1.        ,  0.        ])</div><div class="line">array([ 2.        ,  2.00000001,  2.        ,  1.        ])</div><div class="line">&gt;&gt;&gt; <span class="comment">#求x=4时，曲线9x^3-5x^2+2x+2=0的值</span></div><div class="line">&gt;&gt;&gt;  np.polyval([9, -5, 2, 2], 4)</div><div class="line">506</div></pre></td></tr></table></figure>
+<h3 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h3><p>median 求中值<br>corrcoef 求相关系数<br>cov 求协方差</p>
+<p>使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1, 4, 6, 7, 1, 9, 3])</div><div class="line">&gt;&gt;&gt; np.median(a)</div><div class="line">4.0</div><div class="line">&gt;&gt;&gt; np.corrcoef(a)</div><div class="line">1.0</div><div class="line">&gt;&gt;&gt; np.cov(a)</div><div class="line">array(9.285714285714286)</div></pre></td></tr></table></figure>
+<h3 id="唯一化以及其它的集合逻辑"><a href="#唯一化以及其它的集合逻辑" class="headerlink" title="唯一化以及其它的集合逻辑"></a>唯一化以及其它的集合逻辑</h3><p>unique(x) 返回唯一元素<br>intersect1d(x,y) 交集<br>union1d(x,y) 并集<br>in1d(x,y) 布尔型数组，表示x中的元素是否存在于y中<br>setdiff1d(x,y) 差<br>setxor1d(x,y) 异或</p>
+<p>使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = np.array([1, 4, 6, 7, 1, 9, 3])</div><div class="line">&gt;&gt;&gt; b = np.array([4, 10, 6, 2, 3, 8, 5])</div><div class="line">&gt;&gt;&gt; np.intersect1d(a,b)</div><div class="line">array([3, 4, 6])</div></pre></td></tr></table></figure>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p>二进制文件： np.save 、np.load<br>文本文件：  np.loadtxt、np.savetxt<br>二进制文件会存储为.npy的格式</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>基本上NumPy的常用操作都在这里了，当然肯定还有很多没有总结到。可以看出，NumPy的确是处理数据的好手，NumPy的运行速度非常快，并且在一定程度上弥补了python在运算效率上的不足，仅仅使用numpy就可以实现很多机器学习中比较复杂的算法了，过几天传一个用NumPy写的SVM。<br>希望大家喜欢这一期，嘿嘿！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/05/十分钟上手sklearn-2/" rel="next" title="十分钟上手sklearn：特征提取，常用模型，交叉验证">
+                <i class="fa fa-chevron-left"></i> 十分钟上手sklearn：特征提取，常用模型，交叉验证
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy的安装"><span class="nav-number">1.</span> <span class="nav-text">NumPy的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy第一步"><span class="nav-number">2.</span> <span class="nav-text">NumPy第一步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy基本数据类型"><span class="nav-number">3.</span> <span class="nav-text">NumPy基本数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy数组"><span class="nav-number">4.</span> <span class="nav-text">NumPy数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy基本数组的创建"><span class="nav-number">4.1.</span> <span class="nav-text">NumPy基本数组的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy特殊数组的创建"><span class="nav-number">4.2.</span> <span class="nav-text">NumPy特殊数组的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy数组的访问"><span class="nav-number">4.3.</span> <span class="nav-text">NumPy数组的访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy数组的遍历"><span class="nav-number">4.4.</span> <span class="nav-text">NumPy数组的遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy数组的常用属性"><span class="nav-number">4.5.</span> <span class="nav-text">NumPy数组的常用属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy数组的基本操作"><span class="nav-number">4.6.</span> <span class="nav-text">NumPy数组的基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy数组的数学操作"><span class="nav-number">4.7.</span> <span class="nav-text">NumPy数组的数学操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy矩阵"><span class="nav-number">5.</span> <span class="nav-text">NumPy矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建矩阵"><span class="nav-number">5.1.</span> <span class="nav-text">创建矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素读取"><span class="nav-number">5.2.</span> <span class="nav-text">元素读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速的符号运算"><span class="nav-number">5.3.</span> <span class="nav-text">快速的符号运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy的比较操作"><span class="nav-number">6.</span> <span class="nav-text">NumPy的比较操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#比较操作"><span class="nav-number">6.1.</span> <span class="nav-text">比较操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用比较操作进行访问"><span class="nav-number">6.2.</span> <span class="nav-text">使用比较操作进行访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更为复杂的数学运算"><span class="nav-number">7.</span> <span class="nav-text">更为复杂的数学运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性代数"><span class="nav-number">7.1.</span> <span class="nav-text">线性代数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机数"><span class="nav-number">7.2.</span> <span class="nav-text">随机数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式"><span class="nav-number">7.3.</span> <span class="nav-text">多项式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#统计"><span class="nav-number">7.4.</span> <span class="nav-text">统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唯一化以及其它的集合逻辑"><span class="nav-number">7.5.</span> <span class="nav-text">唯一化以及其它的集合逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作"><span class="nav-number">8.</span> <span class="nav-text">文件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">9.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2156596"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

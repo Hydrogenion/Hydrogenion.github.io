@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blackblog.tech/2018/02/07/NumPy%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%E6%8C%87%E5%8D%97/</loc>
+    
+    <lastmod>2018-02-07T15:48:53.487Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blackblog.tech/2018/02/05/%E5%8D%81%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8Bsklearn-2/</loc>
     
     <lastmod>2018-02-05T17:34:53.134Z</lastmod>
