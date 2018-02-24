@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blackblog.tech/2018/02/23/Eight-Neural-Network/</loc>
+    <lastmod>2018-02-24T16:43:18.393Z</lastmod>
+    <data>
+        <display>
+        <title>一文看懂四种基本的神经网络架构</title>
+        <pubTime>2018-02-23T14:06:07.000Z</pubTime>
+        
+        <tag>神经网络</tag>
+         
+         
+           
+             
+              <breadCrumb title="机器学习" url="http://blackblog.tech/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blackblog.tech/2018/02/07/NumPyQuickStart/</loc>
     <lastmod>2018-02-07T16:07:00.385Z</lastmod>
     <data>
