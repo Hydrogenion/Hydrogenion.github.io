@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta name="description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一句话：一个采用数据流图，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一步步上手TensorFlow——基础知识">
 <meta property="og:url" content="http://blackblog.tech/2018/03/11/TensorflowStartUp/index.html">
 <meta property="og:site_name" content="Black'Blog">
-<meta property="og:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta property="og:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一句话：一个采用数据流图，">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup2.png">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup3.png">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup4.png">
-<meta property="og:updated_time" content="2018-03-11T14:36:08.544Z">
+<meta property="og:updated_time" content="2018-03-11T14:41:02.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一步步上手TensorFlow——基础知识">
-<meta name="twitter:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta name="twitter:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一句话：一个采用数据流图，">
 <meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif">
 
 
@@ -366,7 +366,7 @@
       
 
       
-        <p>之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。<br>TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。<br>TensorFlow从名字上，我们就可以对他有一定的理解。<br>Tensor：张量，表示N维数组。<br>Flow：流，表示给予数据流图的计算。<br>TensorFlow一张图 ：一个采用数据流图，用于数值计算的开源软件库。节点在图中表示数学操作，图中的线则表示在节点间相互联系的多维数据数组，即张量。<br>此图来自于TensorFlow中文社区<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif" alt="TensorFLowing"><br>更多关于TensorFlow的知识，可以登陆其官网进行查询<br><a href="https://www.tensorflow.org" target="_blank" rel="external">https://www.tensorflow.org</a><br>本篇博客的重点在于TensorFlow基础知识的讲解，包括安装，Graph，Session，Variable，Feed，Fetch的讲解。<br><a id="more"></a></p>
+        <p>之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。<br>TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。<br>TensorFlow从名字上，我们就可以对他有一定的理解。<br>Tensor：张量，表示N维数组。<br>Flow：流，表示给予数据流图的计算。<br>TensorFlow一句话：一个采用数据流图，用于数值计算的开源软件库。节点在图中表示数学操作，图中的线则表示在节点间相互联系的多维数据数组，即张量。<br>本篇博客的重点在于TensorFlow基础知识的讲解，包括安装，Graph，Session，Variable，Feed，Fetch的讲解。<br>更多关于TensorFlow的知识，可以登陆其官网进行查询<br><a href="https://www.tensorflow.org" target="_blank" rel="external">https://www.tensorflow.org</a><br><a id="more"></a></p>
 <h2 id="TensorFlow的安装"><a href="#TensorFlow的安装" class="headerlink" title="TensorFlow的安装"></a>TensorFlow的安装</h2><p>工欲善其事 必先利其器，安装tf自然是第一步。<br>首先安装好python，我使用的是python3.6，确认自己是否安装有pip。<br>使用这两句话可以查询自己的pip是否安装正确</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ pip -V  <span class="comment"># for Python 2.7</span></div><div class="line">$ pip3 -V <span class="comment"># for Python 3.n</span></div></pre></td></tr></table></figure>
 <p>安装TensorFlow</p>
@@ -379,7 +379,8 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</div><div class="line">hello = tf.constant(<span class="string">'Hello, TensorFlow!'</span>)</div><div class="line">sess = tf.Session()</div><div class="line">print(sess.run(hello))</div></pre></td></tr></table></figure>
 <p>正确输出如下内容，表示安装成功</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hello, TensorFlow!</div></pre></td></tr></table></figure>
-<h2 id="TensorFlow的基本概念"><a href="#TensorFlow的基本概念" class="headerlink" title="TensorFlow的基本概念"></a>TensorFlow的基本概念</h2><p>图（Graph）：表示计算任务。</p>
+<h2 id="TensorFlow的基本概念"><a href="#TensorFlow的基本概念" class="headerlink" title="TensorFlow的基本概念"></a>TensorFlow的基本概念</h2><p>TensorFlow就是一个采用数据流图，用于数值计算的开源软件库。节点在图中表示数学操作，图中的线则表示在节点间相互联系的多维数据数组，即张量。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif" alt="TensorFLowing"><br>此图来自于TensorFlow中文社区</p>
+<p>图（Graph）：表示计算任务。</p>
 <p>会话（Session）：建立会话，此时会生成一张空图；在会话中添加节点和边，形成一张图，一个会话可以有多个图，通过执行这些图得到结果。</p>
 <p>张量（Tensor）：一个N维数组，用来表示数据。</p>
 <p>变量（Variable）：用来记录一些数据和状态。</p>
