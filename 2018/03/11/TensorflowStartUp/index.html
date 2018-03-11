@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一步步上手TensorFlow——基础知识">
+<meta property="og:url" content="http://blackblog.tech/2018/03/11/TensorflowStartUp/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup2.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup3.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup4.png">
+<meta property="og:updated_time" content="2018-03-11T14:36:08.544Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一步步上手TensorFlow——基础知识">
+<meta name="twitter:description" content="之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。TensorFlow从名字上，我们就可以对他有一定的理解。Tensor：张量，表示N维数组。Flow：流，表示给予数据流图的计算。TensorFlow一张图 ：一个采用数据流图">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/03/11/TensorflowStartUp/"/>
+
+
+
+
+
+  <title>一步步上手TensorFlow——基础知识 | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/03/11/TensorflowStartUp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一步步上手TensorFlow——基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-11T15:37:05+08:00">
+                2018-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/11/TensorflowStartUp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/03/11/TensorflowStartUp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/03/11/TensorflowStartUp/" class="leancloud_visitors" data-flag-title="一步步上手TensorFlow——基础知识">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前发过了几篇关于机器学习的帖子，使用的框架多为TensorFlow。<br>TensorFlow 是一个用于人工智能的开源神器。作为常用的机器学习框架，可被用于语音识别或图像识别等多项机器学习和深度学习领域，且上手简单，教材丰富。<br>TensorFlow从名字上，我们就可以对他有一定的理解。<br>Tensor：张量，表示N维数组。<br>Flow：流，表示给予数据流图的计算。<br>TensorFlow一张图 ：一个采用数据流图，用于数值计算的开源软件库。节点在图中表示数学操作，图中的线则表示在节点间相互联系的多维数据数组，即张量。<br>此图来自于TensorFlow中文社区<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup1.gif" alt="TensorFLowing"><br>更多关于TensorFlow的知识，可以登陆其官网进行查询<br><a href="https://www.tensorflow.org" target="_blank" rel="external">https://www.tensorflow.org</a><br>本篇博客的重点在于TensorFlow基础知识的讲解，包括安装，Graph，Session，Variable，Feed，Fetch的讲解。<br><a id="more"></a></p>
+<h2 id="TensorFlow的安装"><a href="#TensorFlow的安装" class="headerlink" title="TensorFlow的安装"></a>TensorFlow的安装</h2><p>工欲善其事 必先利其器，安装tf自然是第一步。<br>首先安装好python，我使用的是python3.6，确认自己是否安装有pip。<br>使用这两句话可以查询自己的pip是否安装正确</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ pip -V  <span class="comment"># for Python 2.7</span></div><div class="line">$ pip3 -V <span class="comment"># for Python 3.n</span></div></pre></td></tr></table></figure>
+<p>安装TensorFlow</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ pip -V  <span class="comment"># for Python 2.7</span></div><div class="line">$ pip3 -V <span class="comment"># for Python 3.n</span></div></pre></td></tr></table></figure>
+<p>如果上一句代码执行失败，执行如下代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo pip  install --upgrade tfBinaryURL   <span class="comment"># Python 2.7</span></div><div class="line">$ sudo pip3 install --upgrade tfBinaryURL   <span class="comment"># Python 3.n</span></div></pre></td></tr></table></figure>
+<p>如果想要安装其他版本的tf，执行如下代码，自行修改URL就可以安装不同版本的tf了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo pip3 install --upgrade \</div><div class="line"> https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.6.0-py3-none-any.whl</div></pre></td></tr></table></figure>
+<p>安装好后进入python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</div><div class="line">hello = tf.constant(<span class="string">'Hello, TensorFlow!'</span>)</div><div class="line">sess = tf.Session()</div><div class="line">print(sess.run(hello))</div></pre></td></tr></table></figure>
+<p>正确输出如下内容，表示安装成功</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hello, TensorFlow!</div></pre></td></tr></table></figure>
+<h2 id="TensorFlow的基本概念"><a href="#TensorFlow的基本概念" class="headerlink" title="TensorFlow的基本概念"></a>TensorFlow的基本概念</h2><p>图（Graph）：表示计算任务。</p>
+<p>会话（Session）：建立会话，此时会生成一张空图；在会话中添加节点和边，形成一张图，一个会话可以有多个图，通过执行这些图得到结果。</p>
+<p>张量（Tensor）：一个N维数组，用来表示数据。</p>
+<p>变量（Variable）：用来记录一些数据和状态。</p>
+<p>feed和fetch：用于对数据进行操作</p>
+<h2 id="创建图"><a href="#创建图" class="headerlink" title="创建图"></a>创建图</h2><p>TensorFlow 是一个编程系统, 使用图来表示计算任务。 图中的节点被称之为 op (operation 的缩写)。一个 op 获得 0 个或多个 Tensor, 执行计算, 产生 0 个或多个 Tensor。<br>每个 Tensor 是一个类型化的多维数组. 例如, 你可以将一小组图像集表示为一个四维浮点数数组, 这四个维度分别是 [batch, height, width, channels]。<br>构建图的第一步, 是创建源op。<br>源op不需要任何输入, 例如 常量 (Constant)。源 op 的输出被传递给其它 op 做运算.<br>创建一个图</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</div><div class="line"><span class="comment"># 创建一个常量 op, 产生一个 1x2 矩阵. 这个 op 被作为一个节点加到默认图中.</span></div><div class="line">t1 = tf.constant([[<span class="number">3.</span>,<span class="number">3.</span>]])</div><div class="line"><span class="comment">#创建另外一个常量 op, 产生一个 2x1 矩阵.</span></div><div class="line">t2 = tf.constant([[<span class="number">4.</span>],[<span class="number">4.</span>]])</div><div class="line"><span class="comment">#创建一个矩阵乘法 matmul op , 把 'matrix1' 和 'matrix2' 作为输入</span></div><div class="line"><span class="comment"># 返回值 'product' 代表矩阵乘法的结果.</span></div><div class="line">product = tf.matmul(t1,t2)</div></pre></td></tr></table></figure>
+<p>用到的两个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tf.constant(value, dtype=<span class="keyword">None</span>, shape=<span class="keyword">None</span>, name=<span class="string">'Const'</span>)<span class="comment">#用于创建一个内容为value，类型为dtype，大小为shape的常量Tensor。</span></div><div class="line"></div><div class="line">tf.matmul(a, b, transpose_a=<span class="keyword">False</span>, transpose_b=<span class="keyword">False</span>, a_is_sparse=<span class="keyword">False</span>, b_is_sparse=<span class="keyword">False</span>, name=<span class="keyword">None</span>)<span class="comment">#将矩阵a与矩阵b相乘，返回a*b的结果</span></div></pre></td></tr></table></figure>
+<h2 id="启动图"><a href="#启动图" class="headerlink" title="启动图"></a>启动图</h2><p>上一步中完成后，默认图中现有三个节点，两个constant op，一个matmul op。但这仅仅是完成了图的创建，如果要得到最终的结果，我们必须要启动这个图。<br>启动图的第一步就是构造一个会话（Sess），创建一个Session对象。调用 sess 的 run() 方法来执行矩阵乘法 op, 传入 product 作为该方法的参数。函数调用 ‘run(product)’ 触发了图中三个 op (两个常量 op 和一个矩阵乘法 op) 的执行。最终任务结束，关闭会话。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 启动默认图.</span></div><div class="line">sess = tf.Session()</div><div class="line"><span class="comment"># 调用 sess 的 'run()' 方法来执行矩阵乘法 op, 传入 'product' 作为该方法的参数.</span></div><div class="line">result = sess.run(product)</div><div class="line"><span class="keyword">print</span> (result)</div><div class="line"><span class="comment"># 任务完成, 关闭会话.</span></div><div class="line">sess.close()</div></pre></td></tr></table></figure>
+<p>最终的输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[ <span class="number">24.</span>]]<span class="comment">#没问题，算对了</span></div></pre></td></tr></table></figure>
+<p>我们也可以使用with代码块来实现对话的自动关闭,在离开with代码块时，会话会自动关闭。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">    result = sess.run(product)</div><div class="line">    print(result)</div></pre></td></tr></table></figure>
+<p>最终的输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[ <span class="number">24.</span>]]</div></pre></td></tr></table></figure>
+<h2 id="交互式对话"><a href="#交互式对话" class="headerlink" title="交互式对话"></a>交互式对话</h2><p>使用上述方法，会出现一个对话被绑定在一个变量上的情况，有的时候我们并不想这么做，所以我们可以使用交互式对话的方式避免这样的情况。<br>使用 Tensor.eval() 和 Operation.run() 方法代替 Session.run()</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">sess = tf.InteractiveSession()</div><div class="line">x = tf.Variable([<span class="number">1.0</span>, <span class="number">2.0</span>]) <span class="comment">#后面会讲到Variable</span></div><div class="line">a = tf.constant([<span class="number">5.0</span>, <span class="number">3.0</span>])</div><div class="line"><span class="comment"># 使用初始化器 initializer op 的 run() 方法初始化 'x'，由于x是一个Variable，所以我们要对其进行初始化。</span></div><div class="line">x.initializer.run()</div><div class="line"><span class="comment"># 增加一个减法 subtract op, 从 'x' 减去 'a'. 运行减法 op, 输出结果</span></div><div class="line">sub = tf.subtract(x,a)</div><div class="line"><span class="keyword">print</span> (sub.eval())</div></pre></td></tr></table></figure>
+<p>最终的输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">-4.</span> <span class="number">-1.</span>] <span class="comment">#没错，又算对了</span></div></pre></td></tr></table></figure>
+<h2 id="张量（Tensor）"><a href="#张量（Tensor）" class="headerlink" title="张量（Tensor）"></a>张量（Tensor）</h2><p>TensorFlow的名字中第一个单词就是Tensor，可见Tensor在TensorFlow中的重要性。<br>Tensor可以理解为是一个数据结构，其实就是一个N维数组。TensorFlow用tensor表示所有的数据。<br>在计算图中,操作间传递的数据都是tensor。<br>一个 tensor包含一个静态类型rank，和一个shape。</p>
+<h3 id="阶（Rank）"><a href="#阶（Rank）" class="headerlink" title="阶（Rank）"></a>阶（Rank）</h3><p>阶（Rank）用于描述张量的维数<br>一阶Tensor可以理解为数学上的向量，二阶Tensor可以理解为数学上的矩阵。<br>对于一个二阶张量你可以用语句t[i, j]来访问其中的任何元素。而对于三阶张量你可以用’t[i, j, k]’来访问其中的任何元素。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">    t1 = tf.constant([<span class="number">1.0</span>,<span class="number">2.0</span>,<span class="number">3.0</span>])</div><div class="line">    t2 = tf.constant([[<span class="number">1.0</span>,<span class="number">2.0</span>],[<span class="number">3.0</span>,<span class="number">4.0</span>]])</div><div class="line">    t3 = tf.constant([[[<span class="number">2.0</span>,<span class="number">4.0</span>],[<span class="number">6.0</span>,<span class="number">8.0</span>]],[[<span class="number">1.0</span>,<span class="number">2.0</span>],[<span class="number">3.0</span>,<span class="number">4.0</span>]]])</div><div class="line">    print(t1[<span class="number">0</span>].eval())</div><div class="line">    print(t2[<span class="number">1</span>].eval())</div><div class="line">    print(t2[<span class="number">1</span>,<span class="number">0</span>].eval())</div><div class="line">    print(t3[<span class="number">1</span>,<span class="number">0</span>].eval())</div></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.0</span></div><div class="line">[ <span class="number">3.</span>  <span class="number">4.</span>]</div><div class="line"><span class="number">3.0</span></div><div class="line">[ <span class="number">1.</span>  <span class="number">2.</span>]</div></pre></td></tr></table></figure>
+<p>不同阶的数学表示<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup2.png" alt="TensorFLowing"></p>
+<h3 id="形状（Shape）"><a href="#形状（Shape）" class="headerlink" title="形状（Shape）"></a>形状（Shape）</h3><p>这个属性与nparray的shape属性基本一致，因为一个Tensor可以理解为是一个N维数组，所以Shape属性就是获取数组的大小。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">    t1 = tf.constant([<span class="number">1.0</span>,<span class="number">2.0</span>,<span class="number">3.0</span>])</div><div class="line">    t2 = tf.constant([[<span class="number">1.0</span>,<span class="number">2.0</span>],[<span class="number">3.0</span>,<span class="number">4.0</span>]])</div><div class="line">    t3 = tf.constant([[[<span class="number">2.0</span>,<span class="number">4.0</span>],[<span class="number">6.0</span>,<span class="number">8.0</span>]],[[<span class="number">1.0</span>,<span class="number">2.0</span>],[<span class="number">3.0</span>,<span class="number">4.0</span>]]])</div><div class="line">    print(t1.shape)</div><div class="line">    print(t2.shape)</div><div class="line">    print(t3.shape)</div></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="number">3</span>,)</div><div class="line">(<span class="number">2</span>, <span class="number">2</span>)</div><div class="line">(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>)</div></pre></td></tr></table></figure>
+<h3 id="数据类型（dtype）"><a href="#数据类型（dtype）" class="headerlink" title="数据类型（dtype）"></a>数据类型（dtype）</h3><p>不同的数据类型<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup3.png" alt="TensorFLowing"></p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量用来记录一些数据和状态，维护图执行过程中的状态信息。<br>当训练模型时，用变量来存储和更新参数。变量包含张量 (Tensor)存放于内存的缓存区。建模时它们需要被明确地初始化，模型训练后它们必须被存储到磁盘。这些变量的值可在之后模型训练和分析是被加载。</p>
+<h3 id="变量的创建"><a href="#变量的创建" class="headerlink" title="变量的创建"></a>变量的创建</h3><p>当创建一个变量时，可以一个张量作为初始值传入构造函数Variable()。初始值可以是常量也可以是随机值。<br>但注意，初始化变量时，都需要指定传入张量的Shape，Tensor的Shape会自动成为变量的Shape。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#创建两个变量</span></div><div class="line">weights = tf.Variable(tf.random_normal([<span class="number">784</span>, <span class="number">20</span>], stddev=<span class="number">0.35</span>),name=<span class="string">"weights"</span>)</div><div class="line">biases = tf.Variable(tf.zeros([<span class="number">20</span>]), name=<span class="string">"biases"</span>)</div></pre></td></tr></table></figure>
+<h3 id="变量的初始化"><a href="#变量的初始化" class="headerlink" title="变量的初始化"></a>变量的初始化</h3><p>变量的初始化必须在模型的其它操作运行之前先明确地完成。最简单的方法就是添加一个给所有变量初始化的操作，并在使用模型之前首先运行那个操作。<br>除此之外，也可以从检查点文件中重新获取变量值。<br>使用tf.initialize_all_variables()初始化所有变量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">init = tf.global_variables_initializer()</div></pre></td></tr></table></figure>
+<p>使用tf.initialize_all_variables()将所有的变量并行的初始化。<br>我们也可以使用一个变量的initialized_value()方法初始化另一个变量的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#使用weights初始化w2</span></div><div class="line">w2 = tf.Variable(w1.initialized_value(), name=<span class="string">"w2"</span>)</div></pre></td></tr></table></figure>
+<p>最后我们整体执行一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#创建两个变量</span></div><div class="line">w1 = tf.Variable(tf.random_normal([<span class="number">784</span>, <span class="number">20</span>], stddev=<span class="number">0.35</span>),name=<span class="string">"weights"</span>)</div><div class="line">b1 = tf.Variable(tf.zeros([<span class="number">20</span>]), name=<span class="string">"biases"</span>)</div><div class="line"><span class="comment">#初始化所有变量</span></div><div class="line">init = tf.global_variables_initializer()</div><div class="line"><span class="comment">#使用weights初始化w2</span></div><div class="line">w2 = tf.Variable(w1.initialized_value(), name=<span class="string">"w2"</span>)</div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  sess.run(init)</div><div class="line">  print(w1)</div><div class="line">  print(b1)</div><div class="line">  print(w2)</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;tf.Variable <span class="string">'weights:0'</span> shape=(<span class="number">784</span>, <span class="number">20</span>) dtype=float32_ref&gt;</div><div class="line">&lt;tf.Variable <span class="string">'biases:0'</span> shape=(<span class="number">20</span>,) dtype=float32_ref&gt;</div><div class="line">&lt;tf.Variable <span class="string">'w2:0'</span> shape=(<span class="number">784</span>, <span class="number">20</span>) dtype=float32_ref&gt;</div></pre></td></tr></table></figure>
+<h3 id="变量的保存与恢复"><a href="#变量的保存与恢复" class="headerlink" title="变量的保存与恢复"></a>变量的保存与恢复</h3><p>我们在训练模型的过程中，经常需要将已经训练好的模型进行保存，这个时候我们需要将其变量进行保存，并在下一次使用时进行恢复。<br>使用tf.train.Saver()创建一个Saver来管理模型中的所有变量。</p>
+<p>变量的保存</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建一些变量</span></div><div class="line">w1 = tf.Variable(tf.random_normal([<span class="number">784</span>, <span class="number">20</span>], stddev=<span class="number">0.35</span>),name=<span class="string">"weights"</span>)</div><div class="line">b1 = tf.Variable(tf.zeros([<span class="number">20</span>]), name=<span class="string">"biases"</span>)</div><div class="line"><span class="comment"># 初始化</span></div><div class="line">init_op = tf.global_variables_initializer()</div><div class="line"><span class="comment"># 创建一个Saver</span></div><div class="line">saver = tf.train.Saver()</div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  sess.run(init_op)</div><div class="line">  save_path = saver.save(sess, <span class="string">"./tmp/model.ckpt"</span>)</div></pre></td></tr></table></figure>
+<p>保存成功后，一般会得到这四个文件<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tfstartup4.png" alt="TensorFLowing"></p>
+<p>变量的恢复<br>此时我们不再需要对变量进行初始化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建一些变量</span></div><div class="line">w1 = tf.Variable(tf.random_normal([<span class="number">784</span>, <span class="number">20</span>], stddev=<span class="number">0.35</span>),name=<span class="string">"weights"</span>)</div><div class="line">b1 = tf.Variable(tf.zeros([<span class="number">20</span>]), name=<span class="string">"biases"</span>)</div><div class="line"><span class="comment"># 创建一个Saver</span></div><div class="line">saver = tf.train.Saver()</div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  <span class="comment"># Restore variables from disk.</span></div><div class="line">  saver.restore(sess, <span class="string">"./tmp/model.ckpt"</span>)</div></pre></td></tr></table></figure>
+<h3 id="使用变量实现一个计数器"><a href="#使用变量实现一个计数器" class="headerlink" title="使用变量实现一个计数器"></a>使用变量实现一个计数器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建一个变量, 初始化为标量 0.</span></div><div class="line">state = tf.Variable(<span class="number">0</span>, name=<span class="string">"counter"</span>)</div><div class="line"><span class="comment"># 创建一个 op, 其作用是使 state 增加 1</span></div><div class="line">one = tf.constant(<span class="number">1</span>)</div><div class="line">new = tf.add(state, one)</div><div class="line">update = tf.assign(state, new) <span class="comment">#使用assign将 new 赋值给 state</span></div><div class="line"><span class="comment"># 启动图后, 变量必须先经过`初始化` (init) op 初始化,</span></div><div class="line"><span class="comment"># 首先必须增加一个`初始化` op 到图中.</span></div><div class="line">init_op = tf.global_variables_initializer()</div><div class="line"><span class="comment"># 启动图, 运行 op</span></div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  <span class="comment"># 运行 'init' op</span></div><div class="line">  sess.run(init_op)</div><div class="line">  <span class="comment"># 打印 'state' 的初始值</span></div><div class="line">  <span class="keyword">print</span> (sess.run(state))</div><div class="line">  <span class="comment"># 运行 op, 更新 'state', 并打印 'state'</span></div><div class="line">  <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">3</span>):</div><div class="line">    sess.run(update)</div><div class="line">    print(sess.run(state))</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">0</div><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td></tr></table></figure>
+<p>其中的一个函数：tf.assign(ref, value, validate_shape=None, use_locking=None, name=None)，函数完成了将value赋值给ref的作用。其中：ref 必须是tf.Variable创建的tensor，如果ref=tf.constant()会报错！</p>
+<h2 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h2><p>Fetch用于取回操作的输出内容。<br>为了取回操作的输出内容,可以在使用 Session对象的 run()调用执行图时,传入一些 tensor,这些tensor会帮助你取回结果。<br>需要获取的多个 tensor 值，在 op 的一次运行中一起获得（而不是逐个去获取 tensor）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">input1 = tf.constant(<span class="number">3.0</span>)</div><div class="line">input2 = tf.constant(<span class="number">2.0</span>)</div><div class="line">added= tf.add(input1, input2)</div><div class="line">mul = tf.multiply(input1, added)</div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  result = sess.run([mul, added])  <span class="comment">#需要获取的多个 tensor 值，在 op 的一次运行中一起获得（而不是逐个去获取 tensor）。</span></div><div class="line">  <span class="keyword">print</span> (result)</div></pre></td></tr></table></figure>
+<p>输出的结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">15.0</span>, <span class="number">5.0</span>]</div></pre></td></tr></table></figure>
+<h2 id="Feed"><a href="#Feed" class="headerlink" title="Feed"></a>Feed</h2><p>feed 使用一个tensor值临时替换一个操作的输出结果。<br>可以将feed数据作为run()调用的参数。<br>feed只在调用它的方法内有效,方法结后,feed就会消失。<br>最常见的用例是将某些特殊的操作指定为 “feed” 操作, 标记的方法是使用 tf.placeholder() 为这些操作创建占位符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">input1 = tf.placeholder(tf.float32)</div><div class="line">input2 = tf.placeholder(tf.float32)</div><div class="line">output = tf.multiply(input1, input2)</div><div class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">  <span class="keyword">print</span> (sess.run([output], feed_dict=&#123;input1:[<span class="number">5.</span>], input2:[<span class="number">2.</span>]&#125;))</div></pre></td></tr></table></figure>
+<p>输出的结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[array([ <span class="number">10.</span>], dtype=float32)]</div></pre></td></tr></table></figure>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本篇博客讲的主要是讲解TensorFlow的基本知识，本次小项目的代码<a href="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog8%20tf%20startup/tf-test.py" target="_blank" rel="external">点击此处</a>即可下载，省事情吧，都不用git clone😂😂😂</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/23/Eight-Neural-Network/" rel="next" title="一文看懂四种基本的神经网络架构">
+                <i class="fa fa-chevron-left"></i> 一文看懂四种基本的神经网络架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow的安装"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow的基本概念"><span class="nav-number">2.</span> <span class="nav-text">TensorFlow的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建图"><span class="nav-number">3.</span> <span class="nav-text">创建图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动图"><span class="nav-number">4.</span> <span class="nav-text">启动图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交互式对话"><span class="nav-number">5.</span> <span class="nav-text">交互式对话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#张量（Tensor）"><span class="nav-number">6.</span> <span class="nav-text">张量（Tensor）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阶（Rank）"><span class="nav-number">6.1.</span> <span class="nav-text">阶（Rank）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#形状（Shape）"><span class="nav-number">6.2.</span> <span class="nav-text">形状（Shape）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型（dtype）"><span class="nav-number">6.3.</span> <span class="nav-text">数据类型（dtype）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">7.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的创建"><span class="nav-number">7.1.</span> <span class="nav-text">变量的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的初始化"><span class="nav-number">7.2.</span> <span class="nav-text">变量的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的保存与恢复"><span class="nav-number">7.3.</span> <span class="nav-text">变量的保存与恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用变量实现一个计数器"><span class="nav-number">7.4.</span> <span class="nav-text">使用变量实现一个计数器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fetch"><span class="nav-number">8.</span> <span class="nav-text">Fetch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feed"><span class="nav-number">9.</span> <span class="nav-text">Feed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">10.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz',
+        appKey: 'q4Y9saqMlAIFYHVDXQQRa5sI',
+        placeholder: '小哥，不说两句？',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
