@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="tensorflow," />
+  <meta name="keywords" content="操作系统," />
 
 
 
@@ -79,16 +79,21 @@
 
 
 
-<meta name="description" content="昨天，谷歌在 GitHub 上正式发布了 TensorFlow 的最新版本 1.5.0，并开源了其代码。支持 CUDA 9 和 cuDNN 7 被认为是本次更新的最重要部分。GitHub 地址：https://github.com/tensorflow/tensorflow/releases/tag/v1.5.0源代码（zip）：https://github.com/tensorflow/tens">
+<meta name="description" content="这将是一个非常非常长的博客，应该这一个暑假都在写着一个博客。一直以来对计算机原理、操作系统非常感兴趣。以前的操作系统课程就令人非常着迷。近日终于不需要天天熬夜了，终于有了几天的闲暇时间，准备实现一下之前的想法，自制一个操作系统。暂且命名为CherryOS吧（只是因为我喜欢喝樱桃味可乐）。不知道最后能否写出来，但是相信这个过程将是一个很有意义的过程。Day1开始！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tensorflow1.5更新：CUDA9与cuDNN7">
-<meta property="og:url" content="http://blackblog.tech/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/index.html">
+<meta property="og:title" content="自制操作系统——CherryOS (Hello world)">
+<meta property="og:url" content="http://blackblog.tech/2018/07/18/CreateOSDay1/index.html">
 <meta property="og:site_name" content="Black'Blog">
-<meta property="og:description" content="昨天，谷歌在 GitHub 上正式发布了 TensorFlow 的最新版本 1.5.0，并开源了其代码。支持 CUDA 9 和 cuDNN 7 被认为是本次更新的最重要部分。GitHub 地址：https://github.com/tensorflow/tensorflow/releases/tag/v1.5.0源代码（zip）：https://github.com/tensorflow/tens">
-<meta property="og:updated_time" content="2018-01-29T09:21:00.693Z">
+<meta property="og:description" content="这将是一个非常非常长的博客，应该这一个暑假都在写着一个博客。一直以来对计算机原理、操作系统非常感兴趣。以前的操作系统课程就令人非常着迷。近日终于不需要天天熬夜了，终于有了几天的闲暇时间，准备实现一下之前的想法，自制一个操作系统。暂且命名为CherryOS吧（只是因为我喜欢喝樱桃味可乐）。不知道最后能否写出来，但是相信这个过程将是一个很有意义的过程。Day1开始！">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_1.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_2.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_3.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_4.png">
+<meta property="og:updated_time" content="2018-07-17T18:12:32.348Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tensorflow1.5更新：CUDA9与cuDNN7">
-<meta name="twitter:description" content="昨天，谷歌在 GitHub 上正式发布了 TensorFlow 的最新版本 1.5.0，并开源了其代码。支持 CUDA 9 和 cuDNN 7 被认为是本次更新的最重要部分。GitHub 地址：https://github.com/tensorflow/tensorflow/releases/tag/v1.5.0源代码（zip）：https://github.com/tensorflow/tens">
+<meta name="twitter:title" content="自制操作系统——CherryOS (Hello world)">
+<meta name="twitter:description" content="这将是一个非常非常长的博客，应该这一个暑假都在写着一个博客。一直以来对计算机原理、操作系统非常感兴趣。以前的操作系统课程就令人非常着迷。近日终于不需要天天熬夜了，终于有了几天的闲暇时间，准备实现一下之前的想法，自制一个操作系统。暂且命名为CherryOS吧（只是因为我喜欢喝樱桃味可乐）。不知道最后能否写出来，但是相信这个过程将是一个很有意义的过程。Day1开始！">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_1.png">
 
 
 
@@ -118,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://blackblog.tech/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/"/>
+  <link rel="canonical" href="http://blackblog.tech/2018/07/18/CreateOSDay1/"/>
 
 
 
 
 
-  <title>Tensorflow1.5更新：CUDA9与cuDNN7 | Black'Blog</title>
+  <title>自制操作系统——CherryOS (Hello world) | Black'Blog</title>
   
 
 
@@ -251,7 +256,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/07/18/CreateOSDay1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Black'Blog">
@@ -268,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Tensorflow1.5更新：CUDA9与cuDNN7</h1>
+          <h1 class="post-title" itemprop="name headline">自制操作系统——CherryOS (Hello world)</h1>
         
 
         <div class="post-meta">
@@ -280,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T17:15:58+08:00">
-                2018-01-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T01:23:07+08:00">
+                2018-07-18
               </time>
             
 
@@ -303,8 +308,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
                   </a>
                 </span>
 
@@ -321,8 +326,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/" itemprop="commentCount"></span>
+                <a href="/2018/07/18/CreateOSDay1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/18/CreateOSDay1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -330,7 +335,7 @@
 
           
           
-             <span id="/2018/01/29/Tensorflow1-5更新：CUDA9与cuDNN7/" class="leancloud_visitors" data-flag-title="Tensorflow1.5更新：CUDA9与cuDNN7">
+             <span id="/2018/07/18/CreateOSDay1/" class="leancloud_visitors" data-flag-title="自制操作系统——CherryOS (Hello world)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -361,10 +366,44 @@
       
 
       
-        <p>昨天，谷歌在 GitHub 上正式发布了 TensorFlow 的最新版本 1.5.0，并开源了其代码。支持 CUDA 9 和 cuDNN 7 被认为是本次更新的最重要部分。<br>GitHub 地址：<a href="https://github.com/tensorflow/tensorflow/releases/tag/v1.5.0" target="_blank" rel="external">https://github.com/tensorflow/tensorflow/releases/tag/v1.5.0</a><br>源代码（zip）：<a href="https://github.com/tensorflow/tensorflow/archive/v1.5.0.zip" target="_blank" rel="external">https://github.com/tensorflow/tensorflow/archive/v1.5.0.zip</a><br>源代码（tar.gz）：<a href="https://github.com/tensorflow/tensorflow/archive/v1.5.0.tar.gz" target="_blank" rel="external">https://github.com/tensorflow/tensorflow/archive/v1.5.0.tar.gz</a><br><a id="more"></a></p>
-<h2 id="主要功能和提升"><a href="#主要功能和提升" class="headerlink" title="主要功能和提升"></a>主要功能和提升</h2><p>Eager execution：预览版现在可用。<br>TensorFlow Lite：dev 预览版现在可用。<br>支持 CUDA 9 和 cuDNN 7<br>加速线性代数（XLA）：<br>1.添加 complex64 支持到 XLA 编译器。<br>2.bfloat 支持现已添加到 XLA 架构。<br>3.使 XLA 和 XLA 一起工作。<br>4.通过决定性执行程序来生成 XLA 图。<br>tf.contrib：<br>1.tf.contrib.distributions：<br>添加 tf.contrib.distributions.Autoregressive。<br>使 tf.contrib.distributions QuadratureCompound 类支持批处理。<br>从参数中推断 tf.contrib.distributions.RelaxedOneHotCategorical dtype。<br>通过 quadrature_grid_and_prob vs quadrature_degree 使 tf.contrib.distributions 正交族参数化。<br>添加 auto_correlation 到 tf.contrib.distributions。<br>1.添加 tf.contrib.bayesflow.layers，一个概率（神经）层的集合。<br>2.添加 tf.contrib.bayesflow.halton_sequence。<br>3.添加 tf.contrib.data.make_saveable_from_iterator。<br>4.添加 tf.contrib.data.shuffle_and_repeat。<br>5.添加新的自定义转换： tf.contrib.data.scan()。<br>tf.contrib.distributions.bijectors：<br>添加 tf.contrib.distributions.bijectors.MaskedAutoregressiveFlow。<br>1.添加 tf.contrib.distributions.bijectors.Permute。<br>2.添加 tf.contrib.distributions.bijectors.Gumbel。<br>3.添加 tf.contrib.distributions.bijectors.Reshape。<br>支持 Reshape bijector 中的 shape 推理（即，包含-1 的 shape）。<br>添加 streaming_precision_recall_at_equal_thresholds，一种计算流式精确度和时间、空间复杂度为 O(num_thresholds + size of predictions) 的调用的方法。<br>更改 RunConfig 默认行为，不设置随机种子，使随机行为在分布式工作器上独立地随机。我们期待这可以普遍提高训练表现。依赖决定论的模型应明确设置一个随机种子。<br>通过 absl.flags 替换 tf.flags 的实现。<br>在 fp16 GEMM 中为 CUBLAS_TENSOR_OP_MATH 添加支持。<br>在 NVIDIA Tegra 计算卡上为 CUDA 添加支持。</p>
-<h2 id="文档更新"><a href="#文档更新" class="headerlink" title="文档更新"></a>文档更新</h2><p>明确你只能在 64 位机上安装 TensorFlow。<br>添加一个短文件解释 Estimators 如何保存检查点。<br>为由 tf2xla 桥支持的操作添加文档。<br>修改 SpaceToDepth 和 DepthToSpace 文件中的小的书写错误。<br>更新 mfcc_mel_filterbank.h 和 mfcc.h 中的文档命令，说明输入域是幅度谱的平方，权重<br>是在线性幅度谱（输入的 sqrt）上完成的。<br>修复 tf.distributions.bijectors.Bijector 中的文档字符串书写错误。<br>tf.assert_equal 不再引发 ValueError。它现在引发 InvalidArgumentError，如文档所述。<br>更新「开始」文件和 API 介绍。</p>
-<h2 id="Bug修复"><a href="#Bug修复" class="headerlink" title="Bug修复"></a>Bug修复</h2><p>修复之前出现的整数变量分区后变成错误的 shape 的 bug。<br>修复 Adadelta 的 CPU 和 GPU 实现的准确度 bug。<br>修复当导入到 scope 时，import_meta_graph 处理分区变量时出现的 bug。警告：在以非空 import_scope 变量应用 import_meta_graph 之后，这可能会破坏带已保存分区变量图的加载中的检查点。<br>修复离线 debugger 中阻止查看事件的 bug。<br>添加 WorkerService.DeleteWorkerSession 方法到 gRPC 接口，修复内存泄漏。确保你的主服务器和辅助服务器在相同版本的 TensorFlow 上运行，以避免兼容性问题。<br>修复 BlockLSTM cell 的 peephole 实现中的 bug。<br>通过重写 log_det_jacobian 的 dtype 以在 TransformedDistribution 中匹配 log_prob。<br>确保 tf.distributions.Multinomial 不会在 log_prob 中下溢。在此之前，一个整数变量的所有分区会以非分区变量的 shape 进行初始化；经过修复之后，可以正确地初始化。</p>
+        <p>这将是一个非常非常长的博客，应该这一个暑假都在写着一个博客。<br>一直以来对计算机原理、操作系统非常感兴趣。以前的操作系统课程就令人非常着迷。近日终于不需要天天熬夜了，终于有了几天的闲暇时间，准备实现一下之前的想法，自制一个操作系统。暂且命名为CherryOS吧（只是因为我喜欢喝樱桃味可乐）。<br>不知道最后能否写出来，但是相信这个过程将是一个很有意义的过程。<br>Day1开始！<br><a id="more"></a><br>首先，开始之前，感谢《30天自制操作系统》这本书，本博客的大部分内容也将是对这本书的理解与实现。同时此书出版时间过早，很多工具现在已经有了更好的版本，很多工具也都弃用了。本博客会将书本中的部分工具换为其他工具。</p>
+<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><p>macOS 10.13.1 (17B1003)<br>CPU: 2.7 GHz Intel Core i7<br>RAM: 16 GB 2133 MHz LPDDR3</p>
+<h2 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h2><p>工欲善其事 必先利其器<br>第一步需要用到两个工具<br>十六进制编辑器——HexFiend<br>虚拟机——QEMU</p>
+<p>这个操作系统是一个从0开始的操作系统，现在我们手上没有任何可以利用的工具，没有C语言，甚至连汇编都没有。我们唯一有的就是二进制，或者说16进制。一款好用的十六进制编辑器将带给我们很大的便利。</p>
+<p>在这里我选用的是Hex Fiend，工具的选择可以随意能编写十六进制即可。</p>
+<p>因为我们是编写操作系统，所以调试运行是个麻烦的事情。如果我们每一次运行与调试都需要关闭当前的操作系统，那么这样未免太麻烦了。虚拟机成为了我们必须要使用的工具。</p>
+<p>在这里推荐使用QEMU，功能强大又小巧。</p>
+<p>具体安装方式：<br>macOS<br>两种安装方式：(推荐Homebrew)<br>Homebrew:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install qemu</div></pre></td></tr></table></figure>
+<p>MacPorts:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo port install qemu</div></pre></td></tr></table></figure>
+<p>Windows<br>官网下载安装包：<a href="https://www.qemu.org/download/" target="_blank" rel="external">https://www.qemu.org/download/</a></p>
+<p>Linux</p>
+<p>Arch:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pacman -S qemu</div></pre></td></tr></table></figure></p>
+<p>Debian/Ubuntu:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install qemu</div></pre></td></tr></table></figure></p>
+<p>Fedora:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dnf install @virtualization</div></pre></td></tr></table></figure></p>
+<p>Gentoo:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emerge --ask app-emulation/qemu</div></pre></td></tr></table></figure></p>
+<p>RHEL/CentOS:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install qemu-kvm</div></pre></td></tr></table></figure></p>
+<p>SUSE:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zypper install qemu</div></pre></td></tr></table></figure></p>
+<p>至此，工具准备完毕。</p>
+<h2 id="编写Hello-World"><a href="#编写Hello-World" class="headerlink" title="编写Hello World"></a>编写Hello World</h2><p>现在我们来写第一个操作系统，也就是操作系统届的hello world。<br>打开Hex Fiend<br>输入如图字段：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_1.png" alt=""><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_2.png" alt=""><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_3.png" alt=""></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">000000-&gt;000080：</div><div class="line">EB4E9048 454C4C4F 49504C00 02010100 02E00040 0BF00900 12000200 00000000 400B0000 000029FF FFFFFF48 454C4C4F 2D4F5320 20204641 54313220 20200000 00000000 00000000 00000000 00000000 B800008E D0BC007C 8ED88EC0 BE747C8A 0483C601 3C007409 B40EBB0F 00CD10EB EEF4EBFD 0A0A6865 6C6C6F2C 20776F72 6C640A00</div><div class="line"></div><div class="line">0001F0：</div><div class="line">00000000 00000000 00000000 000055AA F0FFFF00 00000000 </div><div class="line"></div><div class="line">001400：F0FFFF</div></pre></td></tr></table></figure>
+<p>剩下的内容全为0，文件大小为80<em> 18 </em> 512 * 2 = 1474560字节，这个很重要，一定要保证大小正确。</p>
+<p>File-&gt;Save As 保存为cherryOS.img</p>
+<p>至此，我们的第一个操作系统编写完成。</p>
+<p>到这里，我相信没人知道在干什么。但是这的确可以运行了。</p>
+<h2 id="原理解释"><a href="#原理解释" class="headerlink" title="原理解释"></a>原理解释</h2><p>我们现在在使用16进制手动编写一个软盘格式的文件。一个软盘的大小就是1474560字节，这也是为什么我们操作系统的大小要是1474560字节。BIOS读软盘第一个扇区时，磁盘内不同地方的内容有不同的含义，这里不仔细说明每一位的含义了。其大概意思为，软盘的格式为FAT12，软盘的名称为HELLOOS(这里并没有改成CherryOS，因为这不是最终的系统，这只是一次实验)</p>
+<p>如果将计算机的开机设置为从软盘启动，计算机开机会驱动软盘的磁头0读其0柱面1扇区的内容到内存0x7c00~ 0x7dff处，并检查扇区最后两2字节内容，如果为55AAH，则从0x7c00开始执行这段程序。</p>
+<p>如果将一个好的软盘的磁头0对应的0柱面1扇区内含有一段（让显存）显示“Hello world”的机器指令，且将扇区最后2个字节的内容为55AAH。设置计算机开机时从软盘启动后就能够显示“Hello World”。</p>
+<p>这就是这一段代码的基本原理 </p>
+<p>当然我们编写操作系统不可能用16进制去编写，这一段代码只是一个小的实验，为了像大家展示，这已经是一个可以使用的系统了。后面，我们将用更高级的语言编写操作系统。</p>
+<p>其实就是汇编。。。。。<br>高级吧！。。。。。。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>用qemu加载cherryOS.img<br>命令行输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-system-i386 -hdd cherryOS.img</div></pre></td></tr></table></figure>
+<p>如果你看到这个画面，就证明！！！<br>你的第一个操作系统实现了！！！！<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryosday1_4.png" alt=""></p>
+<p>hello world！<br>hello OS！</p>
+<p>我们明天继续！</p>
+<p>对了，鉴于这个源码手打起来很费劲，点击<a href="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog10%20chrryosday1/cherryOS.img" target="_blank" rel="external">这里</a>直接下载！哈哈哈哈！</p>
 
       
     </div>
@@ -382,7 +421,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
           
         </div>
       
@@ -395,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/26/线性回归实现人脸识别/" rel="next" title="线性回归实现人脸识别">
-                <i class="fa fa-chevron-left"></i> 线性回归实现人脸识别
+              <a href="/2018/06/03/LeetCodeReview/" rel="next" title="LeetCode中级算法题目总结">
+                <i class="fa fa-chevron-left"></i> LeetCode中级算法题目总结
               </a>
             
           </div>
@@ -404,10 +443,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/29/决策树——ID3算法实现/" rel="prev" title="决策树——ID3算法实现">
-                决策树——ID3算法实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要功能和提升"><span class="nav-number">1.</span> <span class="nav-text">主要功能和提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档更新"><span class="nav-number">2.</span> <span class="nav-text">文档更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bug修复"><span class="nav-number">3.</span> <span class="nav-text">Bug修复</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统环境"><span class="nav-number">1.</span> <span class="nav-text">系统环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工具"><span class="nav-number">2.</span> <span class="nav-text">准备工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写Hello-World"><span class="nav-number">3.</span> <span class="nav-text">编写Hello World</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理解释"><span class="nav-number">4.</span> <span class="nav-text">原理解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果展示"><span class="nav-number">5.</span> <span class="nav-text">效果展示</span></a></li></ol></div>
             
 
           </div>
