@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="昨天我们使用直接编写16进制的方式，完成了我们第一个操作系统。但是通过这样的方式编写一个完整的操作系统实在是太困难了。这次我们选用更高级的工具！——————————汇编！！！！！（好吧，我知道其实也不怎么高级）书中使用的汇编工具是Nask，但是这个汇编编译器资料太少了，也并不是主流的汇编编译器。我们这次选用Nasm作为编译器，使用更加广泛，其中有部分语法与Nask不尽相同，如果你使用Nasm，可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自制操作系统——CherryOS (汇编来了)">
+<meta property="og:url" content="http://blackblog.tech/2018/07/18/CreateOSDay2/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="昨天我们使用直接编写16进制的方式，完成了我们第一个操作系统。但是通过这样的方式编写一个完整的操作系统实在是太困难了。这次我们选用更高级的工具！——————————汇编！！！！！（好吧，我知道其实也不怎么高级）书中使用的汇编工具是Nask，但是这个汇编编译器资料太少了，也并不是主流的汇编编译器。我们这次选用Nasm作为编译器，使用更加广泛，其中有部分语法与Nask不尽相同，如果你使用Nasm，可以">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_1.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_2.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_2.png">
+<meta property="og:updated_time" content="2018-07-18T15:55:29.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自制操作系统——CherryOS (汇编来了)">
+<meta name="twitter:description" content="昨天我们使用直接编写16进制的方式，完成了我们第一个操作系统。但是通过这样的方式编写一个完整的操作系统实在是太困难了。这次我们选用更高级的工具！——————————汇编！！！！！（好吧，我知道其实也不怎么高级）书中使用的汇编工具是Nask，但是这个汇编编译器资料太少了，也并不是主流的汇编编译器。我们这次选用Nasm作为编译器，使用更加广泛，其中有部分语法与Nask不尽相同，如果你使用Nasm，可以">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/07/18/CreateOSDay2/"/>
+
+
+
+
+
+  <title>自制操作系统——CherryOS (汇编来了) | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/07/18/CreateOSDay2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自制操作系统——CherryOS (汇编来了)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T15:29:14+08:00">
+                2018-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/18/CreateOSDay2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/18/CreateOSDay2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/18/CreateOSDay2/" class="leancloud_visitors" data-flag-title="自制操作系统——CherryOS (汇编来了)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>昨天我们使用直接编写16进制的方式，完成了我们第一个操作系统。但是通过这样的方式编写一个完整的操作系统实在是太困难了。这次我们选用更高级的工具！——————————汇编！！！！！（好吧，我知道其实也不怎么高级）<br>书中使用的汇编工具是Nask，但是这个汇编编译器资料太少了，也并不是主流的汇编编译器。<br>我们这次选用Nasm作为编译器，使用更加广泛，其中有部分语法与Nask不尽相同，如果你使用Nasm，可以参考我的代码。<br>编辑器大家可以随意选择，我用VS Code<br><a id="more"></a></p>
+<h2 id="软盘知识补充"><a href="#软盘知识补充" class="headerlink" title="软盘知识补充"></a>软盘知识补充</h2><p>由于下方涉及到很多有关软盘的编码知识，我们先放上一张Windows （开机）读软盘第一个扇区的读法的具体表格，用于后续参考。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_1.png" alt="Windows读软盘第一个扇区"></p>
+<h2 id="Hello-World汇编版"><a href="#Hello-World汇编版" class="headerlink" title="Hello World汇编版"></a>Hello World汇编版</h2><p>昨天我们利用16进制编码的方式编写了操作系统，我们这次使用汇编重新完成。<br>编写汇编代码，汇编代码分为四个部分，软盘的定义，程序主体，信息显示，启动区以外的输出。<br>其实就是将我们昨天16进制编写的代码使用汇编语言编写出来</p>
+<p>在代码的第一部分涉及到了很多有关软盘的知识，可以参考上一节的图片。</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">; hello-os</span></div><div class="line"><span class="comment">; 下面实现FAT12格式软盘代码</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xeb</span>, <span class="number">0x4e</span>, <span class="number">0x90</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"CHRRYIPL"</span> <span class="comment">;启动区的名称可以是任意的字符串，但长度必须是8字节</span></div><div class="line"><span class="built_in">DW</span> <span class="number">512</span><span class="comment">; 每一个扇区的大小，必须是512字节</span></div><div class="line"><span class="built_in">DB</span> <span class="number">1</span> <span class="comment">;簇的大小（必须为1个扇区)</span></div><div class="line"><span class="built_in">DW</span> <span class="number">1</span> <span class="comment">;FAT的起始位置（一般从第一个扇区开始）</span></div><div class="line"><span class="built_in">DB</span> <span class="number">2</span> <span class="comment">;FAT的个数 必须是2</span></div><div class="line"><span class="built_in">DW</span> <span class="number">224</span><span class="comment">;根目录的大小 一般是224项</span></div><div class="line"><span class="built_in">DW</span> <span class="number">2880</span><span class="comment">; 该磁盘的大小 必须是2880扇区</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xf0</span><span class="comment">;磁盘的种类 必须是0xf0</span></div><div class="line"><span class="built_in">DW</span> <span class="number">9</span><span class="comment">;FAT的长度 必须是9扇区</span></div><div class="line"><span class="built_in">DW</span> <span class="number">18</span><span class="comment">;1个磁道(track) 有几个扇区 必须是18</span></div><div class="line"><span class="built_in">DW</span> <span class="number">2</span><span class="comment">; 磁头个数 必须是2</span></div><div class="line"><span class="built_in">DD</span> <span class="number">0</span><span class="comment">; 不使用分区，必须是0</span></div><div class="line"><span class="built_in">DD</span> <span class="number">2880</span><span class="comment">; 重写一次磁盘大小</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0</span>,<span class="number">0</span>,<span class="number">0x29</span> <span class="comment">;扩展引导标记 固定0x29</span></div><div class="line"><span class="built_in">DD</span> <span class="number">0xffffffff</span> <span class="comment">;卷列序号</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"CHERRY-OS  "</span> <span class="comment">;磁盘的名称（11个字节）</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"FAT12   "</span> <span class="comment">;磁盘的格式名称（8字节）</span></div><div class="line"><span class="built_in">TIMES</span> <span class="number">18</span> <span class="built_in">DB</span> <span class="number">0</span><span class="comment">; 先空出18字节 这里与原文写法不同</span></div><div class="line"></div><div class="line"><span class="comment">;程序主体</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xb8</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x8e</span>, <span class="number">0xd0</span>, <span class="number">0xbc</span>, <span class="number">0x00</span>, <span class="number">0x7c</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0x8e</span>, <span class="number">0xd8</span>, <span class="number">0x8e</span>, <span class="number">0xc0</span>, <span class="number">0xbe</span>, <span class="number">0x74</span>, <span class="number">0x7c</span>, <span class="number">0x8a</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0x04</span>, <span class="number">0x83</span>, <span class="number">0xc6</span>, <span class="number">0x01</span>, <span class="number">0x3c</span>, <span class="number">0x00</span>, <span class="number">0x74</span>, <span class="number">0x09</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xb4</span>, <span class="number">0x0e</span>, <span class="number">0xbb</span>, <span class="number">0x0f</span>, <span class="number">0x00</span>, <span class="number">0xcd</span>, <span class="number">0x10</span>, <span class="number">0xeb</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xee</span>, <span class="number">0xf4</span>, <span class="number">0xeb</span>, <span class="number">0xfd</span></div><div class="line"></div><div class="line"><span class="comment">;信息显示部分</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0x0a</span>, <span class="number">0x0a</span> <span class="comment">;两次换行</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"hello, cherryOS"</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0x0a</span> <span class="comment">; 换行</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0</span></div><div class="line"></div><div class="line"><span class="built_in">TIMES</span> <span class="number">0x1fe</span>-($-$$) <span class="built_in">DB</span> <span class="number">0</span> <span class="comment">;填写0x00,直到0x001fe</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0x55</span>,<span class="number">0xaa</span></div><div class="line"></div><div class="line"><span class="comment">;启动区以外的输出</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xf0</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span></div><div class="line"><span class="built_in">TIMES</span> <span class="number">4600</span> <span class="built_in">DB</span> <span class="number">0</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xf0</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span></div><div class="line"><span class="built_in">TIMES</span> <span class="number">1469432</span> <span class="built_in">DB</span> <span class="number">0</span></div></pre></td></tr></table></figure>
+<p>汇编版我们就叫做Hello Cherry啦！！</p>
+<p>我们将这个文件保存为cherryOS.asm，使用nasm生成cherryOS.img。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nasm cherryOS.asm -o cherryOS.img</div></pre></td></tr></table></figure>
+<p>使用QEMU运行我们的系统<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-system-i386 cherryOS.img</div></pre></td></tr></table></figure></p>
+<p>运行效果如下：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_2.png" alt="Result"></p>
+<h3 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h3><p>书中使用的是NASK，我们使用的是NASM，部分语法不同，这里总结一下。</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">NASK代码              NASM代码</div><div class="line"><span class="keyword">JMP</span> entry       -&gt;   <span class="keyword">JMP</span> SHORT entry</div><div class="line"><span class="built_in">RESB</span> &lt;填充字节数&gt; -&gt;   <span class="built_in">TIMES</span> &lt;填充字节数&gt; <span class="built_in">DB</span> &lt;填充数据&gt;</div><div class="line"><span class="built_in">RESB</span> <span class="number">0x7dfe</span>-$   -&gt;   <span class="built_in">TIMES</span> <span class="number">0x1fe</span>-($-$$) <span class="built_in">DB</span> <span class="number">0</span></div><div class="line"><span class="meta">ALIGNB</span> <span class="number">16</span>       -&gt;   <span class="meta">ALIGN</span> <span class="number">16</span>, <span class="built_in">DB</span> <span class="number">0</span></div></pre></td></tr></table></figure>
+<p>下面对一个语句做专门说明</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">TIMES</span> <span class="number">0x1fe</span>-($-$$) <span class="built_in">DB</span> <span class="number">0</span></div></pre></td></tr></table></figure>
+<p>这一句其中出现了$与$$这样的符号。<br>$ 是当前位置<br>$$ 是段开始位置<br>$ - $$ 是当前位置在段内的偏移<br>比如我们前面输入了130个字节，那么$ - $$就是130，使用0x1fe-($ - $$)就可以计算出到达0x1fe还需要多少个字节。<br>这样就保证了我们循环填充后所停在的位置是0x1fe</p>
+<p>上面的代码中出现了FAT12格式，IPL这样的词语。这里简要说明。</p>
+<p><strong>FAT12:</strong> Windows MS-DOS所采用的软盘格式。后面我们将使用FAT32作为我们系统的格式。<br><strong>启动区:</strong> 软盘的第一个扇区成为启动区。<br><strong>扇区: </strong>计算机读写软盘的过程中不是一个字节一个字节的读写，而是以512字节为一个单位进行读写的。因此，软盘的512个字节就是一个扇区。扇区就是最小的读写单元。<br><strong>IPL:</strong>initial program loader的缩写。启动程序加载器，启动区只有区区512字节，实在是太小了。所以我们需要一个专门的程序IPL去启动操作系统<br><strong>bootsrap:</strong>鞋带。操作系统的启动就是操作系统的一个自救过程，我们一般将操作系统的启动机制叫做bootstrap。</p>
+<p>汇编代码 点击<a href="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryOS.asm" target="_blank" rel="external">这里</a>下载</p>
+<h2 id="更漂亮的汇编"><a href="#更漂亮的汇编" class="headerlink" title="更漂亮的汇编"></a>更漂亮的汇编</h2><p>我们之前的汇编代码虽然可以正常运行，但是非常的难懂，而且整个代码不够结构化。<br>我们现在将之前的汇编代码优化一下，让它变得更好看，更易懂，也更方便我们后面进行修改。其实现的功能与之前的没有区别。<br>上代码！</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment">; cherry-os</span></div><div class="line">ORG <span class="number">0x7c00</span> <span class="comment">;指定程序装载的位置</span></div><div class="line"></div><div class="line"><span class="comment">;下面用于描述FAT12个格式的软盘</span></div><div class="line"><span class="keyword">JMP</span> entry</div><div class="line"><span class="built_in">DB</span> <span class="number">0x90</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"CHRRYIPL"</span> <span class="comment">;启动区的名称可以是任意的字符串，但长度必须是8字节</span></div><div class="line"><span class="built_in">DW</span> <span class="number">512</span><span class="comment">; 每一个扇区的大小，必须是512字节</span></div><div class="line"><span class="built_in">DB</span> <span class="number">1</span> <span class="comment">;簇的大小（必须为1个扇区)</span></div><div class="line"><span class="built_in">DW</span> <span class="number">1</span> <span class="comment">;FAT的起始位置（一般从第一个扇区开始）</span></div><div class="line"><span class="built_in">DB</span> <span class="number">2</span> <span class="comment">;FAT的个数 必须是2</span></div><div class="line"><span class="built_in">DW</span> <span class="number">224</span><span class="comment">;根目录的大小 一般是224项</span></div><div class="line"><span class="built_in">DW</span> <span class="number">2880</span><span class="comment">; 该磁盘的大小 必须是2880扇区</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0xf0</span><span class="comment">;磁盘的种类 必须是0xf0</span></div><div class="line"><span class="built_in">DW</span> <span class="number">9</span><span class="comment">;FAT的长度 必须是9扇区</span></div><div class="line"><span class="built_in">DW</span> <span class="number">18</span><span class="comment">;1个磁道(track) 有几个扇区 必须是18</span></div><div class="line"><span class="built_in">DW</span> <span class="number">2</span><span class="comment">; 磁头个数 必须是2</span></div><div class="line"><span class="built_in">DD</span> <span class="number">0</span><span class="comment">; 不使用分区，必须是0</span></div><div class="line"><span class="built_in">DD</span> <span class="number">2880</span><span class="comment">; 重写一次磁盘大小</span></div><div class="line"><span class="built_in">DB</span> <span class="number">0</span>,<span class="number">0</span>,<span class="number">0x29</span> <span class="comment">;扩展引导标记 固定0x29</span></div><div class="line"><span class="built_in">DD</span> <span class="number">0xffffffff</span> <span class="comment">;卷列序号</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"CHERRY-OS  "</span> <span class="comment">;磁盘的名称（11个字节）</span></div><div class="line"><span class="built_in">DB</span> <span class="string">"FAT12   "</span> <span class="comment">;磁盘的格式名称（8字节）</span></div><div class="line"><span class="built_in">TIMES</span> <span class="number">18</span> <span class="built_in">DB</span> <span class="number">0</span><span class="comment">; 先空出18字节 这里与原文写法不同</span></div><div class="line"></div><div class="line"><span class="comment">;程序核心</span></div><div class="line"><span class="symbol">entry:</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">AX</span>,<span class="number">0</span>  <span class="comment">;初始化寄存器</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">SS</span>,<span class="built_in">AX</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">SP</span>,<span class="number">0x7c00</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">DS</span>,<span class="built_in">AX</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">ES</span>,<span class="built_in">AX</span></div><div class="line"></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">SI</span>,msg</div><div class="line"><span class="symbol">putloop:</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">AL</span>,[<span class="built_in">SI</span>]</div><div class="line">    <span class="keyword">ADD</span> <span class="built_in">SI</span>,<span class="number">1</span></div><div class="line">    <span class="keyword">CMP</span> <span class="built_in">AL</span>,<span class="number">0</span></div><div class="line">    <span class="keyword">JE</span> fin</div><div class="line">    <span class="keyword">MOV</span> <span class="number">AH</span>,<span class="number">0x0e</span> <span class="comment">;显示一个文字</span></div><div class="line">    <span class="keyword">MOV</span> <span class="built_in">BX</span>,<span class="number">15</span> <span class="comment">;指定字符的颜色</span></div><div class="line">    <span class="keyword">INT</span> <span class="number">0x10</span> <span class="comment">;调用显卡BIOS</span></div><div class="line">    <span class="keyword">JMP</span> putloop</div><div class="line"><span class="symbol">fin:</span></div><div class="line">    <span class="keyword">HLT</span> <span class="comment">;CPU停止,等待指令</span></div><div class="line">    <span class="keyword">JMP</span> fin <span class="comment">;无限循环</span></div><div class="line"><span class="symbol">msg:</span></div><div class="line">    <span class="built_in">DB</span> <span class="number">0x0a</span> , <span class="number">0x0a</span> <span class="comment">;换行两次</span></div><div class="line">    <span class="built_in">DB</span> <span class="string">"hello, cherryOS"</span></div><div class="line">    <span class="built_in">DB</span> <span class="number">0x0a</span></div><div class="line">    <span class="built_in">DB</span> <span class="number">0</span></div><div class="line">    </div><div class="line">    <span class="built_in">TIMES</span> <span class="number">0x1fe</span>-($-$$) <span class="built_in">DB</span> <span class="number">0</span> <span class="comment">;填写0x00,直到0x001fe</span></div><div class="line">    </div><div class="line">    <span class="built_in">DB</span> <span class="number">0x55</span>, <span class="number">0xaa</span></div></pre></td></tr></table></figure>
+<p>将写好的文件保存成cherryOS.asm，并使用nasm生成img，使用qemu运行。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog11%20cherryosday2/cherryosday2_2.png" alt="Result"><br>实际效果没有区别。</p>
+<h3 id="代码说明-1"><a href="#代码说明-1" class="headerlink" title="代码说明"></a>代码说明</h3><p>几个语句:<br><strong>ORG:</strong>这个指令将告诉编译器，在代码开始执行的时候，这些代码将被装载到哪个地址中，比如我们在这里指定的地址是0x7c00。（为什么是0x7c00，IBM的大佬们当年规定的就是这个数字，我也没办法）<br><strong>JMP:</strong>JMP，跳转，转到对应的语句。<br><strong>MOV:</strong>这个不多说了，相当于赋值语句。MOV AX,0 就是将0赋值给AX<br><strong>HLT:</strong>让CPU停止动作的指令，并不是完全的停止，只是让CPU进入等待状态。<br><strong>INT:</strong>BIOS中断指令，这里我们用到INT0x10调用显卡，更多的有关BIOS的中断可以自行百度。</p>
+<p>四个代码块:<br><strong>entry:</strong>程序的开始，主要用来初始化寄存器和将msg的地址放入SI<br><strong>putloop:</strong>用于显示一个字符，整个流程就是这个代码段所表示的过程，AH默认0x0e，AL表示字符，BH默认为0，BL表示颜色。具体参考INT0x10中断内容。<br><strong>fin:</strong>让CPU进行等待。这个代码段要在代码中看，我们是这么写的CMP AL,0 JE fin。JE表示 jump if equal。所以这句话的意思是，如果AL==0 那么跳转到fin。也就是说我们msg中的信息显示完成后，就让CPU进入无限等待状态。<br><strong>msg:</strong>用于显示我们的内容</p>
+<p>几个寄存器:<br>虽然这都是基础了，但是还是写一下，省的大家百度了<br>AX 累加寄存器 BX 基址寄存器 CX计数寄存器 DX数据寄存器<br>SP 栈指针寄存器 BP 基址指针寄存器 SI 源变址寄存器 DI 目的变址寄存器<br>ES 附加段寄存器 CS 代码段寄存器 SS 堆栈段寄存器 DS 数据段寄存器<br>L与H：H表示高位，L表示地位，AL表示AX寄存器低位，AH表示AX寄存器的高位</p>
+<p>整体流程：</p>
+<ul>
+<li>首先进入entry，entry中完成了对寄存器的初始化，<strong>并且将msg的地址放到SI中</strong>，此时可以将SI理解成一个在msg数据中滑动的指针。</li>
+<li>msg内部是我们需要显示的字符串</li>
+<li>进入putloop，这个循环用于将msg的字符一个一个打印出来。如果AH = 0时，进入fin。</li>
+<li>进入fin，程序变为无限等待状态。</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>明天就要正式上路了。不再使用软盘，也不再使用FAT12了，也将进入32位模式了，终于要迎来C语言了，同时我们还将实现一个真正的IPL。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/18/CreateOSDay1/" rel="next" title="自制操作系统——CherryOS (Hello world)">
+                <i class="fa fa-chevron-left"></i> 自制操作系统——CherryOS (Hello world)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#软盘知识补充"><span class="nav-number">1.</span> <span class="nav-text">软盘知识补充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hello-World汇编版"><span class="nav-number">2.</span> <span class="nav-text">Hello World汇编版</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码说明"><span class="nav-number">2.1.</span> <span class="nav-text">代码说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更漂亮的汇编"><span class="nav-number">3.</span> <span class="nav-text">更漂亮的汇编</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码说明-1"><span class="nav-number">3.1.</span> <span class="nav-text">代码说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz',
+        appKey: 'q4Y9saqMlAIFYHVDXQQRa5sI',
+        placeholder: '小哥，不说两句？',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
