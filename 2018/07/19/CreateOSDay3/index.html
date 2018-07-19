@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="操作系统," />
 
 
 
@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
+<meta name="description" content="Day3！我们之前实现的操作系统全部都是一次性写好，生成img文件，最后使用qemu进行运行。后面我们的操作系统会越来越大，如果每一次我们全部用汇编去完成，用nasm去编译，显然这是不现实的。今天我们将修改之前的代码，只做一个512字节的启动区，并且用启动区启动我们的操作系统。今天我们的操作系统的界面非常简单，仅仅是一个黑屏，只要黑屏出现，意味着我们的启动区引导了我们的操作系统。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="新的开始">
-<meta property="og:url" content="http://blackblog.tech/2017/02/21/新的开始/index.html">
+<meta property="og:title" content="自制操作系统——CherryOS (实现启动区)">
+<meta property="og:url" content="http://blackblog.tech/2018/07/19/CreateOSDay3/index.html">
 <meta property="og:site_name" content="Black'Blog">
-<meta property="og:description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
-<meta property="og:updated_time" content="2017-02-21T15:48:23.000Z">
+<meta property="og:description" content="Day3！我们之前实现的操作系统全部都是一次性写好，生成img文件，最后使用qemu进行运行。后面我们的操作系统会越来越大，如果每一次我们全部用汇编去完成，用nasm去编译，显然这是不现实的。今天我们将修改之前的代码，只做一个512字节的启动区，并且用启动区启动我们的操作系统。今天我们的操作系统的界面非常简单，仅仅是一个黑屏，只要黑屏出现，意味着我们的启动区引导了我们的操作系统。">
+<meta property="og:updated_time" content="2018-07-19T15:53:09.423Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新的开始">
-<meta name="twitter:description" content="这是一个新的开始。这是我用hexo搭建完博客后的第一篇日志。在这里小小纪念一下哈哈哈以后持续更新！！！">
+<meta name="twitter:title" content="自制操作系统——CherryOS (实现启动区)">
+<meta name="twitter:description" content="Day3！我们之前实现的操作系统全部都是一次性写好，生成img文件，最后使用qemu进行运行。后面我们的操作系统会越来越大，如果每一次我们全部用汇编去完成，用nasm去编译，显然这是不现实的。今天我们将修改之前的代码，只做一个512字节的启动区，并且用启动区启动我们的操作系统。今天我们的操作系统的界面非常简单，仅仅是一个黑屏，只要黑屏出现，意味着我们的启动区引导了我们的操作系统。">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://blackblog.tech/2017/02/21/新的开始/"/>
+  <link rel="canonical" href="http://blackblog.tech/2018/07/19/CreateOSDay3/"/>
 
 
 
 
 
-  <title>新的开始 | Black'Blog</title>
+  <title>自制操作系统——CherryOS (实现启动区) | Black'Blog</title>
   
 
 
@@ -289,7 +289,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2017/02/21/新的开始/">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/07/19/CreateOSDay3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Black'Blog">
@@ -306,7 +306,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">新的开始</h1>
+          <h1 class="post-title" itemprop="name headline">自制操作系统——CherryOS (实现启动区)</h1>
         
 
         <div class="post-meta">
@@ -318,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-21T23:29:58+08:00">
-                2017-02-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T23:36:49+08:00">
+                2018-07-19
               </time>
             
 
@@ -341,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/日志/" itemprop="url" rel="index">
-                    <span itemprop="name">日志</span>
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
                   </a>
                 </span>
 
@@ -359,8 +359,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/21/新的开始/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/02/21/新的开始/" itemprop="commentCount"></span>
+                <a href="/2018/07/19/CreateOSDay3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/19/CreateOSDay3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -368,7 +368,7 @@
 
           
           
-             <span id="/2017/02/21/新的开始/" class="leancloud_visitors" data-flag-title="新的开始">
+             <span id="/2018/07/19/CreateOSDay3/" class="leancloud_visitors" data-flag-title="自制操作系统——CherryOS (实现启动区)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -399,8 +399,12 @@
       
 
       
-        <p>这是一个新的开始。<br>这是我用hexo搭建完博客后的第一篇日志。<br>在这里小小纪念一下哈哈哈<br>以后持续更新！！！</p>
-
+        <p>Day3！<br>我们之前实现的操作系统全部都是一次性写好，生成img文件，最后使用qemu进行运行。后面我们的操作系统会越来越大，如果每一次我们全部用汇编去完成，用nasm去编译，显然这是不现实的。<br>今天我们将修改之前的代码，只做一个512字节的启动区，并且用启动区启动我们的操作系统。今天我们的操作系统的界面非常简单，仅仅是一个黑屏，只要黑屏出现，意味着我们的启动区引导了我们的操作系统。<br><a id="more"></a><br><strong>今天我们引导区的文件名为ipl.asm,操作系统文件名为cherryos.asm</strong></p>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>我们之前每一次运行我们的操作系统，都需要经历这样几个步骤，nasm编译生成img文件，使用qemu加载img文件。<br>可以说我们每一次运行调试都要这两个步骤。那么我们是不是可以一次性运行这两个操作？<br>当然可以！<br>这里，我们使用Makefile。</p>
+<h3 id="什么是Makefile"><a href="#什么是Makefile" class="headerlink" title="什么是Makefile"></a>什么是Makefile</h3><p>在软件开发中，make通常被视为一种软件构建工具。该工具主要经由读取一种名为“makefile”或“Makefile”的文件来实现软件的自动化建构。它会通过一种被称之为“target”概念来检查相关文件之间的依赖关系，这种依赖关系的检查系统非常简单，主要通过对比文件的修改时间来实现。在大多数情况下，我们主要用它来编译源代码，生成结果代码，然后把结果代码连接起来生成可执行文件或者库文件。</p>
+<h3 id="Makefile语法"><a href="#Makefile语法" class="headerlink" title="Makefile语法"></a>Makefile语法</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">target...: prerequisites ...(预备知识，先决条件)</div><div class="line">	command（指令）</div></pre></td></tr></table></figure>
+<p>注意，command前面必须是tab！</p>
+<h3 id="自己写一个Makefile"><a href="#自己写一个Makefile" class="headerlink" title="自己写一个Makefile"></a>自己写一个Makefile</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">run:ipl.asm</div><div class="line">	nasm ipl.asm -o cherryOS.img</div><div class="line">	qemu-system-i386 cherryOS.img</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -415,6 +419,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
 
       
       
@@ -424,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/21/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2018/07/18/CreateOSDay2/" rel="next" title="自制操作系统——CherryOS (汇编来了)">
+                <i class="fa fa-chevron-left"></i> 自制操作系统——CherryOS (汇编来了)
               </a>
             
           </div>
@@ -433,10 +443,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/25/cDCGAN生成MNIST图片/" rel="prev" title="cDCGAN生成MNIST图片">
-                cDCGAN生成MNIST图片 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -491,8 +497,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -568,6 +583,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile"><span class="nav-number">1.</span> <span class="nav-text">Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Makefile"><span class="nav-number">1.1.</span> <span class="nav-text">什么是Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile语法"><span class="nav-number">1.2.</span> <span class="nav-text">Makefile语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己写一个Makefile"><span class="nav-number">1.3.</span> <span class="nav-text">自己写一个Makefile</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
