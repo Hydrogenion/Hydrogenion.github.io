@@ -4,6 +4,39 @@
 
     
   <url>
+    <loc>http://blackblog.tech/2018/07/27/WormAndMachineLearing/</loc>
+    <lastmod>2018-07-28T09:28:54.743Z</lastmod>
+    <data>
+        <display>
+        <title>机器学习与蠕虫检测</title>
+        <pubTime>2018-07-27T05:59:05.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blackblog.tech/2018/07/26/LeetCodeReview2/</loc>
+    <lastmod>2018-07-28T05:41:38.360Z</lastmod>
+    <data>
+        <display>
+        <title>LeetCode算法练习——深度优先搜索 DFS</title>
+        <pubTime>2018-07-26T01:51:35.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="OJ" url="http://blackblog.tech/categories/OJ/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blackblog.tech/2018/07/19/CreateOSDay3/</loc>
     <lastmod>2018-07-19T17:04:55.058Z</lastmod>
     <data>

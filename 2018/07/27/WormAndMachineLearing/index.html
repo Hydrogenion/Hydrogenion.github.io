@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="蠕虫&amp;emsp;&amp;emsp;计算机蠕虫与计算机病毒相似，是一种能够自我复制的计算机程序。&amp;emsp;&amp;emsp;与计算机病毒不同的是，计算机蠕虫不需要附在别的程序内，可能不用使用者介入操作也能自我复制或执行。计算机蠕虫未必会直接破坏被感染的系统，却几乎都对网络有害。计算机蠕虫可能会执行垃圾代码以发动分散式阻断服务攻击，令到计算机的执行效率极大程度降低，从而影响计算机的正常使用；可能会损毁或修改目标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习与蠕虫检测">
+<meta property="og:url" content="http://blackblog.tech/2018/07/27/WormAndMachineLearing/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="蠕虫&amp;emsp;&amp;emsp;计算机蠕虫与计算机病毒相似，是一种能够自我复制的计算机程序。&amp;emsp;&amp;emsp;与计算机病毒不同的是，计算机蠕虫不需要附在别的程序内，可能不用使用者介入操作也能自我复制或执行。计算机蠕虫未必会直接破坏被感染的系统，却几乎都对网络有害。计算机蠕虫可能会执行垃圾代码以发动分散式阻断服务攻击，令到计算机的执行效率极大程度降低，从而影响计算机的正常使用；可能会损毁或修改目标">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml18.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml1.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml2.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml3.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml17.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml4.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml5.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml6.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml7.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml8.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml9.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml10.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml11.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml12.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml13.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml14.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml15.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml16.png">
+<meta property="og:updated_time" content="2018-07-28T09:28:54.743Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习与蠕虫检测">
+<meta name="twitter:description" content="蠕虫&amp;emsp;&amp;emsp;计算机蠕虫与计算机病毒相似，是一种能够自我复制的计算机程序。&amp;emsp;&amp;emsp;与计算机病毒不同的是，计算机蠕虫不需要附在别的程序内，可能不用使用者介入操作也能自我复制或执行。计算机蠕虫未必会直接破坏被感染的系统，却几乎都对网络有害。计算机蠕虫可能会执行垃圾代码以发动分散式阻断服务攻击，令到计算机的执行效率极大程度降低，从而影响计算机的正常使用；可能会损毁或修改目标">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml18.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '5G7B6WQ4IA',
+      apiKey: '6ed708e8f0a777590edfbfe4eb312f09',
+      indexName: 'blackblog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"啊！你要的东西没找到: ${query}","hits_stats":"找到约${hits} 条结果 (用时${time} ms)"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/07/27/WormAndMachineLearing/"/>
+
+
+
+
+
+  <title>机器学习与蠕虫检测 | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/07/27/WormAndMachineLearing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习与蠕虫检测</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-27T13:59:05+08:00">
+                2018-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/27/WormAndMachineLearing/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/27/WormAndMachineLearing/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/27/WormAndMachineLearing/" class="leancloud_visitors" data-flag-title="机器学习与蠕虫检测">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="蠕虫"><a href="#蠕虫" class="headerlink" title="蠕虫"></a>蠕虫</h2><p>&emsp;&emsp;计算机蠕虫与计算机病毒相似，是一种能够自我复制的计算机程序。<br>&emsp;&emsp;与计算机病毒不同的是，计算机蠕虫不需要附在别的程序内，可能不用使用者介入操作也能自我复制或执行。计算机蠕虫未必会直接破坏被感染的系统，却几乎都对网络有害。计算机蠕虫可能会执行垃圾代码以发动分散式阻断服务攻击，令到计算机的执行效率极大程度降低，从而影响计算机的正常使用；可能会损毁或修改目标计算机的档案；亦可能只是浪费带宽。</p>
+<p>全文约9000字，阅读时长约20分钟。<br><a id="more"></a></p>
+<h2 id="常见的蠕虫"><a href="#常见的蠕虫" class="headerlink" title="常见的蠕虫"></a>常见的蠕虫</h2><p>以下蠕虫除Witty，Code Red之外均为工业蠕虫。工业蠕虫的攻击对象主要为国家，企业单位的工控系统。</p>
+<h3 id="Stuxnet蠕虫"><a href="#Stuxnet蠕虫" class="headerlink" title="Stuxnet蠕虫"></a>Stuxnet蠕虫</h3><p>&emsp;&emsp;Stuxnet蠕虫的攻击目标是SIMATIC WinCC软件。后者主要用于工业控制系统的数据采集与监控，一般部署在专用的内部局域网中，并与外部互联网实行物理上的隔离。为了实现攻击，Stuxnet蠕虫采取多种手段进行渗透和传播。利用RPC漏洞 MS08-067，打印服务漏洞MS10-061，Ink漏洞MS10-046。<br>&emsp;&emsp;传播思路：首先感染外部主机；然后感染U盘，利用快捷方式文件解析漏洞，传播到内部网络；在内网中，通过快捷方式解析漏洞、RPC远程执行漏洞、打印机后台程序服务漏洞，实现联网主机之间的传播；最后抵达安装了WinCC软件的主机，展开攻击。<br>&emsp;&emsp;赛门铁克公司的统计，目前全球已有约45000个网络被该蠕虫感染，其中60%的受害主机位于伊朗境内。伊朗政府已经确认该国的布什尔核电站遭到Stuxnet蠕虫的攻击。 </p>
+<p><a href="http://www.antiy.com/response/stuxnet/Report_on_the_Worm_Stuxnet_Attack.html" target="_blank" rel="external">对Stuxnet蠕虫攻击工业控制系统事件的综合分析报告</a></p>
+<h3 id="Duqu蠕虫"><a href="#Duqu蠕虫" class="headerlink" title="Duqu蠕虫"></a>Duqu蠕虫</h3><p>&emsp;&emsp;Duqu最早出现在2011年9月，是继Stuxnet蠕虫后最为恶性的一种可窃取信息的蠕虫，大多数Duqu出现在工控系统中。 Duqu的目标是从工业基础设施和系统制造商等实体收集情报数据和资产，这些信息可以帮助他们对包括工业控制系统设施在内的各种行业进行未来攻击。<br>&emsp;&emsp;Duqu使用HTTP,HTTPS协议进行传播，每次都会攻击一个或多个C&amp;C服务器。目前已知的C＆C服务器包括在印度托管的206.183.111.97，在比利时托管的77.241.93.160和在越南托管的123.30.137.117。所有这些IP都处于非活动状态。C＆C服务器配置为将所有端口80和443流量简单地转发到其他服务器。</p>
+<p><a href="https://www.symantec.com/content/en/us/enterprise/media/security_response/whitepapers/w32_duqu_the_precursor_to_the_next_stuxnet.pdf" target="_blank" rel="external">赛门铁克公司 W32.Duqu The precursor to the next Stuxnet</a></p>
+<h3 id="Havex蠕虫"><a href="#Havex蠕虫" class="headerlink" title="Havex蠕虫"></a>Havex蠕虫</h3><p>&emsp;&emsp;利用OPC协议漏洞进行攻击，OPC是基于过程的OLE，是针对现场控制系统的一个工业标准协议。基于微软的OLE/ActiveX，COM以及DCOM，OPC包括自动化过程中的一整套接口、属性、和方法的标准集。<br>&emsp;&emsp;攻击步骤：<br>&emsp;&emsp;1. 非法组织攻击OPC厂商的官方网站,在供客户下载的软件升级包中,植人包含Havex的木马文件。<br>&emsp;&emsp;2. 当客户下载了被篡改的升级包并安装之后,Havex就被安装到用户所使用的OPC客户端上。<br>&emsp;&emsp;3. Havex通过OPC发出非法的数据采集指令。<br>&emsp;&emsp;4. Havex从OPC服务器上收集到有关工控、生产、安全控制等重要数据和信息。<br>&emsp;&emsp;5. Havex将信息传输到某些指定的网站。这些网站外表上是正常网站,实际上已经被非法组织攻陷,暗中进行数据传输活动。<br>&emsp;&emsp;6. 在被攻陷的网站.上,数据被加密传输回非法组织。<br>&emsp;&emsp;Havex是被编写来感染SCADA（数据采集与监视控制系统）和工控系统中使用的工业控制软件，这种木马可能有能力禁用水电大坝、使核电站过载，甚至可以做到按一下键盘就能关闭一个国家的电网。</p>
+<p><a href="http://www.doc88.com/p-6921568076612.html" target="_blank" rel="external">新一代工控网络安全威胁Havex的研究</a></p>
+<h3 id="Flame蠕虫"><a href="#Flame蠕虫" class="headerlink" title="Flame蠕虫"></a>Flame蠕虫</h3><p>&emsp;&emsp;Flame 是于 2012 年 5 月被发现的电脑病毒，其构造复杂，可以通过USB存储器以及网络复制和传播，并能接受来自世界各地多个服务器的指令。目前被定性为“工业病毒”。<br>&emsp;&emsp;Flame 病毒用上了 5 种不同的加密算法，3 种不同的压缩技术，和至少 5 种不同的文件格式，包括其专有的格式。并将它感染的系统信息以高度结构化的格式存储在SQLite 等数据库中，病毒文件达到 20MB 之巨（代码打印出来的纸张长度达到2400米）。此外，还使用了游戏开发用的 Lua 脚本语言编写，使得结构更加复杂。<br>&emsp;&emsp;只要一台电脑感染了Flame病毒，它就会执行记录来自连接或内置话筒里的音频，管理周围的蓝牙设备，截屏，保存一些文件和邮件的数据到电脑里。并且这种对服务器的控制是永无止尽的。而所有收集到的这些数据都是来自于预先计划好的攻击对象。<br>&emsp;&emsp;Flame病毒跟Stuxnet病毒或者其分支Duqu病毒较为类似，专家们认为这种病毒式受同一群人控制。据卡巴斯基实验室里的研究者说，最初感染Flame病毒的用户都是钓鱼式攻击的受害者，一旦攻击成功，Flame病毒就可以通过局域网或者USB闪存驱动扩散到其他的电脑里。</p>
+<p><a href="http://www.antiy.com/response/flame/Analysis_on_the_Flame.pdf" target="_blank" rel="external">Flame蠕虫样本集分析报告</a></p>
+<h3 id="PLC-Blaster"><a href="#PLC-Blaster" class="headerlink" title="PLC-Blaster"></a>PLC-Blaster</h3><p>&emsp;&emsp;针对西门子的SIMATIC S7-1200v3控制器。一个恶意软件可以在一个PLC之上运行，研究人员使用结构化文本(ST)语言开发一个蠕虫病毒，利用PLC的通信特性从一个设备传播到另一个设备进行传播。<br>&emsp;&emsp;PLC-Blaster编程类似普通蠕虫病毒，但有一些针对PLC特定的约束条件。最有可能感染路径涉及蠕虫的工业组件供应商的分销渠道或者设备在运输过程中感染。一旦感染西门子SIMATIC装置是安装在一个网络上，蠕虫病毒开始扫描其他类似系统的TCP端口102。如果确定了被扫描的PLC还没有被感染，蠕虫病毒会停止大约10秒然后向目标设备发送自身代码，并再次启动。然后，针对每一个可能的目标重复这个过程。</p>
+<p><a href="http://www.blackhat.com/docs/asia-16/materials/asia-16-Spenneberg-PLC-Blaster-A-Worm-Living-Solely-In-The-PLC-wp.pdf" target="_blank" rel="external">PLC-Blaster: A Worm Living Solely in the PLC</a><br><a href="http://bbs.gongkong.com/d/201701/703388_1.shtml" target="_blank" rel="external">PLC-Baster蠕虫病毒针对工业网络可能呈现严重威胁</a><br><a href="http://www.doc88.com/p-3317643246276.html" target="_blank" rel="external">一种单独运行在PLC中的蠕虫病毒研究</a></p>
+<h3 id="Witty-Worm"><a href="#Witty-Worm" class="headerlink" title="Witty Worm"></a>Witty Worm</h3><p>&emsp;&emsp;“Witty蠕虫（Worm.Witty）”针对IIS系统中流量漏洞进行攻击。破坏被感染的机器的硬盘数据，可导致机器瘫痪，数据严重丢失，危害极大。<br>&emsp;&emsp;进入系统之后，病毒随机生成20000个IP并对其进行扫描，如果发现系统存在上述漏洞，则进行传播感染，并对感染系统的随机物理磁盘进行随机扇区的覆盖写操作，写入256字节的垃圾数据。病毒破坏的文件不可恢复，造成资料丢失，系统崩溃等等严重后果。该病毒通过UDP 4000端口向随机IP发包，利用UDP报文传播。</p>
+<h3 id="Code-Red-Worms"><a href="#Code-Red-Worms" class="headerlink" title="Code Red Worms"></a>Code Red Worms</h3><p>&emsp;&emsp;Code Red蠕虫能够迅速传播，并造成大范围的访问速度下降甚至阻断。“红色代码”蠕虫造成的破坏主要是涂改网页,对网络上的其它服务器进行攻击，被攻击的服务器又可以继续攻击其它服务器。Code Red采用了一种叫做”缓存区溢出”的黑客技术，利用网络上使用微软IIS系统的服务器来进行病毒的传播。这个蠕虫病毒使用服务器的端口80进行传播。Code Red主要有如下特征：入侵IIS服务器，code red会将WWW英文站点改写为“Hello! Welcome to www.Worm.com! Hacked by Chinese!”。<br>&emsp;&emsp;Code Red并不将病毒信息写入被攻击服务器的硬盘。它只是驻留在被攻击服务器的内存中，并借助这个服务器的网络连接攻击其它的服务器。<br>&emsp;&emsp;每个病毒线程每100毫秒就会向一随机地址的80端口发送一长度为3818字节的病毒传染数据包。完成上述工作后病毒将系统目录下的CMD.EXE文件分别复制到系统根目录\inetpub\scripts和系统根目录\progra~1\common~1\system\MSADC目录下，并取名为root.exe。然后从病毒体内释放出一个木马程序，复制到系统根目录下，并取名为explorer.exe,此木马运行后会调用系统原explorer.exe，运行效果和正常explorer程序无异，但注册表中的很多项已被修改。由于释放木马的代码是个循环，如果目的目录下explorer.exe发现被删，病毒又会释放出一个。</p>
+<h2 id="蠕虫攻击原理"><a href="#蠕虫攻击原理" class="headerlink" title="蠕虫攻击原理"></a>蠕虫攻击原理</h2><p>蠕虫的攻击分为两个阶段 infection proliferation 感染与传播</p>
+<h3 id="感染"><a href="#感染" class="headerlink" title="感染"></a>感染</h3><p>关键：运行蠕虫的可执行代码。<br>方法：利用计算机漏洞，使PC指针跳转到蠕虫可执行代码的开头，从而执行蠕虫程序。这一类漏洞往往都是具有管理员权限服务的漏洞，这使得蠕虫也具有管理员权限。<br>常见漏洞：缓存溢出、整型溢出、字符串格式化错误、内存管理错误<br>感染之后，不同的蠕虫有着不同的行为，窃取用户隐私、拖慢计算机运行速度、破坏工控系统、破坏硬件设备。</p>
+<h3 id="传播"><a href="#传播" class="headerlink" title="传播"></a>传播</h3><p>关键：自我复制 通过网络传播<br>方法：简单：生成一组随机IP地址 复杂：系统的扫描IP地址范围<br>举例：Code Red攻击IIS，第一代的Code Red使用静态随机种子，所以传播的范围比较小。第二代Code Red采用动态随机种子，传播能力很强。</p>
+<h2 id="蠕虫检测"><a href="#蠕虫检测" class="headerlink" title="蠕虫检测"></a>蠕虫检测</h2><p>蠕虫检测的两种方式（按照分类模型区分）：anomaly detection（异常检测） misuse detection（入侵检测）</p>
+<p><strong>IDS：Intrusion Detection Systems 入侵检测系统<br>出发点：网络流量分析<br>签名：一种可用于识别入侵的标志。最简单的形式：由一串字符（或字节）组成，有的IDS也支持正则表达的签名。<br>方法：根据网络流量分析的结果产生签名，将问题转换为一个分类问题 有签名-&gt;蠕虫  无签名-&gt;正常流量<br>关键：如何生成签名？（目前，签名大多都是安全专家人工制作。）</strong></p>
+<h3 id="Anomaly-Detection-异常检测"><a href="#Anomaly-Detection-异常检测" class="headerlink" title="Anomaly Detection 异常检测"></a>Anomaly Detection 异常检测</h3><p>IDS系统使用<strong>正常流量模型</strong>作为参考，将输入的网络流量与与已有模型进行比较，寻找异常，从而判断蠕虫的存在。<br>缺点：误报率高。网络世界过于复杂，很多“异常流量”并不一定就是入侵。比如，电子邮件和P2P查询都表现出类似蠕虫的流量特征。</p>
+<h3 id="Misuse-Detection-入侵检测"><a href="#Misuse-Detection-入侵检测" class="headerlink" title="Misuse Detection 入侵检测"></a>Misuse Detection 入侵检测</h3><p><strong> 又称Signature-based Detection 特征检测</strong><br>IDS系统使用<strong>入侵流量模型</strong>作为参考，也就是使用<strong>签名</strong>作为评判标准。将输入的流量与签名进行比较，如果与签名符合，则证明这是一个蠕虫病毒。<br>缺点：传统方法，入侵检测只能够检测已知签名的蠕虫。</p>
+<h3 id="IDS-入侵检测系统"><a href="#IDS-入侵检测系统" class="headerlink" title="IDS 入侵检测系统"></a>IDS 入侵检测系统</h3><p>IDS可以分为：Host-based IDS（基于主机的入侵检测系统）Network-based IDS（基于网络的入侵检测系统）</p>
+<p><strong>HIDS (基于主机的IDS)：</strong>HIDS出现在20世纪80年代初期，那时网络规模还比较小，而且网络之间也没有完全互连。在这样的环境里，检查可疑行为的审计记录相对比较容易，况且在当时入侵行为非常少，通过对攻击的事后分析就可以防止随后的攻击。<br>&emsp;&emsp;通过分析系统的审计数据来发现可疑的活动，如内存和文件的变化等。其输入数据主要来源于系统的审计日志，一般只能检测该主机上发生的入侵。</p>
+<p><strong>NIDS（基于网络的IDS）：</strong>通过连接在网络上的站点捕获网上的包，并分析其是否具有已知的攻击模式，以此来判别是否为入侵者。当该模型发现某些可疑的现象时也一样会产生告警，并会向一个中心管理站点发出“告警”信号。</p>
+<h3 id="IDS的几个案例"><a href="#IDS的几个案例" class="headerlink" title="IDS的几个案例"></a>IDS的几个案例</h3><p><strong>Snort和Bro：</strong>两种广泛使用的开源滥用检测系统。 Snort将网络数据包与具有字符串匹配的规则进行匹配，而Bro则使用协议规范（例如HTTP GET请求）。但所有规则都必须手工制作。</p>
+<p><strong>Earlybird、Autograph、Polygraph：</strong>三种入侵检测系统，通过使用字符串算法自动生成签名，例如找到最长的公共子序列，以区分正常网络流和蠕虫之间的区别。</p>
+<p><strong>PayL、One-Class：</strong>两个异常检测器，使用字节频率分布对流量进行建模。</p>
+<p><strong>Vigilant：</strong>一种基于主机的仿真入侵检测系统。在虚拟机或仿真的环境中运行蠕虫，并监控其行为，比如分发内存访问，缓存溢出。</p>
+<p><strong>Honeycomb：</strong>制作诱饵，其由一组看似正常的数据流组成，但其实该数据流受IDS的监控。诱导蠕虫攻击该诱饵，从而发现蠕虫。</p>
+<h3 id="IDS部署"><a href="#IDS部署" class="headerlink" title="IDS部署"></a>IDS部署</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml18.png" alt="IDS部署"></p>
+<h2 id="机器学习与蠕虫检测"><a href="#机器学习与蠕虫检测" class="headerlink" title="机器学习与蠕虫检测"></a>机器学习与蠕虫检测</h2><p><strong>为什么应用机器学习的方式？</strong><br>传统方式：签名由安全人员人工制作，耗时耗力。且根据已知签名制作的IDS检测不到新的蠕虫，也难以发现蠕虫的变种。如果使用较为通用的签名，则会提高误报率。</p>
+<h2 id="机器学习与基于网络的蠕虫检测"><a href="#机器学习与基于网络的蠕虫检测" class="headerlink" title="机器学习与基于网络的蠕虫检测"></a>机器学习与基于网络的蠕虫检测</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li>定义蠕虫模型</li>
+<li>捕获网络流量</li>
+<li>数据预处理——将流量转化为模型所需要的形式</li>
+<li>使用分类器对网络流量进行分类<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml1.png" alt="顶层设计"></li>
+</ol>
+<h3 id="蠕虫模型"><a href="#蠕虫模型" class="headerlink" title="蠕虫模型"></a>蠕虫模型</h3><p>蠕虫可以看作是二进制的数据流：<br>由三部分组成：</p>
+<p><strong>应用程序特定数据 Application speciﬁc data：</strong> 包括与含有漏洞目标服务进行通信所需的协议头和其他控制信息。</p>
+<p><strong>漏洞攻击的代码 Exploit code：</strong> 用于攻击漏洞，将恶意代码注入应用程序。</p>
+<p><strong>可执行代码 Executable payload：</strong> 在利用代码成功感染系统后所执行的操作。通常，包含有关如何进一步传播与感染的操作与信息。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml2.png" alt="Worm Model"></p>
+<h3 id="蠕虫变种"><a href="#蠕虫变种" class="headerlink" title="蠕虫变种"></a>蠕虫变种</h3><p>蠕虫变种：如果两个蠕虫的漏洞攻击代码相同的话，则将其视为同一种蠕虫的不同变种。<br>不同的蠕虫：如果两个蠕虫的漏洞攻击代码不同的话，则将其视为两种蠕虫。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml3.png" alt="Mutation"></p>
+<h3 id="捕获网络流量"><a href="#捕获网络流量" class="headerlink" title="捕获网络流量"></a>捕获网络流量</h3><p>面临问题：网络传输的过程中，采用分组传输的方式。当蠕虫被分为多个网络包之后，变得更加难以进行检测。有的时候，蠕虫的制作者也会将蠕虫病毒分块传输来混淆签名。</p>
+<p><strong>多态蠕虫常常会使用混淆签名的方式来躲避IDS。</strong></p>
+<p><strong>应用层上的分析：</strong>协议分析器基于各种协议特定数据交换生成事件。例如，超文本传输​​协议（HTTP）分析器可以为每个HTTP GET请求生成事件。事件由协议分析器附带的策略脚本解析。<br>应用程序协议级分析的优点：它提供了一个很高的抽象级别，也更加容易做出决策<br>应用程序协议级分析的缺点：数据开销比较大、所有的协议都需要单独编写协议分析器</p>
+<p><strong>传输层上分析：</strong>基于TCP、UDP数据报的分析。其中包括由源IP地址，源端口号，目标IP地址、目标端口号等等信息。另外，TCP是可靠连接，可以排除分组丢失、无序分组等问题，且相对于应用层，效率较高。</p>
+<h3 id="一个简单的网络流捕获模型"><a href="#一个简单的网络流捕获模型" class="headerlink" title="一个简单的网络流捕获模型"></a>一个简单的网络流捕获模型</h3><p>模型由三部分组成：<br>数据包捕获器 packet capturer<br>数据流表 ﬂow table<br>数据流分析器 ﬂow analyser</p>
+<p><strong>数据包捕获器</strong>使用pcap数据包捕获库，一次只从网络中获取一个数据包，并将其添加到数据流表中。<br><strong>数据流表</strong>是一种数据结构，用于保存按流分类的数据包。<br><strong>数据流分析器</strong>在自己的线程中运行，逐步通过流动台查找可疑的流量。在这种多线程架构中，数据流分析器与数据包捕获器可以同时工作。数据流分析器封装了我们后面用到的分类器。</p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml17.png" alt="网络流捕获模型"></p>
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>&emsp;&emsp;特征提取采用<strong>n-gram方法</strong><br>&emsp;&emsp;n-gram是一种基于统计语言模型的算法。它的基本思想是将文本里面的内容按照字节进行大小为n的滑动窗口操作，形成了长度是n 的字节片段序列。<br>&emsp;&emsp;每一个字节片段称为gram,对所有gram的出现频度进行统计，并且按照事先设定好的阈值进行过滤，形成关键gram列表，也就是这个文本的向量特征空间，列表中的每一种gram就是一个特征向量维度。<br>&emsp;&emsp;当n越小时，模型只考虑领近词语之间的关系。尤其是对于n=1时的特殊情况，被称之为unigram，此时对于每一个词的概率评估实际上与文本的上下文无关，仅与当前词语在语料库中出现的概率有关，但人们不会以一个词一个词的方式交流，而是要以词组成句子和段落，所以要预测一个词是否出现，需要考虑上下文中的更多词，即增大n的取值，以捕捉更多的有用信息。<br>&emsp;&emsp;然而，另一方面，当n越大时，虽然模型会考虑更长距离的上下文之间的关联关系，但随着n的取值增大，语言模型的参数越多，将导致参数空间过大到无法估算。若词表集合为V,其中单词数量为|V|,则由这些词组成的N元组合的数目为|V|^n,也就是说，组合数目会随着n的增大呈指数级的增长。</p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml4.png" alt="n-gram"></p>
+<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>在谈及分类器之前，我们将前面的所有流程总览一遍。<br>训练与分类：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml5.png" alt="训练与分类"></p>
+<p>训练：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml6.png" alt="训练"></p>
+<p>分类：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml7.png" alt="分类"></p>
+<h3 id="SVM分类器"><a href="#SVM分类器" class="headerlink" title="SVM分类器"></a>SVM分类器</h3><h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a><strong>数据集</strong></h4><p>由于数据集过少，采用人造数据，模拟蠕虫的方法。<br>方法：将signature随机写入到一组随机的数据中，模拟蠕虫以及蠕虫的突变。随机数据表示正常的数据流。<br>这里选用的签名是Slapper蠕虫的签名<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml8.png" alt="数据集"></p>
+<p>为了模拟变异，我们还可以将数据做进步的混淆。其重点在于签名的改变，可以将签名变为连续的、分裂的、乱序的。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml9.png" alt="变异"></p>
+<p><span id="jump"></span><br>Signature在有效载荷中所占的比例，考虑真实情况进行建立。<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml10.png" alt="比例"><br>可以发现所有蠕虫的数据的签名比例都低于25：1，只要我们高于这个数值，理论上来说有着很强的查杀能力。</p>
+<p>数据量大小对分类器的影响很大，由于我们使用的人造蠕虫，可以很方便的控制蠕虫的个数，方便实验。我们模型应该对数据量较小的情况也能表现出出色分类效果。</p>
+<h4 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a><strong>SVM</strong></h4><p>支持向量机（Support Vector Machine, SVM）的基本模型是在特征空间上找到最佳的分离超平面使得训练集上正负样本间隔最大。SVM是用来解决二分类问题的有监督学习算法，在引入了核方法之后SVM也可以用来解决非线性问题。<br>一般SVM有下面三种：</p>
+<ul>
+<li>硬间隔支持向量机（线性可分支持向量机）：当训练数据线性可分时，可通过硬间隔最大化学得一个线性可分支持向量机。</li>
+<li>软间隔支持向量机：当训练数据近似线性可分时，可通过软间隔最大化学得一个线性支持向量机。</li>
+<li>非线性支持向量机：当训练数据线性不可分时，可通过核方法以及软间隔最大化学得一个非线性支持向量机。</li>
+</ul>
+<h4 id="Kernel"><a href="#Kernel" class="headerlink" title="Kernel"></a><strong>Kernel</strong></h4><p>将线性不可分问题转化为线性可分问题。<br>这里我们有三个备选的核函数。</p>
+<p><strong>线性核：</strong>只有一个可以调整的参数–C参数。C是惩罚系数，C越大，容忍出错的程度越小。<br><strong>高斯核：</strong>C和gamma，C是惩罚系数，C越大，容忍出错的程度越小，gamma值控制RBF内核的宽度，gamma越大，支持向量越少，gamma值越小，支持向量越多，RBF宽度越大，<br><strong>字符串核：</strong> 两个关键参数是子字符串长度，定长或变长。研究了固定和可变长度字符串相对于签名长度改变子串长度的效果。</p>
+<h4 id="误报率"><a href="#误报率" class="headerlink" title="误报率"></a><strong>误报率</strong></h4><p>误报率在信息安全中是一个很敏感的话题。高误报率是一个令人很头疼的问题。我们利用ROC与AUC去评估误报率。<br><strong>ROC曲线：</strong>受试者工作特征曲线<br>分类器的分类结果根据其正确行可以分为：真阳、伪阳、伪阴、真阴。<br>TPR：在所有实际为阳性的样本中，被正确地判断为阳性之比率。TPR=TP/(TP+FN)<br>FPR：在所有实际为阴性的样本中，被错误地判断为阳性之比率。FPR=FP/(FP+TN)<br>ROC空间将伪阳性率（FPR）定义为 X 轴，真阳性率（TPR）定义为 Y 轴。<br>&emsp;&emsp;放在具体领域来理解上述两个指标。如在医学诊断中，判断有病的样本。那么尽量把有病的揪出来是主要任务，也就是第一个指标TPR，要越高越好。而把没病的样本误诊为有病的，也就是第二个指标FPR，要越低越好。不难发现，这两个指标之间是相互制约的。如果某个医生对于有病的症状比较敏感，稍微的小症状都判断为有病，那么他的第一个指标应该会很高，但是第二个指标也就相应地变高。最极端的情况下，他把所有的样本都看做有病，那么第一个指标达到1，第二个指标也为1。<br><strong>曲线距离左上角越近，证明分类器效果越好。</strong></p>
+<p><strong>AUC：</strong><br>AUC值为ROC曲线所覆盖的区域面积，显然，AUC越大，分类器分类效果越好。<br>AUC = 1，是完美分类器，采用这个预测模型时，不管设定什么阈值都能得出完美预测。绝大多数预测的场合，不存在完美分类器。<br>0.5 &lt; AUC &lt; 1，优于随机猜测。这个分类器（模型）妥善设定阈值的话，能有预测价值。<br>AUC = 0.5，跟随机猜测一样（例：扔硬币），模型没有预测价值。<br>AUC &lt; 0.5，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。<br><strong>AUC面积越大，证明分类器效果越好。</strong></p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p>使用Libsvm1.8作为分类器，使用线性核与高斯核，使用Libsvm1.9作为分类器，使用字符串核。<br>数据量：1000条网络流 正常网络流:恶意网络流=1:1</p>
+<h4 id="关于SVM-Kernel"><a href="#关于SVM-Kernel" class="headerlink" title="关于SVM Kernel"></a>关于SVM Kernel</h4><p><strong>参数对三种核函数的影响</strong><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml11.png" alt="三个Kernel"><br>线性核对C参数几乎不敏感，高斯核对参数比较敏感，C范围为2^0到2^20，γ范围为2^0到2^-20。此后，将使用C =2^4和γ= 2^-14的参数组合。</p>
+<p><strong>三种核函数的效果比较</strong><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml12.png" alt="效果对比"><br>可以看出效果最好的是字符串核，其次是线性核，高斯核效果最差。但使用字符串核速度太慢了，所以采用线性核。</p>
+<h4 id="关于n-gram"><a href="#关于n-gram" class="headerlink" title="关于n-gram"></a>关于n-gram</h4><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml13.png" alt="n-gram"><br>可以看出n=1的情况，效果很差，因为完全忽略了上下文。n=2 与 n=3 的效果几乎一致，但考虑到其存储空间差异巨大，选择bi-grams是比较好的选择。<br>数据与签名比率约为12：1 到 100：1之间，使用bi-grams，分类准确率在90%以上。</p>
+<h4 id="关于数据量大小"><a href="#关于数据量大小" class="headerlink" title="关于数据量大小"></a>关于数据量大小</h4><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml14.png" alt="数据量"><br>在<a href="#jump">6.7.1</a>中我们已经知道了大部分蠕虫的签名比例都是小于1:25的。所以这个模型在数据量较小的情况下，性能依然不错。</p>
+<h4 id="关于变异"><a href="#关于变异" class="headerlink" title="关于变异"></a>关于变异</h4><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml15.png" alt="变异"><br>这个模型对于连续的签名效果极好，当签名被分割、混淆后，依旧可以表现出不错的效果。<br>但是如果混淆后的数据出现了重合，那么在高签名率的情况下，效果一般，当低签名率（约25:1）的时候，效果还可以。</p>
+<h4 id="关于误报率"><a href="#关于误报率" class="headerlink" title="关于误报率"></a>关于误报率</h4><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog14%20wormml/wormml16.png" alt="误报率"><br>可以看到，签名比例对于误报率的影响很大。在25:1的情况下，ROC曲线非常贴近于左上角，效果很好。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ol>
+<li>总的来说，对于经典的蠕虫（签名比例在25:1的情况下），SVM算法表现优秀</li>
+<li>选取线性内核是多方面考虑的结果。高斯核与字符串核在准确度的表现上也很不错。</li>
+<li>选择bi-grams为特征提取的方式。虽然tri-grams效果更好，但是空间开销过高。</li>
+<li>对于蠕虫变异，SVM算法表现优秀</li>
+<li>误报情况，低签名比例的准确率小于高签名比例。</li>
+</ol>
+<h2 id="机器学习与基于本机的蠕虫检测"><a href="#机器学习与基于本机的蠕虫检测" class="headerlink" title="机器学习与基于本机的蠕虫检测"></a>机器学习与基于本机的蠕虫检测</h2><p>这里关于基于本机的蠕虫监测重点在与结论，因为整体的流程与思路与基于网络的基本一致。不在详述。</p>
+<h3 id="制作训练集"><a href="#制作训练集" class="headerlink" title="制作训练集"></a>制作训练集</h3><p>使用Dabber.A、Deborm.Y、Sasser.D、Slackor.A四种蠕虫病毒对测试计算机进行感染。通过监测计算机性能采集到323个系统特征。主要包括：ICMP(27个特征)，IP(17个），memory（29个）,Network Interface（17个）,Physical Disk（21个）,Process（27个），Processor（15个），System（17个），TCP（9个），Thread（12个），UDP（5个）。每两秒采样如上的323个特征，连续采样20分钟，生成原始数据训练集。</p>
+<h3 id="特征选择算法选取重要的特征"><a href="#特征选择算法选取重要的特征" class="headerlink" title="特征选择算法选取重要的特征"></a>特征选择算法选取重要的特征</h3><p>Chi-Square算法、Gain-Ratio算法、ResliefF算法<br>实验效果表明 Gain-Ratio算法效果最好</p>
+<h3 id="分类算法测试"><a href="#分类算法测试" class="headerlink" title="分类算法测试"></a>分类算法测试</h3><p>均适用Gain-Ratio算法选取前100个特征，对四种蠕虫进行测试<br>ID3：81.1%<br>BN：98.2%<br>ANN：85.7%<br>SVM：91.5%</p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>在模拟计算机不同应用环境状态下，以4种2蠕虫样本作为测试集，最终确定的最优蠕虫检测系统对于未知蠕虫有着平均82.8%的检测准确率，在计算机无其他程序运行时，蠕虫检测系统对未知蠕虫的判决准确率可达到86%以上。对于已知蠕虫样本检测系统有着平均高达98%以上的判决准确率。</p>
+<p>最优蠕虫检测系统利用信息增益算法和特征对比方法对原始数据集进行预处理，使特征向量维数从323降至100,处理，后的数据集由贝叶斯网络算法支持的分类器进行分类模型构建和判决规则生成。实验中模拟计算机的不同应用状态，并对检测系统进行评估验证，结果表明本文提出的蠕虫检测系统对未知蠕虫病毒有着82%以上的检测准确率，对已知蠕虫样本有着98%以上的检测准确率。</p>
+<p>使用SVM算法去检测蠕虫</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>第6节中，我们所描述的模型取得了非常好的效果，高准确率，低误报率，可以说这样的一个模型完全可以满足我们的需求。<br>但笔者认为第6节所描述的模型存在着一些漏洞，而造成这个漏洞的原因是机器学习研究中不可避免的。<br>这个漏洞便是数据问题！！！<br>这个模型使用自己创造的数据，准确的说是已知signature的数据。</p>
+<h3 id="无形的特征提取"><a href="#无形的特征提取" class="headerlink" title="无形的特征提取"></a>无形的特征提取</h3><p>采用这种方式制作数据集，无形中做了特征提取。<br><strong>举个例子：</strong><br>我们需要制作一个分类器用来区分猫与猪的脸。但是我们没有真实的猫与猪的图片，但是我们知道猫的胡子很长、眼睛很大，耳朵是向上立着的，而猪的鼻子是扁的、耳朵是耷拉的、脸很大。我们根据这样的已知特征，去创造猫与猪的图片，这样的图片与真实图片必然有着很大的区别，且这个过程我们完成了一次“看不见”的特征提取。我们将这样的数据集拿给分类器，无形中降低分类器分类的难度，也行这个分类器在真实场景的表现也很不错，但是我们不能贸然断定，我们这样做就是合理的。</p>
+<h3 id="单个Signature没有说服力"><a href="#单个Signature没有说服力" class="headerlink" title="单个Signature没有说服力"></a>单个Signature没有说服力</h3><p>第6节中所描述的数据集采用的Signature是Slapper蠕虫的Signature，不谈及其Signature的复杂度，但作为15年前年的一个蠕虫病毒，使用其Signature制作的蠕虫病毒与今天的蠕虫病毒必然有很大的区别。</p>
+<h3 id="将一个不定解的问题转化为了定解"><a href="#将一个不定解的问题转化为了定解" class="headerlink" title="将一个不定解的问题转化为了定解"></a>将一个不定解的问题转化为了定解</h3><p>我们使用已知的Signature制作的数据集，其解是固定的。只要分类器找到了这个解，就可以成功分类。且这还是一个只有单个解的问题。而真实的环境中，蠕虫是否存在这样一个定解都是未知数，其解的个数更难以确定。使用这样数据集训练出来的模型出现<strong>过拟合</strong>的概率非常高。</p>
+<h3 id="对于未知Signature的蠕虫检测能力未知"><a href="#对于未知Signature的蠕虫检测能力未知" class="headerlink" title="对于未知Signature的蠕虫检测能力未知"></a>对于未知Signature的蠕虫检测能力未知</h3><p>通过前面的分析，相信大家对这个模型的问题已经有了一定认识。同样原文也没有测试其对其他数据集的效果，所以这个模型是否能够检测出真实环境中的蠕虫还是个未知数。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>该模型将蠕虫检测问题转化为字符串识别问题，其在真实环境的效果需要再做研究。<br>但模型中整体设计的思路，以及n-gram的方法的选择都很值得我们学习。<br>最后，做机器学习的过程中，还是要多多考虑数据的问题。garbage in, garbage out.</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1]Oliver, Sharma. Detecting Worm Mutations Using Machine Learning[D]. University of Glasgow:Oliver Sharma, 2008.<br>[2]Mohssen, M, Z, E, Mohammed, H, Anthony, Chan, Neco, Ventura. Polymorphic Worms Detection Using A Supervised Machine Learning Technique[D]. South Africa:University of Cape Town Rondebosch, 2014.<br>Polymorphic Worms Detection Using A Supervised Machine Learning Technique<br>[3]Oliver, Sharma, Mark, Girolami, Joseph, Sventek. Detecting Worm Variants using Machine Learning[D]. University of Glasgow:Oliver Sharma, 2008.<br>[4]朱禹. 基于计算机性能和机器学习的蠕虫病毒检测方法[D]. 浙江大学:朱禹, 2008.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/LeetCodeReview2/" rel="next" title="LeetCode算法练习——深度优先搜索 DFS">
+                <i class="fa fa-chevron-left"></i> LeetCode算法练习——深度优先搜索 DFS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/ZxcXenon" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/55a1bc4688c6" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-adjust"></i>简书</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#蠕虫"><span class="nav-number">1.</span> <span class="nav-text">蠕虫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的蠕虫"><span class="nav-number">2.</span> <span class="nav-text">常见的蠕虫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stuxnet蠕虫"><span class="nav-number">2.1.</span> <span class="nav-text">Stuxnet蠕虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Duqu蠕虫"><span class="nav-number">2.2.</span> <span class="nav-text">Duqu蠕虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Havex蠕虫"><span class="nav-number">2.3.</span> <span class="nav-text">Havex蠕虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flame蠕虫"><span class="nav-number">2.4.</span> <span class="nav-text">Flame蠕虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PLC-Blaster"><span class="nav-number">2.5.</span> <span class="nav-text">PLC-Blaster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Witty-Worm"><span class="nav-number">2.6.</span> <span class="nav-text">Witty Worm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-Red-Worms"><span class="nav-number">2.7.</span> <span class="nav-text">Code Red Worms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蠕虫攻击原理"><span class="nav-number">3.</span> <span class="nav-text">蠕虫攻击原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#感染"><span class="nav-number">3.1.</span> <span class="nav-text">感染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传播"><span class="nav-number">3.2.</span> <span class="nav-text">传播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蠕虫检测"><span class="nav-number">4.</span> <span class="nav-text">蠕虫检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Anomaly-Detection-异常检测"><span class="nav-number">4.1.</span> <span class="nav-text">Anomaly Detection 异常检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Misuse-Detection-入侵检测"><span class="nav-number">4.2.</span> <span class="nav-text">Misuse Detection 入侵检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDS-入侵检测系统"><span class="nav-number">4.3.</span> <span class="nav-text">IDS 入侵检测系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDS的几个案例"><span class="nav-number">4.4.</span> <span class="nav-text">IDS的几个案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDS部署"><span class="nav-number">4.5.</span> <span class="nav-text">IDS部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习与蠕虫检测"><span class="nav-number">5.</span> <span class="nav-text">机器学习与蠕虫检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习与基于网络的蠕虫检测"><span class="nav-number">6.</span> <span class="nav-text">机器学习与基于网络的蠕虫检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">6.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蠕虫模型"><span class="nav-number">6.2.</span> <span class="nav-text">蠕虫模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蠕虫变种"><span class="nav-number">6.3.</span> <span class="nav-text">蠕虫变种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#捕获网络流量"><span class="nav-number">6.4.</span> <span class="nav-text">捕获网络流量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个简单的网络流捕获模型"><span class="nav-number">6.5.</span> <span class="nav-text">一个简单的网络流捕获模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征提取"><span class="nav-number">6.6.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总览"><span class="nav-number">6.7.</span> <span class="nav-text">总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SVM分类器"><span class="nav-number">6.8.</span> <span class="nav-text">SVM分类器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据集"><span class="nav-number">6.8.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM"><span class="nav-number">6.8.2.</span> <span class="nav-text">SVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kernel"><span class="nav-number">6.8.3.</span> <span class="nav-text">Kernel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#误报率"><span class="nav-number">6.8.4.</span> <span class="nav-text">误报率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果"><span class="nav-number">6.9.</span> <span class="nav-text">效果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于SVM-Kernel"><span class="nav-number">6.9.1.</span> <span class="nav-text">关于SVM Kernel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于n-gram"><span class="nav-number">6.9.2.</span> <span class="nav-text">关于n-gram</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于数据量大小"><span class="nav-number">6.9.3.</span> <span class="nav-text">关于数据量大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于变异"><span class="nav-number">6.9.4.</span> <span class="nav-text">关于变异</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于误报率"><span class="nav-number">6.9.5.</span> <span class="nav-text">关于误报率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">6.10.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习与基于本机的蠕虫检测"><span class="nav-number">7.</span> <span class="nav-text">机器学习与基于本机的蠕虫检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#制作训练集"><span class="nav-number">7.1.</span> <span class="nav-text">制作训练集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征选择算法选取重要的特征"><span class="nav-number">7.2.</span> <span class="nav-text">特征选择算法选取重要的特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类算法测试"><span class="nav-number">7.3.</span> <span class="nav-text">分类算法测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果"><span class="nav-number">7.4.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">8.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无形的特征提取"><span class="nav-number">8.1.</span> <span class="nav-text">无形的特征提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个Signature没有说服力"><span class="nav-number">8.2.</span> <span class="nav-text">单个Signature没有说服力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将一个不定解的问题转化为了定解"><span class="nav-number">8.3.</span> <span class="nav-text">将一个不定解的问题转化为了定解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对于未知Signature的蠕虫检测能力未知"><span class="nav-number">8.4.</span> <span class="nav-text">对于未知Signature的蠕虫检测能力未知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz',
+        appKey: 'q4Y9saqMlAIFYHVDXQQRa5sI',
+        placeholder: '小哥，不说两句？',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
