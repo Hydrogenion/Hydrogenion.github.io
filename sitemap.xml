@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blackblog.tech/2018/07/30/MalimgAndMachineLearning/</loc>
+    
+    <lastmod>2018-08-04T07:12:18.405Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blackblog.tech/2018/08/02/LeetCodeReview4/</loc>
     
-    <lastmod>2018-08-03T05:40:38.772Z</lastmod>
+    <lastmod>2018-08-04T06:00:49.396Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blackblog.tech/2018/07/27/WormAndMachineLearing/</loc>
+    
+    <lastmod>2018-08-03T16:00:54.011Z</lastmod>
     
   </url>
   
@@ -26,13 +40,6 @@
     <loc>http://blackblog.tech/2018/06/03/LeetCodeReview/</loc>
     
     <lastmod>2018-07-29T08:20:38.293Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blackblog.tech/2018/07/27/WormAndMachineLearing/</loc>
-    
-    <lastmod>2018-07-28T09:28:54.743Z</lastmod>
     
   </url>
   

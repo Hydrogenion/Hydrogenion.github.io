@@ -4,8 +4,23 @@
 
     
   <url>
+    <loc>http://blackblog.tech/2018/07/30/MalimgAndMachineLearning/</loc>
+    <lastmod>2018-08-04T07:12:18.405Z</lastmod>
+    <data>
+        <display>
+        <title></title>
+        <pubTime>2018-07-30T11:49:17.127Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blackblog.tech/2018/08/02/LeetCodeReview4/</loc>
-    <lastmod>2018-08-03T05:40:38.772Z</lastmod>
+    <lastmod>2018-08-04T06:00:49.396Z</lastmod>
     <data>
         <display>
         <title>LeetCode算法练习——深度优先搜索 DFS(3)</title>
@@ -17,6 +32,26 @@
            
              
               <breadCrumb title="OJ" url="http://blackblog.tech/categories/OJ/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blackblog.tech/2018/07/27/WormAndMachineLearing/</loc>
+    <lastmod>2018-08-03T16:00:54.011Z</lastmod>
+    <data>
+        <display>
+        <title>机器学习与蠕虫检测</title>
+        <pubTime>2018-07-27T05:59:05.000Z</pubTime>
+        
+        <tag>机器学习</tag>
+         
+         
+           
+             
+              <breadCrumb title="机器学习" url="http://blackblog.tech/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
           
         </display>
     </data>
@@ -78,21 +113,6 @@
              
               <breadCrumb title="OJ" url="http://blackblog.tech/categories/OJ/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blackblog.tech/2018/07/27/WormAndMachineLearing/</loc>
-    <lastmod>2018-07-28T09:28:54.743Z</lastmod>
-    <data>
-        <display>
-        <title>机器学习与蠕虫检测</title>
-        <pubTime>2018-07-27T05:59:05.000Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>

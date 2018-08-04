@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="清华大学实习 —— 蠕虫病毒的可视化与分类摘要&amp;emsp;&amp;emsp;本文描述了一种使用图像分类技术对蠕虫病毒进行识别的方法。将蠕虫病毒的可执行二进制文件转化为灰度图像，同类蠕虫的灰度图像在纹理与布局上存在着很高的相似性，其特有的纹理与布局是该类蠕虫特有的模式。鉴于机器学习在图像分类与识别上的优秀表现，我们使用机器学习的方式进行对蠕虫图像进行分类，达到蠕虫病毒检测的效果。最终使用VGG-SVM 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Black'Blog">
+<meta property="og:url" content="http://blackblog.tech/2018/07/30/MalimgAndMachineLearning/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="清华大学实习 —— 蠕虫病毒的可视化与分类摘要&amp;emsp;&amp;emsp;本文描述了一种使用图像分类技术对蠕虫病毒进行识别的方法。将蠕虫病毒的可执行二进制文件转化为灰度图像，同类蠕虫的灰度图像在纹理与布局上存在着很高的相似性，其特有的纹理与布局是该类蠕虫特有的模式。鉴于机器学习在图像分类与识别上的优秀表现，我们使用机器学习的方式进行对蠕虫图像进行分类，达到蠕虫病毒检测的效果。最终使用VGG-SVM 的">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_1.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_2.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_3.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_4.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_5.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_6.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_7.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_8.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_9.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_10.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_11.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_12.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_13.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_14.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_15.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_16.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_17.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_18.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_19.png">
+<meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_20.png">
+<meta property="og:updated_time" content="2018-08-04T07:12:18.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Black'Blog">
+<meta name="twitter:description" content="清华大学实习 —— 蠕虫病毒的可视化与分类摘要&amp;emsp;&amp;emsp;本文描述了一种使用图像分类技术对蠕虫病毒进行识别的方法。将蠕虫病毒的可执行二进制文件转化为灰度图像，同类蠕虫的灰度图像在纹理与布局上存在着很高的相似性，其特有的纹理与布局是该类蠕虫特有的模式。鉴于机器学习在图像分类与识别上的优秀表现，我们使用机器学习的方式进行对蠕虫图像进行分类，达到蠕虫病毒检测的效果。最终使用VGG-SVM 的">
+<meta name="twitter:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '5G7B6WQ4IA',
+      apiKey: '6ed708e8f0a777590edfbfe4eb312f09',
+      indexName: 'blackblog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"啊！你要的东西没找到: ${query}","hits_stats":"找到约${hits} 条结果 (用时${time} ms)"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/07/30/MalimgAndMachineLearning/"/>
+
+
+
+
+
+  <title> | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/07/30/MalimgAndMachineLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-30T19:49:17+08:00">
+                2018-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/30/MalimgAndMachineLearning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/30/MalimgAndMachineLearning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/30/MalimgAndMachineLearning/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,162
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="清华大学实习-——-蠕虫病毒的可视化与分类"><a href="#清华大学实习-——-蠕虫病毒的可视化与分类" class="headerlink" title="清华大学实习 —— 蠕虫病毒的可视化与分类"></a>清华大学实习 —— 蠕虫病毒的可视化与分类</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>&emsp;&emsp;本文描述了一种使用图像分类技术对蠕虫病毒进行识别的方法。将蠕虫病毒的可执行二进制文件转化为灰度图像，同类蠕虫的灰度图像在纹理与布局上存在着很高的相似性，其特有的纹理与布局是该类蠕虫特有的模式。鉴于机器学习在图像分类与识别上的优秀表现，我们使用机器学习的方式进行对蠕虫图像进行分类，达到蠕虫病毒检测的效果。最终使用VGG-SVM 的方法使准确率达到98.37%。</p>
+<h2 id="传统分类方式的缺陷"><a href="#传统分类方式的缺陷" class="headerlink" title="传统分类方式的缺陷"></a>传统分类方式的缺陷</h2><p>基于标签的检测：<br>    通过识别特殊字符序列的方式发现蠕虫。这种方式对于零日漏洞与新的蠕虫识别效果并不好，因为签名还没有存入数据库，无法识别。</p>
+<p>基于行为的检测：<br>    属于异常检测。扫描系统，将不正常的的系统行为标为恶意软件，而不是检测恶意软件。启发式检测在检测未知蠕虫上有着不错的表现，但是误报率较高，需要较高的系统性能。</p>
+<h2 id="恶意软件的可视化"><a href="#恶意软件的可视化" class="headerlink" title="恶意软件的可视化"></a>恶意软件的可视化</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>&emsp;&emsp;将恶意软件进行可视化表达，寻找同类恶意软件所表现出的特征，将问题转化为模式识别问题。使用机器学习在图像识别上较为成熟的方法对恶意软件进行分类与检测。</p>
+<h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><p>&emsp;&emsp;恶意软件可视化是UCSB下属的Vision Research Lab所负责的Signal Processing for Malware Analysis的项目。他们提出了将恶意软件可视化用于检测与分类的方法。2012年，该团队制作了一个名为SARVAM（Search And RetrieVAl of Malware）的系统，用于可视化恶意软件，并可以根据恶意软件的图像对恶意软件进行分类。目前，该系统中已经有超过700万个恶意软件的数据。<br>&emsp;&emsp;2011年，该团队制作了Malimg数据集，信息安全工作者可对其进行研究。2011之后，该团队一直在尝试使用各类分类方法对Malimg数据集进行分类。目前该项目组成员所发表的论文中已经尝试了聚类，CNN，CNN-SVM，随机森林等方法。其中CNN达到了98%的准确率。</p>
+<p>相关链接：<br><a href="[Signal Processing for Malware Analysis | Vision Research Lab](https://vision.ece.ucsb.edu/research/signal-processing-malware-analysis">Signal Processing for Malware Analysis项目主页</a>)<br><a href="[Home - SARVAM](http://sarvam.ece.ucsb.edu">SARVAM主页</a>)</p>
+<h3 id="可视化流程"><a href="#可视化流程" class="headerlink" title="可视化流程"></a>可视化流程</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_1.png" style="zoom:100%"></p>
+<p>1、读取将恶意软件可执行文件的二进制代码<br>2、每8位无符号整数作为一个向量，转位[0,255]之间的数字<br>3、将恶意软件的所有8位向量转化为灰度图像<br>图像的宽度确定，高度根据文件大小确定。</p>
+<p>图像宽度的选择与文件大小见的关系如图所示：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_2.png" style="zoom:50%"></p>
+<h3 id="同类恶意软件图像所表现出的相似性"><a href="#同类恶意软件图像所表现出的相似性" class="headerlink" title="同类恶意软件图像所表现出的相似性"></a>同类恶意软件图像所表现出的相似性</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_3.png" style="zoom:50%"></p>
+<p>上方图像为恶意软件Fakerean的三个变种<br>下方图像为恶意软件Dontovo.A的三个变种<br>     从上图，我们可以看到同类恶意软件图像在纹理与布局上具有很高的相似性，不同类恶意软件图像见存在较大区别。<br>    在恶意软件的开发过程中，通常恶意软件的变种都是基于前一个版本的恶意软件进行开发，其代码结构具有较高的相似性，这种相似性使得其灰度图像也具有较高的相似性。恶意软件图像的相似性促使我们使用计算机视觉技术来对其进行分类与检测，机器学习，神经网络等方法在图像分类上有着非常出色的表现。</p>
+<h3 id="图像纹理说明"><a href="#图像纹理说明" class="headerlink" title="图像纹理说明"></a>图像纹理说明</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_4.png" style="zoom:50%"></p>
+<p>该图为Dontovo.A（一种木马病毒）的图像<br>.text：包含可执行代码。.text部分的第一部分代码图像具有较高的细粒度， 其余部分是黑色，其为程序段末尾填充的0。<br>.data：黑色部分为未初始化的数据，细粒度高的部分未初始化的数据<br>.rsrc部分，包含模块的所有资源，其可以包括应用程序可以使用的图标。</p>
+<h3 id="图像纹理"><a href="#图像纹理" class="headerlink" title="图像纹理"></a>图像纹理</h3><p>&emsp;&emsp;图像纹理并没有一个明确的定义，一般人们认为图像纹理是一种重复出现的模式。<br>&emsp;&emsp;纹理研究一般分为三个方向：<br>&emsp;&emsp;纹理分类：对不同的纹理进行分类。其中也包括对纹理分割，即对边界进行识别。<br>&emsp;&emsp;纹理分析：计算机视觉的重要研究方向。分析纹理的所指向的意义。常常用于医学影像分析，遥感图像分析等等。<br>&emsp;&emsp;纹理合成：纹理合成方法用于合成纹理图像。 它们经常用于计算机图形学。<br>&emsp;&emsp;恶意软件图像虽然不完全是重复的模式，但其中也表现出了大量的纹理信息，这些纹理用于分类。</p>
+<h2 id="Malimg数据集"><a href="#Malimg数据集" class="headerlink" title="Malimg数据集"></a>Malimg数据集</h2><h3 id="Malimg数据集介绍"><a href="#Malimg数据集介绍" class="headerlink" title="Malimg数据集介绍"></a>Malimg数据集介绍</h3><p>&emsp;&emsp;Malimg数据集是一个关于恶意软件的数据集。Malimg数据集中包括25种恶意软件，一共9339个样本。其数据集原始文件为二进制文件，其可视化结果将在后文展示。通常人们将二进制文件转换为32X32的图像进行识别与分类。</p>
+<h3 id="Malimg数据集中的恶意软件"><a href="#Malimg数据集中的恶意软件" class="headerlink" title="Malimg数据集中的恶意软件"></a>Malimg数据集中的恶意软件</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_5.png" style="zoom:50%"></p>
+<p>其对应的图像</p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_6.png" style="zoom:50%"></p>
+<h3 id="Malimg数据集的解析"><a href="#Malimg数据集的解析" class="headerlink" title="Malimg数据集的解析"></a>Malimg数据集的解析</h3><p>Malimg使用npz格式进行存储，使用Python进行读取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">malimg = np.load(&apos;malimg.npz&apos;)</div><div class="line">malware=[]</div><div class="line">label=[]</div><div class="line">for data in malimg[&apos;arr&apos;]:</div><div class="line">    malware.append(data[0]) #data[0]为32x32的数据</div><div class="line">    label.append(data[1]) #data[1]为标签</div></pre></td></tr></table></figure>
+<h2 id="使用Sklearn对Malimg数据集做分类"><a href="#使用Sklearn对Malimg数据集做分类" class="headerlink" title="使用Sklearn对Malimg数据集做分类"></a>使用Sklearn对Malimg数据集做分类</h2><h3 id="Sklearn简介"><a href="#Sklearn简介" class="headerlink" title="Sklearn简介"></a>Sklearn简介</h3><p>&emsp;&emsp;Sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装。其中包括：分类（Classification）、回归（Regression）、聚类（Clustering）、数据降维（Dimensionality reduction）、常用模型（Model selection）、数据预处理（Preprocessing）。使用非常简单，</p>
+<h3 id="仅对蠕虫进行分类"><a href="#仅对蠕虫进行分类" class="headerlink" title="仅对蠕虫进行分类"></a>仅对蠕虫进行分类</h3><p>&emsp;&emsp;从数据集中取出Allaple.L、Allaple.A、Yuner.A、VB.AT四种蠕虫，共5748组数据。<br>&emsp;&emsp;使用SVM、神经网络、朴素贝叶斯进行尝试，均采用十折交叉验证。其中SVM选取高斯核作为核函数，C设置为10。多层神经网络使用relu做激活函数，使用AdamOptimizer作为优化器，L2惩罚系数为0.001，自适应学习率，迭代500个epoch。朴素贝叶斯以高斯分布为模型。</p>
+<p>效果：<br>输出十次训练的准确率。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SVM模型评价: [0.81423611 0.7773913  0.85043478 0.81913043 0.80347826 0.82434783 0.81565217 0.80869565 0.82752613 0.80104712]</div><div class="line">神经网络模型评价: [0.83506944 0.77043478 0.81565217 0.8173913  0.76869565 0.80695652 0.81217391 0.79478261 0.81184669 0.80977312]</div><div class="line">朴素贝叶斯(高斯分布)模型评价: [0.79166667 0.77217391 0.81217391 0.80695652 0.77565217 0.81217391 0.81913043 0.81217391 0.81881533 0.79406632]</div></pre></td></tr></table></figure>
+<h3 id="对所有恶意软件进行分类"><a href="#对所有恶意软件进行分类" class="headerlink" title="对所有恶意软件进行分类"></a>对所有恶意软件进行分类</h3><p>对数据集中25种恶意软件进行分类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SVM模型评价: [0.82751323 0.8014862  0.84861407 0.83547009 0.81390374 0.83957219 0.84317938 0.83423036 0.84       0.81148429]</div><div class="line">神经网络模型评价: [0.55767196 0.6433121  0.63219616 0.58226496 0.58930481 0.68877005 0.55853921 0.5489774  0.60864865 0.63163597]</div><div class="line">朴素贝叶斯(高斯分布)模型评价: [0.8010582  0.78980892 0.82196162 0.82478632 0.79037433 0.81497326</div><div class="line"> 0.8292159  0.81593111 0.8227027  0.80606717]</div></pre></td></tr></table></figure>
+<p>类别增加之后，SVM的表现效果还是不错的。</p>
+<h2 id="使用类VGG-SVM网络模型进行分类"><a href="#使用类VGG-SVM网络模型进行分类" class="headerlink" title="使用类VGG-SVM网络模型进行分类"></a>使用类VGG-SVM网络模型进行分类</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>&emsp;&emsp;使用Malimg作为数据集，对25类，9339个样本进行分类。所有图像均为32 X 32 X 1。对数据进行随机抽取，80%用作训练集，20%用作测试集。</p>
+<h3 id="VGG网络"><a href="#VGG网络" class="headerlink" title="VGG网络"></a>VGG网络</h3><p>&emsp;&emsp;VGG与传统的CNN并没有过大的区别。VGG是2014年被提出的，与之前的AlexNet的网络结构相比，错误率大幅下降，并取得了ILSVRC2014比赛分类项目的第二名和定位项目的第一名。同时，VGG的拓展性很强，迁移到其他图片数据上的泛化性非常好。VGG的结构简洁，整个网络都使用同样大小的卷积核尺寸（3x3）和最大池化尺寸（2x2）。到目前为止，VGG仍然被用来提取图像特征。</p>
+<p>特点：<br>1.全部使用3x3的卷积核和2x2的池化核，通过不断加深网络结构来提升性能。<br>2.利用多个小卷积核卷积层的组合比一个大卷积核卷积层好，小的卷积核的连用可以让决策函数变得更有区分度，并且可以大大降低参数的数量，<br>3.拓展性很强，迁移到其他图像数据集的泛化性很好。</p>
+<h3 id="神经网络结构"><a href="#神经网络结构" class="headerlink" title="神经网络结构"></a>神经网络结构</h3><p>仿照VGG构建了一个小的神经网络，并将VGG与SVM结合，将VGG的最后一层的输出作为SVM的输入，相当于使用SVM作为激活函数。</p>
+<p>网络结构如下：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_7.png" style="zoom:50%"></p>
+<p>说明：<br>全部使用3x3的卷积核和2x2的池化核，多个小卷积层进行组合。<br>卷积层使用relu做激活函数，克服梯度消失的问题，加快训练速度。<br>相比VGG，将最后的全连接层改为一层，使用softmax做激活函数。<br>使用AdamOptimizer调节参数<br>使用类别交叉熵作为损失函数<br>Learing_rate = 0.0001<br>Batch_size = 32  或 64<br>Epoch = 100 </p>
+<h3 id="实验效果"><a href="#实验效果" class="headerlink" title="实验效果"></a>实验效果</h3><p><strong>VGG 针对25个类，batch_size = 32：</strong><br>准确率：93.99%，网络不够稳定</p>
+<p>最后五个epoch:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Epoch 96/100</div><div class="line">9s - loss: 0.0069 - acc: 0.9976 - val_loss: 0.2756 - val_acc: 0.9372</div><div class="line">Epoch 97/100</div><div class="line">9s - loss: 0.0183 - acc: 0.9941 - val_loss: 0.2640 - val_acc: 0.9439</div><div class="line">Epoch 98/100</div><div class="line">9s - loss: 0.0105 - acc: 0.9970 - val_loss: 0.2886 - val_acc: 0.9412</div><div class="line">Epoch 99/100</div><div class="line">9s - loss: 0.0080 - acc: 0.9973 - val_loss: 0.3149 - val_acc: 0.9398</div><div class="line">Epoch 100/100</div><div class="line">9s - loss: 0.0098 - acc: 0.9966 - val_loss: 0.3019 - val_acc: 0.9372</div></pre></td></tr></table></figure>
+<p>准确率随迭代次数的变化情况：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_8.png" style="zoom:100%"></p>
+<p>损失随迭代次数的变化情况<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_9.png" style="zoom:100%"></p>
+<p>可以看到这个网络准确率还可以，但是抖动明显，还未达到收敛。由于batch-size较小，应该增加epoch的数量，使其达到收敛。</p>
+<p><strong>VGG-SVM ：batch-size=32</strong><br>将VGG最后的输出作为SVM的输入，使用SVM进行分类，准确率达到98.37%。</p>
+<p><strong>选取linear核，C对准确率的影响</strong><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_10.png" style="zoom:100%"></p>
+<p>使用线性核，C对准确率几乎没有影响</p>
+<p><strong>选取rbf核，C对准确率的影响，gamma自适应</strong><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_11.png" style="zoom:100%"></p>
+<p>使用高斯核，C对准确率几乎没有影响</p>
+<p>最后选kernel = linear , C=10 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">十次训练的准确率：0.98518519, 0.97664544, 0.98720682, 0.98611111, 0.99144385, 0.98609626, 0.98066595, 0.98062433, 0.9827027 , 0.98049837</div><div class="line">平均： 0.9837180016911671</div></pre></td></tr></table></figure>
+<p><strong>针对25个类，batch_size = 64：</strong><br>准确率：92.24%，网络不够稳定，可能因为batch size过小，网络还没收敛。</p>
+<p>最后5个epoch：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Epoch 96/100</div><div class="line">51s - loss: 0.0203 - acc: 0.9924 - val_loss: 0.2875 - val_acc: 0.9305</div><div class="line">Epoch 97/100</div><div class="line">51s - loss: 0.0208 - acc: 0.9938 - val_loss: 0.4102 - val_acc: 0.9024</div><div class="line">Epoch 98/100</div><div class="line">51s - loss: 0.0092 - acc: 0.9976 - val_loss: 0.3271 - val_acc: 0.9225</div><div class="line">Epoch 99/100</div><div class="line">54s - loss: 0.0110 - acc: 0.9966 - val_loss: 0.2922 - val_acc: 0.9318</div><div class="line">Epoch 100/100</div><div class="line">55s - loss: 0.0148 - acc: 0.9955 - val_loss: 0.3205 - val_acc: 0.9251</div></pre></td></tr></table></figure>
+<p>准确率随迭代次数的变化情况：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_12.png" style="zoom:100%"></p>
+<p>损失随迭代次数的变化情况<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_13.png" style="zoom:100%"></p>
+<p><strong>VGG-SVM ：batch-size=64</strong><br>将VGG最后的输出作为SVM的输入，使用SVM进行分类，准确率达到98.25%。</p>
+<p><strong>选取linear核，C对准确率的影响</strong></p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_14.png" style="zoom:100%"><br>使用线性核，C对准确率几乎没有影响</p>
+<p><strong>选取rbf核，C对准确率的影响，gamma自适应</strong><br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_15.png" style="zoom:100%"><br>使用高斯核，C对准确率几乎没有影响</p>
+<p>最后选kernel = linear , C=10 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">十次训练的准确率：0.98624339, 0.97983015, 0.98614072, 0.98183761, 0.98395722, 0.98502674, 0.98711063, 0.97631862, 0.98054054, 0.97833153</div><div class="line">平均： 0.9825337147936295</div></pre></td></tr></table></figure>
+<p>通过这两个例子，可以看到使用SVM作为激活函数，对于准确率有着明显的提升。</p>
+<h3 id="batch-size对于性能的影响："><a href="#batch-size对于性能的影响：" class="headerlink" title="batch size对于性能的影响："></a>batch size对于性能的影响：</h3><p>Batch size每一次训练的数据量大小，其对梯度下降有着很大的影响。<br><strong>一般来说，在合理的范围之内，越大的 batch size 使下降方向越准确，震荡越小；batch size 如果过大，则可能会出现局部最优的情况。小的 bath size 引入的随机性更大，难以达到收敛，但有时可能会让效果变好。</strong></p>
+<p>两个极端：</p>
+<p>batch_size为全数据集(Full Batch Learning)：<br>好处：<br>1.由全数据集确定的方向能够更好地代表样本总体，从而更准确地朝向极值所在的方向。<br>2.由于不同权重的梯度值差别巨大，因此选择一个全局的学习率很困难。Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>坏处：<br>1.随着数据集的海量增长和内存限制，一次性载入所有的数据进来变得越来越不可行。<br>2.以Rprop的方式迭代，会由于各个Batch之间的采样差异性，各次梯度修正值相互抵消，无法修正。</p>
+<p>Batch_size=1:<br>Batch_size=1，也就是每次只训练一个样本。这就是在线学习(Online Learning)。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元，非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，难以达到收敛。</p>
+<p>1.batch_size设的大一些，收敛得块，也就是需要训练的次数少，准确率上升的也很稳定，但是实际使用起来精度不高。<br>2.batch_size设的小一些，收敛得慢，可能准确率来回震荡，因此需要把基础学习速率降低一些，但是实际使用起来精度较高。</p>
+<h2 id="使用SVM代替Softmax"><a href="#使用SVM代替Softmax" class="headerlink" title="使用SVM代替Softmax"></a>使用SVM代替Softmax</h2><p>该方法由Yichuan Tang在2013年提出，其使用SVM代替Softmax作为CNN的激活函数，在MNIST、CIFAR-10等数据集上都有着良好的效果。 ICML 2013表征学习研讨会对这种方式表示认可。<br>具体的理论在Deep Learning using Linear Support Vector Machines 这篇文章中有详细说明，目前还在研究论文。</p>
+<h2 id="对论文的复现"><a href="#对论文的复现" class="headerlink" title="对论文的复现"></a>对论文的复现</h2><p>&emsp;&emsp;Towards Building an Intelligent Anti-Malware System: A Deep Learning Approach using Support Vector Machine (SVM) for Malware Classification一文中提出了了一种深度学习与SVM结合的分类方式。以CNN为例，其在最后一层使用linear作为激活函数，将数据提取出来后，放入SVM中进行分类。CNN在此过程中只用于特征提取，SVM用于分类。<br>    除CNN-SVM之外，原文还给出了GRU-SVM、MLP-SVM这两种方式。并对三种方法做了评估，我们暂时先复现CNN-SVM。</p>
+<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_16.png" style="zoom:50%"></p>
+<p>说明：<br>Batch_size = 256<br>SVM C =10<br>Epoch  = 100<br>Learning rate = 1e-3<br>将fc1的输出提取出来作为SVM的输入 </p>
+<p>文中的参数选择：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_17.png" style="zoom:80%"></p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p>CNN-SVM：<br>准确率：95.77%</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">十次训练的准确率：</div><div class="line">0.95873016, 0.96072187, 0.96481876, 0.95940171, 0.94545455,0.96042781, 0.96348013, 0.96017223, 0.95135135, 0.95341278</div><div class="line"></div><div class="line">平均： 0.9577971345610535</div></pre></td></tr></table></figure>
+<p>CNN：使用softmax做最后一层的激活函数<br>准确率：85.08%</p>
+<p>最后五个epoch</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Epoch 95/100</div><div class="line">30s - loss: 0.0144 - acc: 0.9964 - val_loss: 0.5229 - val_acc: 0.8449</div><div class="line">Epoch 96/100</div><div class="line">31s - loss: 0.0125 - acc: 0.9963 - val_loss: 0.5305 - val_acc: 0.8503</div><div class="line">Epoch 97/100</div><div class="line">30s - loss: 0.0122 - acc: 0.9975 - val_loss: 0.5798 - val_acc: 0.8516</div><div class="line">Epoch 98/100</div><div class="line">30s - loss: 0.0136 - acc: 0.9966 - val_loss: 0.5615 - val_acc: 0.8463</div><div class="line">Epoch 99/100</div><div class="line">29s - loss: 0.0111 - acc: 0.9969 - val_loss: 0.5705 - val_acc: 0.8596</div><div class="line">Epoch 100/100</div><div class="line">26s - loss: 0.0098 - acc: 0.9982 - val_loss: 0.5550 - val_acc: 0.8529</div></pre></td></tr></table></figure>
+<p>准确率随迭代次数的变化情况：</p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_18.png" style="zoom:100%"></p>
+<p>损失随迭代次数的变化情况</p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_19.png" style="zoom:100%"></p>
+<p>可以看到论文中的网络结构，使用Softmax做激活函数时，准确率不高，但是网络非常稳定。</p>
+<h3 id="文中结果"><a href="#文中结果" class="headerlink" title="文中结果"></a>文中结果</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_20.png" style="zoom:50%"></p>
+<p>文中CNN-SVM准确率仅有77.23%，与实验复现结果差距较大。因文中仅给出网络结构，并未给出其具体参数。参数设置的不同，可能会对实验结果造成影响。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1].Abien, Fred, M, Agarap, Francis, John, Hill, Pepito. Towards Building an Intelligent Anti-Malware System: A Deep Learning Approach using Support Vector Machine (SVM) for Malware Classification[M]. Adamson University:Department of Computer Science, 2017.<br>[2].Felan, Carlo, C, Garcia, Felix, P, Muga, II, PhD. Random Forest for Malware Classification[M]. Ateneo de Manila University:Department of Electronics, Computer and Communications Engineering, 2016.<br>[3].L, Nataraj, S, Karthikeyan, G, Jacob, B, S, Manjunath. Malware Images: Visualization and Automatic Classification[M]. Electrical and Computer Engineering,:University of California, Santa Barbara, 2011.<br>[4].Espoir, K, Kabanga, Chang, Hoon, Kim. Malware Images Classification Using Convolutional Neural Network[M]. Department of Computer and Information Engineering:Daegu University,, 2018.<br>[5]Yichuan Tang. 2013. Deep learning using linear support vector machines. arXiv preprint arXiv:1306.0239 (2013).</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/29/LeetCodeReview3/" rel="next" title="LeetCode算法练习——深度优先搜索 DFS(2)">
+                <i class="fa fa-chevron-left"></i> LeetCode算法练习——深度优先搜索 DFS(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/02/LeetCodeReview4/" rel="prev" title="LeetCode算法练习——深度优先搜索 DFS(3)">
+                LeetCode算法练习——深度优先搜索 DFS(3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/ZxcXenon" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/55a1bc4688c6" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-adjust"></i>简书</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#清华大学实习-——-蠕虫病毒的可视化与分类"><span class="nav-number">1.</span> <span class="nav-text">清华大学实习 —— 蠕虫病毒的可视化与分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统分类方式的缺陷"><span class="nav-number">1.2.</span> <span class="nav-text">传统分类方式的缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#恶意软件的可视化"><span class="nav-number">1.3.</span> <span class="nav-text">恶意软件的可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目的"><span class="nav-number">1.3.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.3.2.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化流程"><span class="nav-number">1.3.3.</span> <span class="nav-text">可视化流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同类恶意软件图像所表现出的相似性"><span class="nav-number">1.3.4.</span> <span class="nav-text">同类恶意软件图像所表现出的相似性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像纹理说明"><span class="nav-number">1.3.5.</span> <span class="nav-text">图像纹理说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像纹理"><span class="nav-number">1.3.6.</span> <span class="nav-text">图像纹理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Malimg数据集"><span class="nav-number">1.4.</span> <span class="nav-text">Malimg数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Malimg数据集介绍"><span class="nav-number">1.4.1.</span> <span class="nav-text">Malimg数据集介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Malimg数据集中的恶意软件"><span class="nav-number">1.4.2.</span> <span class="nav-text">Malimg数据集中的恶意软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Malimg数据集的解析"><span class="nav-number">1.4.3.</span> <span class="nav-text">Malimg数据集的解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Sklearn对Malimg数据集做分类"><span class="nav-number">1.5.</span> <span class="nav-text">使用Sklearn对Malimg数据集做分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sklearn简介"><span class="nav-number">1.5.1.</span> <span class="nav-text">Sklearn简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#仅对蠕虫进行分类"><span class="nav-number">1.5.2.</span> <span class="nav-text">仅对蠕虫进行分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对所有恶意软件进行分类"><span class="nav-number">1.5.3.</span> <span class="nav-text">对所有恶意软件进行分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用类VGG-SVM网络模型进行分类"><span class="nav-number">1.6.</span> <span class="nav-text">使用类VGG-SVM网络模型进行分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集"><span class="nav-number">1.6.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VGG网络"><span class="nav-number">1.6.2.</span> <span class="nav-text">VGG网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#神经网络结构"><span class="nav-number">1.6.3.</span> <span class="nav-text">神经网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验效果"><span class="nav-number">1.6.4.</span> <span class="nav-text">实验效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch-size对于性能的影响："><span class="nav-number">1.6.5.</span> <span class="nav-text">batch size对于性能的影响：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用SVM代替Softmax"><span class="nav-number">1.7.</span> <span class="nav-text">使用SVM代替Softmax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对论文的复现"><span class="nav-number">1.8.</span> <span class="nav-text">对论文的复现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络结构"><span class="nav-number">1.8.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">1.8.2.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文中结果"><span class="nav-number">1.8.3.</span> <span class="nav-text">文中结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.9.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共66.8k字 |</span>
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz',
+        appKey: 'q4Y9saqMlAIFYHVDXQQRa5sI',
+        placeholder: '小哥，不说两句？',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
