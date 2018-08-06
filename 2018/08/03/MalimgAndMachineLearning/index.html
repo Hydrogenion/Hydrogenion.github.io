@@ -105,7 +105,7 @@
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_18.png">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_19.png">
 <meta property="og:image" content="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_20.png">
-<meta property="og:updated_time" content="2018-08-04T07:16:50.765Z">
+<meta property="og:updated_time" content="2018-08-04T09:07:07.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蠕虫病毒的可视化与分类">
 <meta name="twitter:description" content="摘要&amp;emsp;&amp;emsp;本文描述了一种使用图像分类技术对蠕虫病毒进行识别的方法。将蠕虫病毒的可执行二进制文件转化为灰度图像，同类蠕虫的灰度图像在纹理与布局上存在着很高的相似性，其特有的纹理与布局是该类蠕虫特有的模式。鉴于机器学习在图像分类与识别上的优秀表现，我们使用机器学习的方式进行对蠕虫图像进行分类，达到蠕虫病毒检测的效果。最终使用VGG-SVM 的方法使准确率达到98.37%。">
@@ -457,18 +457,18 @@
 <h2 id="恶意软件的可视化"><a href="#恶意软件的可视化" class="headerlink" title="恶意软件的可视化"></a>恶意软件的可视化</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>&emsp;&emsp;将恶意软件进行可视化表达，寻找同类恶意软件所表现出的特征，将问题转化为模式识别问题。使用机器学习在图像识别上较为成熟的方法对恶意软件进行分类与检测。</p>
 <h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><p>&emsp;&emsp;恶意软件可视化是UCSB下属的Vision Research Lab所负责的Signal Processing for Malware Analysis的项目。他们提出了将恶意软件可视化用于检测与分类的方法。2012年，该团队制作了一个名为SARVAM（Search And RetrieVAl of Malware）的系统，用于可视化恶意软件，并可以根据恶意软件的图像对恶意软件进行分类。目前，该系统中已经有超过700万个恶意软件的数据。<br>&emsp;&emsp;2011年，该团队制作了Malimg数据集，信息安全工作者可对其进行研究。2011之后，该团队一直在尝试使用各类分类方法对Malimg数据集进行分类。目前该项目组成员所发表的论文中已经尝试了聚类，CNN，CNN-SVM，随机森林等方法。其中CNN达到了98%的准确率。</p>
 <p>相关链接：<br><a href="[Signal Processing for Malware Analysis | Vision Research Lab](https://vision.ece.ucsb.edu/research/signal-processing-malware-analysis">Signal Processing for Malware Analysis项目主页</a>)<br><a href="[Home - SARVAM](http://sarvam.ece.ucsb.edu">SARVAM主页</a>)</p>
-<h3 id="可视化流程"><a href="#可视化流程" class="headerlink" title="可视化流程"></a>可视化流程</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_1.png" style="zoom:100%"></p>
+<h3 id="可视化流程"><a href="#可视化流程" class="headerlink" title="可视化流程"></a>可视化流程</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_1.png" style="zoom:50%"></p>
 <p>1、读取将恶意软件可执行文件的二进制代码<br>2、每8位无符号整数作为一个向量，转位[0,255]之间的数字<br>3、将恶意软件的所有8位向量转化为灰度图像<br>图像的宽度确定，高度根据文件大小确定。</p>
-<p>图像宽度的选择与文件大小见的关系如图所示：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_2.png" style="zoom:50%"></p>
-<h3 id="同类恶意软件图像所表现出的相似性"><a href="#同类恶意软件图像所表现出的相似性" class="headerlink" title="同类恶意软件图像所表现出的相似性"></a>同类恶意软件图像所表现出的相似性</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_3.png" style="zoom:50%"></p>
+<p>图像宽度的选择与文件大小见的关系如图所示：<br><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_2.png" style="zoom:30%"></p>
+<h3 id="同类恶意软件图像所表现出的相似性"><a href="#同类恶意软件图像所表现出的相似性" class="headerlink" title="同类恶意软件图像所表现出的相似性"></a>同类恶意软件图像所表现出的相似性</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_3.png" style="zoom:20%"></p>
 <p>上方图像为恶意软件Fakerean的三个变种<br>下方图像为恶意软件Dontovo.A的三个变种<br>     从上图，我们可以看到同类恶意软件图像在纹理与布局上具有很高的相似性，不同类恶意软件图像见存在较大区别。<br>    在恶意软件的开发过程中，通常恶意软件的变种都是基于前一个版本的恶意软件进行开发，其代码结构具有较高的相似性，这种相似性使得其灰度图像也具有较高的相似性。恶意软件图像的相似性促使我们使用计算机视觉技术来对其进行分类与检测，机器学习，神经网络等方法在图像分类上有着非常出色的表现。</p>
-<h3 id="图像纹理说明"><a href="#图像纹理说明" class="headerlink" title="图像纹理说明"></a>图像纹理说明</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_4.png" style="zoom:50%"></p>
+<h3 id="图像纹理说明"><a href="#图像纹理说明" class="headerlink" title="图像纹理说明"></a>图像纹理说明</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_4.png" style="zoom:30%"></p>
 <p>该图为Dontovo.A（一种木马病毒）的图像<br>.text：包含可执行代码。.text部分的第一部分代码图像具有较高的细粒度， 其余部分是黑色，其为程序段末尾填充的0。<br>.data：黑色部分为未初始化的数据，细粒度高的部分未初始化的数据<br>.rsrc部分，包含模块的所有资源，其可以包括应用程序可以使用的图标。</p>
 <h3 id="图像纹理"><a href="#图像纹理" class="headerlink" title="图像纹理"></a>图像纹理</h3><p>&emsp;&emsp;图像纹理并没有一个明确的定义，一般人们认为图像纹理是一种重复出现的模式。<br>&emsp;&emsp;纹理研究一般分为三个方向：<br>&emsp;&emsp;纹理分类：对不同的纹理进行分类。其中也包括对纹理分割，即对边界进行识别。<br>&emsp;&emsp;纹理分析：计算机视觉的重要研究方向。分析纹理的所指向的意义。常常用于医学影像分析，遥感图像分析等等。<br>&emsp;&emsp;纹理合成：纹理合成方法用于合成纹理图像。 它们经常用于计算机图形学。<br>&emsp;&emsp;恶意软件图像虽然不完全是重复的模式，但其中也表现出了大量的纹理信息，这些纹理用于分类。</p>
 <h2 id="Malimg数据集"><a href="#Malimg数据集" class="headerlink" title="Malimg数据集"></a>Malimg数据集</h2><h3 id="Malimg数据集介绍"><a href="#Malimg数据集介绍" class="headerlink" title="Malimg数据集介绍"></a>Malimg数据集介绍</h3><p>&emsp;&emsp;Malimg数据集是一个关于恶意软件的数据集。Malimg数据集中包括25种恶意软件，一共9339个样本。其数据集原始文件为二进制文件，其可视化结果将在后文展示。通常人们将二进制文件转换为32X32的图像进行识别与分类。</p>
-<h3 id="Malimg数据集中的恶意软件"><a href="#Malimg数据集中的恶意软件" class="headerlink" title="Malimg数据集中的恶意软件"></a>Malimg数据集中的恶意软件</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_5.png" style="zoom:50%"></p>
+<h3 id="Malimg数据集中的恶意软件"><a href="#Malimg数据集中的恶意软件" class="headerlink" title="Malimg数据集中的恶意软件"></a>Malimg数据集中的恶意软件</h3><p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_5.png" style="zoom:20%"></p>
 <p>其对应的图像</p>
-<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_6.png" style="zoom:50%"></p>
+<p><img src="https://blog-1253353217.cos.ap-chengdu.myqcloud.com/blog15%20malimg0802/malimg0802_6.png" style="zoom:30%"></p>
 <h3 id="Malimg数据集的解析"><a href="#Malimg数据集的解析" class="headerlink" title="Malimg数据集的解析"></a>Malimg数据集的解析</h3><p>Malimg使用npz格式进行存储，使用Python进行读取。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">malimg = np.load(&apos;malimg.npz&apos;)</div><div class="line">malware=[]</div><div class="line">label=[]</div><div class="line">for data in malimg[&apos;arr&apos;]:</div><div class="line">    malware.append(data[0]) #data[0]为32x32的数据</div><div class="line">    label.append(data[1]) #data[1]为标签</div></pre></td></tr></table></figure>
 <h2 id="使用Sklearn对Malimg数据集做分类"><a href="#使用Sklearn对Malimg数据集做分类" class="headerlink" title="使用Sklearn对Malimg数据集做分类"></a>使用Sklearn对Malimg数据集做分类</h2><h3 id="Sklearn简介"><a href="#Sklearn简介" class="headerlink" title="Sklearn简介"></a>Sklearn简介</h3><p>&emsp;&emsp;Sklearn是机器学习中一个常用的python第三方模块，对常用的机器学习算法进行了封装。其中包括：分类（Classification）、回归（Regression）、聚类（Clustering）、数据降维（Dimensionality reduction）、常用模型（Model selection）、数据预处理（Preprocessing）。使用非常简单，</p>
@@ -752,7 +752,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共66.8k字 |</span>
+  <span class="post-count">博客全站共69.0k字 |</span>
 </div>
 
 
