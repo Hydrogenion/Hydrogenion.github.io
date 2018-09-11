@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OJ," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面几周完成了DFS、BFS的章节，一共大约40题左右，今天开始练习动态规划。动态规划是一种将原问题拆分成子问题，对子问题进行求解，最终解决原文题的思想。动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。DP的关键在于寻找状态转移方程，即如何从前一状态转移到后一状态，也可以理解为子问题的递推公式。
+动态规划设计的两种方法：自顶向下（又称记忆化搜索、备忘录）：基本上对应着递归函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode算法练习——动态规划 DP">
+<meta property="og:url" content="http://blackblog.tech/2018/08/24/LeetCodeReview6/index.html">
+<meta property="og:site_name" content="Black'Blog">
+<meta property="og:description" content="前面几周完成了DFS、BFS的章节，一共大约40题左右，今天开始练习动态规划。动态规划是一种将原问题拆分成子问题，对子问题进行求解，最终解决原文题的思想。动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。DP的关键在于寻找状态转移方程，即如何从前一状态转移到后一状态，也可以理解为子问题的递推公式。
+动态规划设计的两种方法：自顶向下（又称记忆化搜索、备忘录）：基本上对应着递归函数">
+<meta property="og:updated_time" content="2018-09-11T03:15:32.332Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode算法练习——动态规划 DP">
+<meta name="twitter:description" content="前面几周完成了DFS、BFS的章节，一共大约40题左右，今天开始练习动态规划。动态规划是一种将原问题拆分成子问题，对子问题进行求解，最终解决原文题的思想。动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。DP的关键在于寻找状态转移方程，即如何从前一状态转移到后一状态，也可以理解为子问题的递推公式。
+动态规划设计的两种方法：自顶向下（又称记忆化搜索、备忘录）：基本上对应着递归函数">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '5G7B6WQ4IA',
+      apiKey: '6ed708e8f0a777590edfbfe4eb312f09',
+      indexName: 'blackblog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"啊！你要的东西没找到: ${query}","hits_stats":"找到约${hits} 条结果 (用时${time} ms)"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blackblog.tech/2018/08/24/LeetCodeReview6/"/>
+
+
+
+
+
+  <title>LeetCode算法练习——动态规划 DP | Black'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Black'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Code Tech Life</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blackblog.tech/2018/08/24/LeetCodeReview6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Black'Blog">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Black'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LeetCode算法练习——动态规划 DP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-24T20:04:30+08:00">
+                2018-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OJ/" itemprop="url" rel="index">
+                    <span itemprop="name">OJ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/24/LeetCodeReview6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/24/LeetCodeReview6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/08/24/LeetCodeReview6/" class="leancloud_visitors" data-flag-title="LeetCode算法练习——动态规划 DP">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,074
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  21
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面几周完成了DFS、BFS的章节，一共大约40题左右，今天开始练习动态规划。动态规划是一种将原问题拆分成子问题，对子问题进行求解，最终解决原文题的思想。动态规划适用于子问题不是独立的情况，也就是各子问题包含公共的子子问题。<br>DP的关键在于寻找状态转移方程，即如何从前一状态转移到后一状态，也可以理解为子问题的递推公式。</p>
+<p>动态规划设计的两种方法：<br>自顶向下（又称记忆化搜索、备忘录）：基本上对应着递归函数实现，从大范围开始计算，要注意不断保存中间结果，避免重复计算<br>自底向上（递推）：从小范围递推计算到大范围</p>
+<p>其实前几节搜索的问题很多也可以用DP的方式去求解。</p>
+<p>给个目录：<br>LeetCode63 不同路径 II<br>LeetCode64 最小路径和<br>LeetCode120 三角形最小路径和<br>LeetCode91 解码方法<br>LeetCode139 单词拆分<br>LeetCode338 比特位计数<br>LeetCode357 计算各个位数不同的数字个数<br>LeetCode375 猜数字大小 II<br>LeetCode516 最长回文子序列<br>LeetCode647 回文子串<br><a id="more"></a></p>
+<h2 id="LeetCode63-不同路径-II"><a href="#LeetCode63-不同路径-II" class="headerlink" title="LeetCode63 不同路径 II"></a>LeetCode63 不同路径 II</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。<br>机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。<br>现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？<br>网格中的障碍物和空位置分别用 1 和 0 来表示。<br>说明：m 和 n 的值均不超过 100。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">输入:</div><div class="line">[</div><div class="line">  [0,0,0],</div><div class="line">  [0,1,0],</div><div class="line">  [0,0,0]</div><div class="line">]</div><div class="line">输出: 2</div><div class="line">解释:</div><div class="line">3x3 网格的正中间有一个障碍物。</div><div class="line">从左上角到右下角一共有 2 条不同的路径：</div><div class="line">1. 向右 -&gt; 向右 -&gt; 向下 -&gt; 向下</div><div class="line">2. 向下 -&gt; 向下 -&gt; 向右 -&gt; 向右</div></pre></td></tr></table></figure>
+<h3 id="C-代码"><a href="#C-代码" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> m = obstacleGrid.size(); <span class="comment">//地图高度</span></div><div class="line">        <span class="keyword">int</span> n = obstacleGrid[<span class="number">0</span>].size(); <span class="comment">////地图宽度</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(m+<span class="number">1</span>,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>,<span class="number">0</span>)); <span class="comment">//初始化一个dp数组</span></div><div class="line">        <span class="keyword">bool</span> row_flag = <span class="literal">true</span>; <span class="comment">//用来判断第一行是否有1</span></div><div class="line">        <span class="keyword">bool</span> col_flag = <span class="literal">true</span>; <span class="comment">//用来判断第一列是否有1</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123; <span class="comment">//将第一行第一个障碍之前的所有点 标记为1 表示有一种路径可以到达 第一个障碍之后的所有点标记为0 表示有0种路径可达</span></div><div class="line">            <span class="keyword">if</span>(obstacleGrid[<span class="number">0</span>][i]==<span class="number">1</span>) row_flag = <span class="literal">false</span>; </div><div class="line">            <span class="keyword">if</span>(row_flag) dp[<span class="number">0</span>][i]=<span class="number">1</span>;</div><div class="line">            <span class="keyword">else</span> dp[<span class="number">0</span>][i]=<span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;m;i++)&#123; <span class="comment">//将第一列第一个障碍之前的所有点 标记为1 表示有一种路径可以到达 第一个障碍之后的所有点标记为0 表示有0种路径可达</span></div><div class="line">            <span class="keyword">if</span>(obstacleGrid[i][<span class="number">0</span>]==<span class="number">1</span>) col_flag = <span class="literal">false</span>;</div><div class="line">            <span class="keyword">if</span>(col_flag) dp[i][<span class="number">0</span>]=<span class="number">1</span>;</div><div class="line">            <span class="keyword">else</span> dp[i][<span class="number">0</span>]=<span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;m;i++)&#123;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;n;j++)&#123; <span class="comment">//从[1][1]开始计算到达每一点的路径数，如果该点不是障碍则计算，状态转移方程为dp[i][j] = max(dp[i][j],dp[i-1][j]+dp[i][j-1])</span></div><div class="line">                <span class="keyword">if</span>(obstacleGrid[i][j]!=<span class="number">1</span>) dp[i][j] = max(dp[i][j],dp[i<span class="number">-1</span>][j]+dp[i][j<span class="number">-1</span>]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[m<span class="number">-1</span>][n<span class="number">-1</span>]; <span class="comment">//返回右下角的值</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="LeetCode64-最小路径和"><a href="#LeetCode64-最小路径和" class="headerlink" title="LeetCode64 最小路径和"></a>LeetCode64 最小路径和</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><p>给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。</p>
+<p>说明：每次只能向下或者向右移动一步。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">输入:</div><div class="line">[</div><div class="line">  [1,3,1],</div><div class="line">  [1,5,1],</div><div class="line">  [4,2,1]</div><div class="line">]</div><div class="line">输出: 7</div><div class="line">解释: 因为路径 1→3→1→1→1 的总和最小。</div></pre></td></tr></table></figure>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</div><div class="line">        <span class="comment">//dp数组表示从左上角到当前点的最小路径和</span></div><div class="line">        <span class="keyword">int</span> m = grid.size(); <span class="comment">//矩阵的高度</span></div><div class="line">        <span class="keyword">int</span> n = grid[<span class="number">0</span>].size(); <span class="comment">//矩阵的宽度</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(m+<span class="number">1</span>,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>,<span class="number">0</span>)); <span class="comment">//初始化一个dp数组</span></div><div class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>]; <span class="comment">//第一个点的最小路径就是自己</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</div><div class="line">            dp[<span class="number">0</span>][i]=dp[<span class="number">0</span>][i<span class="number">-1</span>] + grid[<span class="number">0</span>][i]; <span class="comment">//初始化第一行 dp[0][i]=之前的路径和+当前路径</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;m;i++)&#123;</div><div class="line">            dp[i][<span class="number">0</span>] = dp[i<span class="number">-1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>]; <span class="comment">//初始化第一列 dp[i][0]=之前路径和+当前路径</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;m;i++)&#123;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;n;j++)&#123;</div><div class="line">                dp[i][j] = min(dp[i<span class="number">-1</span>][j],dp[i][j<span class="number">-1</span>])+grid[i][j]; <span class="comment">//状态转移方程 每一点最小路径等与左点 上点中的较小值+当前点的值</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[m<span class="number">-1</span>][n<span class="number">-1</span>]; <span class="comment">//返回右下角点</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会"><a href="#体会" class="headerlink" title="体会"></a>体会</h3><p>简单的DP题。dp[i][j]表示从左上角到[i]j]的最小路径和，首先初始化第一行与第一列、第一行、第一列每一个最小路径都等于前一个点的最小路径加上当前路径，从[1][1]点开始后，状态转移方程为dp[i][j] = min(dp[i-1][j],dp[i][j-1])+grid[i][j]，每一点最小路径等与 左点 上点 中的较小值+当前点的值。最后返回右下角的点。</p>
+<h2 id="LeetCode120-三角形最小路径和"><a href="#LeetCode120-三角形最小路径和" class="headerlink" title="LeetCode120 三角形最小路径和"></a>LeetCode120 三角形最小路径和</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
+<p>例如，给定三角形：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">     [2],</div><div class="line">    [3,4],</div><div class="line">   [6,5,7],</div><div class="line">  [4,1,8,3]</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。</p>
+<p>说明：</p>
+<p>如果你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题，那么你的算法会很加分。</p>
+<h3 id="C-代码-1"><a href="#C-代码-1" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; triangle)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> width = triangle[triangle.size()<span class="number">-1</span>].size(); <span class="comment">//三角形的最大宽度</span></div><div class="line">    <span class="keyword">int</span> depth = triangle.size(); <span class="comment">//三角形最大高度</span></div><div class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(triangle.size(),<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(triangle[triangle.size()<span class="number">-1</span>].size(),<span class="number">0</span>));  <span class="comment">//初始化一个dp数组</span></div><div class="line">    <span class="comment">//dp[i][j]表示从底部开始向上计算 第i行j列的最小路径和</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;width;i++)&#123; </div><div class="line">        dp[depth<span class="number">-1</span>][i] = triangle[depth<span class="number">-1</span>][i]; <span class="comment">//初始化最后一行的值 最后一行的最小路路径就是三角形的路径</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=depth<span class="number">-2</span>;i&gt;=<span class="number">0</span>;i--)&#123; <span class="comment">//从倒数第二行向上开始计算</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;triangle[i].size();j++)&#123;<span class="comment">//遍历一行中的所有数据</span></div><div class="line">            dp[i][j] = triangle[i][j] + min(dp[i+<span class="number">1</span>][j],dp[i+<span class="number">1</span>][j+<span class="number">1</span>]);<span class="comment">//状态转移方程 选出底下一行中较小的数字 将其与当前三角形内的值相加</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>]; <span class="comment">//最终的结果</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="体会-1"><a href="#体会-1" class="headerlink" title="体会"></a>体会</h3><p>一道基础的DP题，从底向上进行计算，dp[i][j]表示第i行j列的最小路径和。从倒数第二行向上开始循环，状态转移方程为dp[i][j] = triangle[i][j] + min(dp[i+1][j],dp[i+1][j+1]);即选出底下一行中较小的数字，将其与当前三角形内的值相加。最终dp[0][0]为最终的结果。</p>
+<h2 id="LeetCode91-解码方法"><a href="#LeetCode91-解码方法" class="headerlink" title="LeetCode91 解码方法"></a>LeetCode91 解码方法</h2><h3 id="题目-3"><a href="#题目-3" class="headerlink" title="题目"></a>题目</h3><p>一条包含字母 A-Z 的消息通过以下方式进行了编码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&apos;A&apos; -&gt; 1</div><div class="line">&apos;B&apos; -&gt; 2</div><div class="line">...</div><div class="line">&apos;Z&apos; -&gt; 26</div></pre></td></tr></table></figure>
+<p>给定一个只包含数字的非空字符串，请计算解码方法的总数。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: &quot;12&quot;</div><div class="line">输出: 2</div><div class="line">解释: 它可以解码为 &quot;AB&quot;（1 2）或者 &quot;L&quot;（12）。</div></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: &quot;226&quot;</div><div class="line">输出: 3</div><div class="line">解释: 它可以解码为 &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), 或者 &quot;BBF&quot; (2 2 6) 。</div></pre></td></tr></table></figure>
+<h3 id="C-代码-2"><a href="#C-代码-2" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(s.size()+<span class="number">1</span>,<span class="number">0</span>);</div><div class="line">        dp[<span class="number">0</span>]=<span class="number">1</span>;</div><div class="line">        <span class="comment">//dp[i]表示前i位的解码方式为dp[i]种</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;dp.size();i++)&#123;</div><div class="line">            <span class="keyword">if</span>(s[i<span class="number">-1</span>]==<span class="string">'0'</span>) dp[i<span class="number">-1</span>] = <span class="number">0</span>; <span class="comment">//0 不能单独解码，dp[i-1]赋值为0</span></div><div class="line">            <span class="keyword">if</span>(s[i<span class="number">-2</span>]==<span class="string">'1'</span> || (s[i<span class="number">-2</span>]==<span class="string">'2'</span>&amp;&amp;s[i<span class="number">-1</span>]&lt;<span class="string">'7'</span>)) dp[i] = dp[i<span class="number">-1</span>]+dp[i<span class="number">-2</span>]; <span class="comment">//如果十位为1或者十位为2 个位&lt;7 ，证明这个数字可以按照两位数进行分解</span></div><div class="line">            <span class="keyword">else</span> dp[i] = dp[i<span class="number">-1</span>]; <span class="comment">// 如果不满足分解情况，直接dp[i] = dp[i-1]</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[s.size()]; <span class="comment">//返回dp[size]为最终的结果</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-2"><a href="#体会-2" class="headerlink" title="体会"></a>体会</h3><p>斐波纳切问题，建立一个dp数组，dp[i]表示前i为的解码方式为dp[i]种。初值赋值为1，表示至少都有一种解码方式，即逐个分割。之后对后面的数字进行循环，如果遇到0，0不能单独解码，将dp[i-1]设置为0；如果遇到1开头，或者2开头且后一位小于7的数字，证明其可以看成一个两位数，则多一种解码方式，dp[i] = dp[i-1]+1; 最终输出dp[s.size()]表示最终的结果。</p>
+<h2 id="LeetCode139-单词拆分"><a href="#LeetCode139-单词拆分" class="headerlink" title="LeetCode139 单词拆分"></a>LeetCode139 单词拆分</h2><h3 id="题目-4"><a href="#题目-4" class="headerlink" title="题目"></a>题目</h3><p>给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。</p>
+<p>说明：</p>
+<p>拆分时可以重复使用字典中的单词。<br>你可以假设字典中没有重复的单词。<br>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: s = &quot;leetcode&quot;, wordDict = [&quot;leet&quot;, &quot;code&quot;]</div><div class="line">输出: true</div><div class="line">解释: 返回 true 因为 &quot;leetcode&quot; 可以被拆分成 &quot;leet code&quot;。</div></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">输入: s = &quot;applepenapple&quot;, wordDict = [&quot;apple&quot;, &quot;pen&quot;]</div><div class="line">输出: true</div><div class="line">解释: 返回 true 因为 &quot;applepenapple&quot; 可以被拆分成 &quot;apple pen apple&quot;。</div><div class="line">     注意你可以重复使用字典中的单词。</div></pre></td></tr></table></figure>
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">输入: s = &quot;catsandog&quot;, wordDict = [&quot;cats&quot;, &quot;dog&quot;, &quot;sand&quot;, &quot;and&quot;, &quot;cat&quot;]</div><div class="line">输出: false</div></pre></td></tr></table></figure>
+<h3 id="C-代码-3"><a href="#C-代码-3" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">wordBreak</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordDict)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span>(s.size()&lt;<span class="number">0</span> || wordDict.empty()) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//如果字符串长度小于0，或者字典为空，则返回空值。</span></div><div class="line">        <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; dict; <span class="comment">//将wordDict转换成一个unordered_set,方便快速查询</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> key:wordDict) dict.insert(key); <span class="comment">//将wordDict转化为dict</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; dp(s.size()+<span class="number">1</span>,<span class="literal">false</span>); <span class="comment">//创建一个dp数组 dp[i]表示前i个字符是否可以被拆分</span></div><div class="line">        dp[<span class="number">0</span>] = <span class="literal">true</span>; <span class="comment">//初始值为true</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=s.size();i++)&#123; <span class="comment">//前i个数字 字符串的终点</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=i;j++)&#123; <span class="comment">//字符串的起点</span></div><div class="line">                <span class="built_in">string</span> new_str = s.substr(j,i-j); <span class="comment">//i-j表示字符串的长度 j表示字符串的起点</span></div><div class="line">                <span class="keyword">if</span>(dp[j] &amp;&amp; dict.count(new_str)) &#123; <span class="comment">//dp[j]表示前j个字符是否可以被划分（相当于起点前的字符串被划分） new_str是新的字符串 如果前面的字符串可以被划分且new_str可以被划分，则字符串前i个字符可以被划分。</span></div><div class="line">                    dp[i] = <span class="literal">true</span>;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[s.size()];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-3"><a href="#体会-3" class="headerlink" title="体会"></a>体会</h3><p>动态规划问题，判断一个字符串是否可以划分，只需要将其不断拆分为小的字符串，判断其是否可以划分即可。dp[i]表示前i个字符是否可以划分。i从1到size进行循环，j从0到i进行循环，i可以看成是子串的终点，j可以看成是子串的起点，如果dp[j]为true，表示前j个字符是可以划分的，如果当前的new_str可以划分，那么证明前i个字符是可以划分的，依次类推，循环整个字符串。</p>
+<h2 id="LeetCode338-比特位计数"><a href="#LeetCode338-比特位计数" class="headerlink" title="LeetCode338 比特位计数"></a>LeetCode338 比特位计数</h2><h3 id="题目-5"><a href="#题目-5" class="headerlink" title="题目"></a>题目</h3><p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">输入: 2</div><div class="line">输出: [0,1,1]</div></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">输入: 5</div><div class="line">输出: [0,1,1,2,1,2]</div></pre></td></tr></table></figure>
+<p>进阶:</p>
+<p>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<h3 id="C-代码-4"><a href="#C-代码-4" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; countBits(<span class="keyword">int</span> num) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(num+<span class="number">1</span>,<span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=num;i++)</div><div class="line">            dp[i] = dp[i&gt;&gt;<span class="number">1</span>]+(i&amp;<span class="number">1</span>);<span class="comment">//1001 可以看成是 100中1的个数 + 最后一位是否为1 </span></div><div class="line">        <span class="keyword">return</span> dp;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-4"><a href="#体会-4" class="headerlink" title="体会"></a>体会</h3><p>这个题的关键就在于状态转移方程。1001中1的个数可以看作是100中1的个数加上最后一位是否为1，所以状态状态转移方程为dp[i] = dp[i&gt;&gt;1]+(i&amp;1)，若推导过程中用十进制去思考，很难观察到该状态转移方程。</p>
+<h2 id="LeetCode357-计算各个位数不同的数字个数"><a href="#LeetCode357-计算各个位数不同的数字个数" class="headerlink" title="LeetCode357 计算各个位数不同的数字个数"></a>LeetCode357 计算各个位数不同的数字个数</h2><h3 id="题目-6"><a href="#题目-6" class="headerlink" title="题目"></a>题目</h3><p>给定一个非负整数 n，计算各位数字都不同的数字 x 的个数，其中 0 ≤ x &lt; 10n 。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: 2</div><div class="line">输出: 91 </div><div class="line">解释: 答案应为除去 11,22,33,44,55,66,77,88,99 外，在 [0,100) 区间内的所有数字。</div></pre></td></tr></table></figure>
+<h3 id="C-代码-5"><a href="#C-代码-5" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">countNumbersWithUniqueDigits</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//0 1 2 这三种情况直接输出</span></div><div class="line">    <span class="keyword">if</span>(n==<span class="number">1</span>) <span class="keyword">return</span> <span class="number">10</span>;</div><div class="line">    <span class="keyword">if</span>(n==<span class="number">2</span>) <span class="keyword">return</span> <span class="number">91</span>;</div><div class="line">    <span class="keyword">if</span>(n&gt;<span class="number">2</span>)&#123;</div><div class="line">        <span class="keyword">int</span> sum = <span class="number">91</span>;<span class="comment">//两位数中的各个位不同的数字有91个</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">3</span>;j&lt;=n;j++)&#123;</div><div class="line">            <span class="keyword">int</span> bit = <span class="number">9</span>; <span class="comment">//第二位有9种情况</span></div><div class="line">            <span class="keyword">int</span> small_sum = <span class="number">9</span>; <span class="comment">//第一位有9种情况</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;j<span class="number">-1</span>;i++)&#123;</div><div class="line">                small_sum = small_sum*bit; <span class="comment">//各个位的情况相乘</span></div><div class="line">                bit--; <span class="comment">//从第二位开始往后每位可选择的数字少一个</span></div><div class="line">            &#125;</div><div class="line">            sum =  sum+small_sum;<span class="comment">//统计所有数据</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> sum;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="体会-5"><a href="#体会-5" class="headerlink" title="体会"></a>体会</h3><p>组合排列问题。当n=2时：十位有9种选择，个位有9种选择；当n=3时，百位有9种选择，十位有9种选择，个位有8种选择；当n=4时，千位有9种选择，百位有9种选择，十位有8种选择，个位有7种选择。<br>所以：<br>n=2 9x9<br>n=3 9x9x8<br>n=4 9x9x8x7<br>以此类推，n在10以上后，必定有重复。</p>
+<h2 id="LeetCode375-猜数字大小-II"><a href="#LeetCode375-猜数字大小-II" class="headerlink" title="LeetCode375 猜数字大小 II"></a>LeetCode375 猜数字大小 II</h2><h3 id="题目-7"><a href="#题目-7" class="headerlink" title="题目"></a>题目</h3><p>我们正在玩一个猜数游戏，游戏规则如下：</p>
+<p>我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。</p>
+<p>每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。</p>
+<p>然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">n = 10, 我选择了8.</div><div class="line"></div><div class="line">第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你需要支付5块。</div><div class="line">第二轮: 你猜是7，我告诉你，我的数字更大一些，你支付7块。</div><div class="line">第三轮: 你猜是9，我告诉你，我的数字更小一些，你支付9块。</div><div class="line"></div><div class="line">游戏结束。8 就是我选的数字。</div><div class="line"></div><div class="line">你最终要支付 5 + 7 + 9 = 21 块钱。</div></pre></td></tr></table></figure>
+<p>给定 n ≥ 1，计算你至少需要拥有多少现金才能确保你能赢得这个游戏。</p>
+<h3 id="C-代码-6"><a href="#C-代码-6" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMoneyAmount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n+<span class="number">1</span>,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>,<span class="number">0</span>));</div><div class="line">        <span class="comment">//极小极大问题</span></div><div class="line">        <span class="keyword">if</span>(n&lt;=<span class="number">2</span>) <span class="keyword">return</span> n<span class="number">-1</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)&#123; <span class="comment">//i表示终点</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i<span class="number">-1</span>;j&gt;<span class="number">0</span>;j--)&#123; <span class="comment">//j表示起点</span></div><div class="line">                <span class="keyword">int</span> global = <span class="number">999</span>; <span class="comment">//求最后的极小值 先初始化一个极大值</span></div><div class="line">                <span class="keyword">int</span> local = <span class="number">0</span>; <span class="comment">//需要找到每一个子序列的极大值</span></div><div class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k=j+<span class="number">1</span>;k&lt;i;k++)&#123;</div><div class="line">                    local = k + max(dp[k+<span class="number">1</span>][i],dp[j][k<span class="number">-1</span>]); <span class="comment">//状态转移方程</span></div><div class="line">                    global = min(local,global); <span class="comment">//最后取i j之间的最小值</span></div><div class="line">                &#125;</div><div class="line">                dp[j][i] = j+<span class="number">1</span>==i?j:global;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[<span class="number">1</span>][n];<span class="comment">//整个序列</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-6"><a href="#体会-6" class="headerlink" title="体会"></a>体会</h3><p>这个题目的技巧性还是比较高的，状态转移方法比较难以寻找。<br>那么我们需要建立一个二维的dp数组，其中dp[i][j]表示从数字i到j之间猜中任意一个数字最少需要花费的钱数，那么我们需要遍历每一段区间[j, i]，维护一个全局最小值global_min变量，然后遍历该区间中的每一个数字，计算局部最大值local_max = k + max(dp[j][k - 1], dp[k + 1][i])，这个正好是将该区间在每一个位置都分为两段，然后取当前位置的花费加上左右两段中较大的花费之和为局部最大值，为啥要取两者之间的较大值呢，因为我们要cover所有的情况，就得取最坏的情况。然后更新全局最小值，最后在更新dp[j][i]的时候看j和i是否是相邻的，相邻的话赋为i，否则赋为global_min。这里为啥又要取较小值呢，因为dp数组是求的[j, i]范围中的最低cost，比如只有两个数字1和2，那么肯定是猜1的cost低。</p>
+<p>如果只有一个数字，那么我们不用猜，cost为0。<br>如果有两个数字，比如1和2，我们猜1，即使不对，我们cost也比猜2要低。<br>如果有三个数字1，2，3，那么我们就先猜2，根据对方的反馈，就可以确定正确的数字，所以我们的cost最低为2。<br>如果有四个数字1，2，3，4，那么情况就有点复杂了，那么我们的策略是用k来遍历所有的数字，然后再根据k分成的左右两个区间，取其中的较大cost加上k。<br>当k为1时，左区间为空，所以cost为0，而右区间2，3，4，根据之前的分析应该取3，所以整个cost就是1+3=4。<br>当k为2时，左区间为1，cost为0，右区间为3，4，cost为3，整个cost就是2+3=5。<br>当k为3时，左区间为1，2，cost为1，右区间为4，cost为0，整个cost就是3+1=4。<br>当k为4时，左区间1，2，3，cost为2，右区间为空，cost为0，整个cost就是4+2=6。<br>引自：<a href="https://blog.csdn.net/xuxuxuqian1/article/details/81636415" target="_blank" rel="external">https://blog.csdn.net/xuxuxuqian1/article/details/81636415</a></p>
+<h2 id="LeetCode516-最长回文子序列"><a href="#LeetCode516-最长回文子序列" class="headerlink" title="LeetCode516 最长回文子序列"></a>LeetCode516 最长回文子序列</h2><h3 id="题目-8"><a href="#题目-8" class="headerlink" title="题目"></a>题目</h3><p>给定一个字符串s，找到其中最长的回文子序列。可以假设s的最大长度为1000。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">输入:</div><div class="line"></div><div class="line">&quot;bbbab&quot;</div><div class="line">输出:</div><div class="line"></div><div class="line">4</div><div class="line">一个可能的最长回文子序列为 &quot;bbbb&quot;。</div></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">输入:</div><div class="line"></div><div class="line">&quot;cbbd&quot;</div><div class="line">输出:</div><div class="line"></div><div class="line">2</div><div class="line">一个可能的最长回文子序列为 &quot;bb&quot;。</div></pre></td></tr></table></figure>
+<h3 id="C-代码-7"><a href="#C-代码-7" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestPalindromeSubseq</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="built_in">string</span> t = s;</div><div class="line">        reverse(t.begin(),t.end()); <span class="comment">//新建一个字符串 取反向 寻找公共子序列 就是最长回文串</span></div><div class="line">        <span class="keyword">return</span> lcs(t,s);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lcs</span><span class="params">(<span class="built_in">string</span> src,<span class="built_in">string</span> dst)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> n = src.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n+<span class="number">1</span>,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>,<span class="number">0</span>)); <span class="comment">//新建一个dp数组</span></div><div class="line">        <span class="comment">//dp数组初始化 第一行 第一列初始化为0</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=n;i++) &#123;</div><div class="line">            dp[<span class="number">0</span>][i] = <span class="number">0</span>;</div><div class="line">            dp[i][<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">        &#125; </div><div class="line">        </div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123; <span class="comment">//从第二个元素开始遍历</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)&#123;</div><div class="line">                <span class="keyword">if</span>(src[i<span class="number">-1</span>]==dst[j<span class="number">-1</span>]) dp[i][j] = dp[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>; <span class="comment">//状态转移方程</span></div><div class="line">                <span class="keyword">else</span> &#123;</div><div class="line">                    dp[i][j] = max(dp[i<span class="number">-1</span>][j],dp[i][j<span class="number">-1</span>]); </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[n][n];</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-7"><a href="#体会-7" class="headerlink" title="体会"></a>体会</h3><p>判断最长回文子串，只需要将一个字符串反转后与原字符串求LCS，就是最长回文子串。<br>LCS的状态转移方程比较简单。<br>         0                        if i=0 or j=0<br>c[i,j] = c[i-1,j-1]+1             if i,j&gt;0 and xi  = yj<br>         max(c[i,j-1],c[i-1,j])   if i,j&gt;0 and xi != yj<br>记住就好</p>
+<h2 id="LeetCode647-回文子串"><a href="#LeetCode647-回文子串" class="headerlink" title="LeetCode647 回文子串"></a>LeetCode647 回文子串</h2><h3 id="题目-9"><a href="#题目-9" class="headerlink" title="题目"></a>题目</h3><p>给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。</p>
+<p>具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被计为是不同的子串。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: &quot;abc&quot;</div><div class="line">输出: 3</div><div class="line">解释: 三个回文子串: &quot;a&quot;, &quot;b&quot;, &quot;c&quot;.</div></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">输入: &quot;aaa&quot;</div><div class="line">输出: 6</div><div class="line">说明: 6个回文子串: &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;aa&quot;, &quot;aa&quot;, &quot;aaa&quot;.</div></pre></td></tr></table></figure>
+<p>注意:</p>
+<p>输入的字符串长度不会超过1000。</p>
+<h3 id="C-代码-8"><a href="#C-代码-8" class="headerlink" title="C++代码"></a>C++代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">help</span><span class="params">(<span class="built_in">string</span> str,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span>(str[left]==str[right] &amp;&amp; left&gt;=<span class="number">0</span> &amp;&amp; right&lt;=str.size()<span class="number">-1</span>)&#123; <span class="comment">//如果str[left]==str[right] 且没有越界的情况下 向左右伸展 并记数</span></div><div class="line">            count++; <span class="comment">//记数</span></div><div class="line">            left--; <span class="comment">//向左伸展</span></div><div class="line">            right++; <span class="comment">//向右伸展</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countSubstrings</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>; <span class="comment">//用来记数</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;s.size();i++)&#123;</div><div class="line">            sum+= help(s,i,i); <span class="comment">//长度为奇数的回文数</span></div><div class="line">            sum+= help(s,i,i+<span class="number">1</span>); <span class="comment">//长度为偶数的回文数</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> sum;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="体会-8"><a href="#体会-8" class="headerlink" title="体会"></a>体会</h3><p>简单题，回文数有两种情况，一种是长度为奇数的回文数，一种是长度为偶数的回文数，找到中间值，向两边伸展同时进行判断就可以。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OJ/" rel="tag"># OJ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/19/LeetCodeReview5/" rel="next" title="LeetCode算法练习——广度优先搜索 BFS">
+                <i class="fa fa-chevron-left"></i> LeetCode算法练习——广度优先搜索 BFS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Black'Blog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/ZxcXenon" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/55a1bc4688c6" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-adjust"></i>简书</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode63-不同路径-II"><span class="nav-number">1.</span> <span class="nav-text">LeetCode63 不同路径 II</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目"><span class="nav-number">1.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码"><span class="nav-number">1.2.</span> <span class="nav-text">C++代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode64-最小路径和"><span class="nav-number">2.</span> <span class="nav-text">LeetCode64 最小路径和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-1"><span class="nav-number">2.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">2.2.</span> <span class="nav-text">C++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会"><span class="nav-number">2.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode120-三角形最小路径和"><span class="nav-number">3.</span> <span class="nav-text">LeetCode120 三角形最小路径和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-2"><span class="nav-number">3.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-1"><span class="nav-number">3.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-1"><span class="nav-number">3.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode91-解码方法"><span class="nav-number">4.</span> <span class="nav-text">LeetCode91 解码方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-3"><span class="nav-number">4.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-2"><span class="nav-number">4.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-2"><span class="nav-number">4.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode139-单词拆分"><span class="nav-number">5.</span> <span class="nav-text">LeetCode139 单词拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-4"><span class="nav-number">5.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-3"><span class="nav-number">5.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-3"><span class="nav-number">5.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode338-比特位计数"><span class="nav-number">6.</span> <span class="nav-text">LeetCode338 比特位计数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-5"><span class="nav-number">6.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-4"><span class="nav-number">6.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-4"><span class="nav-number">6.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode357-计算各个位数不同的数字个数"><span class="nav-number">7.</span> <span class="nav-text">LeetCode357 计算各个位数不同的数字个数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-6"><span class="nav-number">7.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-5"><span class="nav-number">7.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-5"><span class="nav-number">7.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode375-猜数字大小-II"><span class="nav-number">8.</span> <span class="nav-text">LeetCode375 猜数字大小 II</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-7"><span class="nav-number">8.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-6"><span class="nav-number">8.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-6"><span class="nav-number">8.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode516-最长回文子序列"><span class="nav-number">9.</span> <span class="nav-text">LeetCode516 最长回文子序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-8"><span class="nav-number">9.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-7"><span class="nav-number">9.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-7"><span class="nav-number">9.3.</span> <span class="nav-text">体会</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode647-回文子串"><span class="nav-number">10.</span> <span class="nav-text">LeetCode647 回文子串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-9"><span class="nav-number">10.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-代码-8"><span class="nav-number">10.2.</span> <span class="nav-text">C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体会-8"><span class="nav-number">10.3.</span> <span class="nav-text">体会</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Black'Blog</span>
+
+  
+</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共82.7k字 |</span>
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4
+| <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz',
+        appKey: 'q4Y9saqMlAIFYHVDXQQRa5sI',
+        placeholder: '小哥，不说两句？',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("IWsmYIsP7eKH7JUiJa3GCocc-gzGzoHsz", "q4Y9saqMlAIFYHVDXQQRa5sI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
